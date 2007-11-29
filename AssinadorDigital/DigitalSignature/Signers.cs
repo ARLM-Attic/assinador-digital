@@ -16,6 +16,19 @@ namespace OpenXML
 
         #region Public Constants and Fields
 
+        /// <summary>
+        /// Gets or Sets the Signer value in Signers[i]
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public Signer this[int index]
+        {
+            get { return (Signer)this.List[index]; }
+            set { this.List[index] = value; }
+        }
+        /// <summary>
+        /// Gets or Sets the Path string of the document
+        /// </summary>
         public string Path
         {
             get { return path; }
@@ -35,12 +48,14 @@ namespace OpenXML
 
         #region Public Methods
 
-        public Signer this[int index]
-        {
-            get { return (Signer)this.List[index]; }
-            set { this.List[index] = value; }
-        }
-
+        /// <summary>
+        /// Add the signer parameters in the Signers list
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="uri"></param>
+        /// <param name="issuer"></param>
+        /// <param name="date"></param>
+        /// <param name="serial"></param>
         public void Add(string name, string uri, string issuer, string date, string serial)
         {
             MoveNext();
@@ -52,18 +67,29 @@ namespace OpenXML
             sig.serialNumber = serial;
             this.List.Add(sig);
         }
-
+        /// <summary>
+        /// Add the signer parameter in the Signers list
+        /// </summary>
+        /// <param name="signer"></param>
         public void Add(Signer signer)
         {
             MoveNext();
             this.List.Add(signer);
         }
-
+        /// <summary>
+        /// Remove the signer parameter from the Signers list
+        /// </summary>
+        /// <param name="signer"></param>
         public void Remove(Signer signer)
         {
             this.List.Remove(signer);
         }
-
+        /// <summary>
+        /// Verify if the Signers list contains the signer parameter
+        /// Compare the signature name + signature issuer + serial number
+        /// </summary>
+        /// <param name="signer"></param>
+        /// <returns></returns>
         public bool Contains(Signer signer)
         {
             foreach (Signer sgn in this.InnerList)
@@ -75,7 +101,12 @@ namespace OpenXML
             }
             return false;
         }
-
+        /// <summary>
+        /// Compare the serial string parameter with each Signer.serialNumber in Signers list
+        /// and returns true if the Signers list has the serial number
+        /// </summary>
+        /// <param name="serial">The serial number related with the digital signature</param>
+        /// <returns></returns>
         public bool HasSerialNumber(string serial)
         {
             foreach (Signer sgn in this.InnerList)
