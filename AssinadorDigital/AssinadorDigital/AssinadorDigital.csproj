@@ -63,6 +63,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Program Files\2007 Office System Developer Resources\OpenXMLSDK\1.0.0531\lib\Microsoft.Office.DocumentFormat.OpenXml.dll</HintPath>
     </Reference>
+    <Reference Include="ReachFramework">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -130,6 +133,10 @@
     <ProjectReference Include="..\DigitalSignature\OpenXML.csproj">
       <Project>{DDAED572-6412-4E05-BCAB-0AC23D2A3180}</Project>
       <Name>OpenXML</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XPSDocument\XPSDocument.csproj">
+      <Project>{BEDB6909-4A3A-4427-9521-8ACF3E785C55}</Project>
+      <Name>XPSDocument</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
