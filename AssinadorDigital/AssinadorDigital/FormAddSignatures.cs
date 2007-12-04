@@ -15,6 +15,7 @@ using System.Security;
 using System.Security.Cryptography;
 using System.Security.Cryptography.Xml;
 using Microsoft.Office.DocumentFormat.OpenXml.Packaging;
+using XPSDocument;
 
 namespace AssinadorDigital
 {

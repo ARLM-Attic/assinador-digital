@@ -12,9 +12,11 @@ using System.IO;
 using System.IO.Packaging;
 using System.Xml;
 using System.Security;
+using System.Windows.Xps.Packaging;
 using System.Security.Cryptography;
 using System.Security.Cryptography.Xml;
 using Microsoft.Office.DocumentFormat.OpenXml.Packaging;
+using XPSDocument;
 
 namespace AssinadorDigital
 {
@@ -25,6 +27,7 @@ namespace AssinadorDigital
         /// Object of DigitalSignature
         /// </summary>
         private DigitalSignature digitalSignature;
+        private XpsManager xpsSignature;
         private ArrayList selectedDocuments = new ArrayList();
         /// <summary>
         /// String[] of listed documents
@@ -38,7 +41,7 @@ namespace AssinadorDigital
         private ArrayList selectedSigners = new ArrayList();
         private ArrayList invalidSignatures = new ArrayList();
         private ArrayList documentProperties = new ArrayList();
-        #endregion
+        #endregion        
 
         #region Constructor
         /// <summary>
@@ -101,6 +104,11 @@ namespace AssinadorDigital
                     {
                         filetype[0] = "5";
                         filetype[1] = "Microsoft Office Excel Macro-Enabled Worksheet";
+                    }
+                    else if (fileextension == ".xps")
+                    {
+                        filetype[0] = "6";
+                        filetype[1] = "XPS Document";
                     }
                     else
                     {
@@ -202,6 +210,8 @@ namespace AssinadorDigital
                         digitalSignature = new DigitalSignature(filepath, Types.PresentationML);
                     else if ((fileextension == ".xlsx") || (fileextension == ".xlsm"))
                         digitalSignature = new DigitalSignature(filepath, Types.SpreadSheetML);
+                    else if (fileextension == ".xps")
+                        xpsSignature = new XpsManager(filepath);
             }
         }
 
