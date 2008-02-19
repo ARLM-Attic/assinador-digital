@@ -132,7 +132,7 @@ namespace AssinadorDigital
 
                         foreach (FileInfo file in dInfo.GetFiles())
                         {
-                            files[j]=file.ToString();
+                            files[j]=file.FullName.ToString();
                             j++;
                         }
                         listFiles(files,false);
@@ -171,7 +171,10 @@ namespace AssinadorDigital
 
                 string path = digitalSignature.signers.Path;
                 tbName.Text = Path.GetFileName(path);
-                tbPath.Text = Path.GetDirectoryName(path) + "\\";
+                if (Path.GetDirectoryName(path).EndsWith("\\"))
+                    tbPath.Text = Path.GetDirectoryName(path);
+                else
+                    tbPath.Text = Path.GetDirectoryName(path) + "\\";
                 lblCreator.Text = documentProperties[0].ToString();
                 lblModifiedBy.Text = documentProperties[1].ToString();
                 lblTitle.Text = documentProperties[2].ToString();
@@ -482,13 +485,8 @@ namespace AssinadorDigital
             return true;
         }
 
-        #endregion                                 
-        
-        #region Events
-
-        private void Form1_Load(object sender, EventArgs e)
+        private void signDocuments()
         {
-            listFiles(documents,true);
             //String that receives an specific XML object file (Office 2007 compatibility)
             String officeDocument = Properties.Resources.OfficeObject;
             if (digitalSignature != null)
@@ -500,13 +498,35 @@ namespace AssinadorDigital
                 String key = null;
                 if (certificate != null)
                 {
-                    foreach (string sgn in selectedDocuments)
+                    string[] newFiles = new string[selectedDocuments.Count];
+                    bool fileCreated = false;
+                    int i = 0;
+                    foreach (string fileToSign in selectedDocuments)
                     {
-                        key = sgn.ToString();
-                        loadDigitalSignature(sgn.ToString());
+                        string filePath = fileToSign;
+                        string newPath;
+                        if (txtPath.Text.EndsWith("\\"))
+                            newPath = txtPath.Text + Path.GetFileName(fileToSign);
+                        else
+                            newPath = txtPath.Text + "\\" + Path.GetFileName(fileToSign);
+                        if (filePath != newPath)
+                        {
+                            File.Copy(filePath, newPath);
+                            filePath = newPath;
+                            newFiles[i] = newPath;
+                            fileCreated = true;
+                            i++;
+                        }
+                        key = filePath;
+                        loadDigitalSignature(filePath);
+                        //lstDocuments.SelectedItems[i].SubItems[2].Text
                         //Call the method that Sign the open package
                         digitalSignature.SignPackage(certificate);
-
+                    }
+                    if (fileCreated)
+                    {
+                        lstDocuments.Items.Clear();
+                        listFiles(newFiles, true);
                     }
                     /*
                     for (int i = 0; i < documents.Length; i++)
@@ -519,7 +539,17 @@ namespace AssinadorDigital
                     }*/
                 }
             }
-                loadSigners();
+        }
+
+        #endregion                                 
+        
+        #region Events
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            txtPath.Text = Path.GetDirectoryName(documents[0]);
+            listFiles(documents, true);
+            loadSigners();
         }
 
         private void lstFiles_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
@@ -590,7 +620,17 @@ namespace AssinadorDigital
             loadSigners();
         }
 
-        #endregion
+        private void btnSign_Click(object sender, EventArgs e)
+        {
+            signDocuments();
+        }
 
+        private void btnPath_Click(object sender, EventArgs e)
+        {
+            PathBrowserDialog.ShowDialog();
+            txtPath.Text = PathBrowserDialog.SelectedPath;
+        }
+
+        #endregion
     }
 }
