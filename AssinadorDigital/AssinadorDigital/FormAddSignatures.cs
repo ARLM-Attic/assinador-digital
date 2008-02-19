@@ -121,10 +121,11 @@ namespace AssinadorDigital
 
                             lstDocuments.Items.Add(listItem);
                         }
-                    }                    
+                    }
                 }
                 else
-                {    if(openSubFolders)
+                {
+                    if (openSubFolders)
                     {
                         DirectoryInfo dInfo = new DirectoryInfo(filenames[i]);
                         string[] files = new string[dInfo.GetFiles().Length];
@@ -132,10 +133,10 @@ namespace AssinadorDigital
 
                         foreach (FileInfo file in dInfo.GetFiles())
                         {
-                            files[j]=file.FullName.ToString();
+                            files[j] = file.FullName.ToString();
                             j++;
                         }
-                        listFiles(files,false);
+                        listFiles(files, false);
                     }
                 }
             }
@@ -504,11 +505,14 @@ namespace AssinadorDigital
                     foreach (string fileToSign in selectedDocuments)
                     {
                         string filePath = fileToSign;
-                        string newPath;
-                        if (txtPath.Text.EndsWith("\\"))
-                            newPath = txtPath.Text + Path.GetFileName(fileToSign);
-                        else
-                            newPath = txtPath.Text + "\\" + Path.GetFileName(fileToSign);
+                        string newPath = filePath;
+                        if (txtPath.Text != "")
+                        {
+                            if (txtPath.Text.EndsWith("\\"))
+                                newPath = txtPath.Text + Path.GetFileName(fileToSign);
+                            else
+                                newPath = txtPath.Text + "\\" + Path.GetFileName(fileToSign);
+                        }
                         if (filePath != newPath)
                         {
                             File.Copy(filePath, newPath);
@@ -519,7 +523,7 @@ namespace AssinadorDigital
                         }
                         key = filePath;
                         loadDigitalSignature(filePath);
-                        //lstDocuments.SelectedItems[i].SubItems[2].Text
+
                         //Call the method that Sign the open package
                         digitalSignature.SignPackage(certificate);
                     }
@@ -528,15 +532,6 @@ namespace AssinadorDigital
                         lstDocuments.Items.Clear();
                         listFiles(newFiles, true);
                     }
-                    /*
-                    for (int i = 0; i < documents.Length; i++)
-                    {
-                        key = documents[i].ToString();
-                        loadDigitalSignature(documents[i].ToString());
-                        //Call the method that Sign the open package
-                        digitalSignature.SignPackage(certificate);
-
-                    }*/
                 }
             }
         }
@@ -547,7 +542,6 @@ namespace AssinadorDigital
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            txtPath.Text = Path.GetDirectoryName(documents[0]);
             listFiles(documents, true);
             loadSigners();
         }

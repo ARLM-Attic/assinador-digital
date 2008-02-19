@@ -106,7 +106,6 @@ namespace AssinadorDigital
             // 
             // txtPath
             // 
-            this.txtPath.Enabled = false;
             this.txtPath.Location = new System.Drawing.Point(57, 221);
             this.txtPath.Name = "txtPath";
             this.txtPath.Size = new System.Drawing.Size(228, 20);
