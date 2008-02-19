@@ -54,70 +54,88 @@ namespace AssinadorDigital
 
         #region Private Methods
 
-        private void listFiles(string[] filenames)
+        private void listFiles(string[] filenames, bool openSubFolders)
         {
             int length = filenames.Length;
             string[] filetype = new string[2];
 
             for (int i = 0; i < length; i++)
             {
-                string fileextension = Path.GetExtension(filenames[i]);
-                bool documentFound = false;
-                foreach (ListViewItem documentAlreadyInList in lstDocuments.Items)
+                if (Path.HasExtension(filenames[i]))
                 {
-                    if (documentAlreadyInList.SubItems[2].Text == filenames[i])
+                    string fileextension = Path.GetExtension(filenames[i]);
+                    bool documentFound = false;
+                    foreach (ListViewItem documentAlreadyInList in lstDocuments.Items)
                     {
-                        documentFound = true;
-                        break;
+                        if (documentAlreadyInList.SubItems[2].Text == filenames[i])
+                        {
+                            documentFound = true;
+                            break;
+                        }
                     }
+                    if (!documentFound)
+                    {
+                        if (fileextension == ".docx")
+                        {
+                            filetype[0] = "0";
+                            filetype[1] = "Microsoft Office Word Document";
+                        }
+                        else if (fileextension == ".docm")
+                        {
+                            filetype[0] = "1";
+                            filetype[1] = "Microsoft Office Word Macro-Enabled Document";
+                        }
+                        else if (fileextension == ".pptx")
+                        {
+                            filetype[0] = "2";
+                            filetype[1] = "Microsoft Office PowerPoint Presentation";
+                        }
+                        else if (fileextension == ".pptm")
+                        {
+                            filetype[0] = "3";
+                            filetype[1] = "Microsoft Office PowerPoint Macro-Enabled Presentation";
+                        }
+                        else if (fileextension == ".xlsx")
+                        {
+                            filetype[0] = "4";
+                            filetype[1] = "Microsoft Office Excel Worksheet";
+                        }
+                        else if (fileextension == ".xlsm")
+                        {
+                            filetype[0] = "5";
+                            filetype[1] = "Microsoft Office Excel Macro-Enabled Worksheet";
+                        }
+                        else
+                        {
+                            filetype[0] = "-1";
+                            filetype[1] = "Unknow";
+                        }
+
+                        if (filetype[0] != "-1")
+                        {
+                            ListViewItem listItem = new ListViewItem();         //INDEX
+                            listItem.Text = Path.GetFileName(filenames[i]);     //0 filename
+                            listItem.ImageIndex = Convert.ToInt32(filetype[0]);
+                            listItem.SubItems.Add(filetype[1]);                 //1 filetype
+                            listItem.SubItems.Add(filenames[i].ToString());     //2 filepath
+
+                            lstDocuments.Items.Add(listItem);
+                        }
+                    }                    
                 }
-                if (!documentFound)
-                {
-                    if (fileextension == ".docx")
+                else
+                {    if(openSubFolders)
                     {
-                        filetype[0] = "0";
-                        filetype[1] = "Microsoft Office Word Document";
-                    }
-                    else if (fileextension == ".docm")
-                    {
-                        filetype[0] = "1";
-                        filetype[1] = "Microsoft Office Word Macro-Enabled Document";
-                    }
-                    else if (fileextension == ".pptx")
-                    {
-                        filetype[0] = "2";
-                        filetype[1] = "Microsoft Office PowerPoint Presentation";
-                    }
-                    else if (fileextension == ".pptm")
-                    {
-                        filetype[0] = "3";
-                        filetype[1] = "Microsoft Office PowerPoint Macro-Enabled Presentation";
-                    }
-                    else if (fileextension == ".xlsx")
-                    {
-                        filetype[0] = "4";
-                        filetype[1] = "Microsoft Office Excel Worksheet";
-                    }
-                    else if (fileextension == ".xlsm")
-                    {
-                        filetype[0] = "5";
-                        filetype[1] = "Microsoft Office Excel Macro-Enabled Worksheet";
-                    }
-                    else
-                    {
-                        filetype[0] = "-1";
-                        filetype[1] = "Unknow";
-                    }
+                        DirectoryInfo dInfo = new DirectoryInfo(filenames[i]);
+                        string[] files = new string[dInfo.GetFiles().Length];
+                        int j = 0;
 
-                    if (filetype[0] != "-1")
-                    {
-                        ListViewItem listItem = new ListViewItem();         //INDEX
-                        listItem.Text = Path.GetFileName(filenames[i]);     //0 filename
-                        listItem.ImageIndex = Convert.ToInt32(filetype[0]);
-                        listItem.SubItems.Add(filetype[1]);                 //1 filetype
-                        listItem.SubItems.Add(filenames[i].ToString());     //2 filepath
-
-                        lstDocuments.Items.Add(listItem);
+                        foreach (FileInfo file in dInfo.GetFiles())
+                        {
+                            files[j]=file.ToString();
+                            j++;
+                        }
+                        listFiles(files,false);
                     }
                 }
             }
@@ -470,7 +488,7 @@ namespace AssinadorDigital
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            listFiles(documents);
+            listFiles(documents,true);
             //String that receives an specific XML object file (Office 2007 compatibility)
             String officeDocument = Properties.Resources.OfficeObject;
             if (digitalSignature != null)
