@@ -12,26 +12,38 @@ namespace AssinadorDigital
         [STAThread]
         static void Main(string[] args)
         {
+            System.Diagnostics.Debug.Assert(true);
+
             if (args.Length > 0)
             {
                 if (args[0] == "/v")
                 {
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
-                    Application.Run(new frmManageDigitalSignature(args[1].Split('|')));
+                    string[] paths = args[1].Split('|');
+                    if ((paths.Length <= 1)
+                        && System.IO.Path.HasExtension(paths[0]))
+                        Application.Run(new frmManageDigitalSignature(args[1].Split('|'),false));
+                    else
+                        Application.Run(new frmIncludeSubFolders(args[1].Split('|'),args[0]));
+                    
                 }
                 else if (args[0] == "/r")
                 {
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
-                    Application.Run(new frmRemoveDigitalSignature(args[1].Split('|')));
+                    string[] paths = args[1].Split('|');
+                    if ((paths.Length <= 1)
+                        && System.IO.Path.HasExtension(paths[0]))
+                        Application.Run(new frmSelectDigitalSignatureToRemove(args[1].Split('|'), false));
+                    else
+                        Application.Run(new frmIncludeSubFolders(args[1].Split('|'), args[0]));
                 }
                 else if (args[0] == "/a")
                 {
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
-                    Application.Run(new frmAddDigitalSignature(args[1].Split('|')));
-                    //Application.Run(new frmViewDigitalSignature(args[1].Split('|')));
+                    Application.Run(new frmAddDigitalSignature(args[1].Split('|'), true));
                 }
             }
         }

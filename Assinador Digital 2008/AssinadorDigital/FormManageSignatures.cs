@@ -6,27 +6,40 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using OpenXML;
+using OPC;
 using System.Security.Cryptography.X509Certificates;
 using System.IO;
+using FileUtils;
 using System.IO.Packaging;
 using System.Xml;
 using System.Security;
+using System.Windows.Xps.Packaging;
 using System.Security.Cryptography;
 using System.Security.Cryptography.Xml;
 using Microsoft.Office.DocumentFormat.OpenXml.Packaging;
-using XPSDocument;
 
 namespace AssinadorDigital
 {
-    public partial class frmAddDigitalSignature : Form
+    public partial class frmManageDigitalSignature : Form
     {
-        #region private Properties
+        #region Constructor
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public frmManageDigitalSignature(string[] paths, bool subfolders)
+        {
+            InitializeComponent();
+            documents = paths;
+            includeSubfolders = subfolders;
+        }
+        #endregion
+
+        #region Private Properties
         /// <summary>
         /// Object of DigitalSignature
         /// </summary>
-        private DigitalSignature digitalSignature;
-        private ArrayList selectedDocuments = new ArrayList();
+        private DigitalSignature digitalSignature;      
+        private List<string> selectedDocuments = new List<string>();
         /// <summary>
         /// String[] of listed documents
         /// </summary>
@@ -39,26 +52,19 @@ namespace AssinadorDigital
         private ArrayList selectedSigners = new ArrayList();
         private ArrayList invalidSignatures = new ArrayList();
         private ArrayList documentProperties = new ArrayList();
-        #endregion
+        private List<string> compatibleDocuments = new List<string>();
+        private bool includeSubfolders;
+        private List<FileStatus> documentsPerformedAction = new List<FileStatus>();
 
-        #region Constructor
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public frmAddDigitalSignature(string[] args)
-        {
-            InitializeComponent();
-            documents = args;
-        }
-        #endregion
+        #endregion        
 
         #region Private Methods
 
-        private void listFiles(string[] filenames, bool openSubFolders)
+        private void listFiles(string[] filenames)
         {
-            int length = filenames.Length;
             string[] filetype = new string[2];
 
+            int length = filenames.Length;
             for (int i = 0; i < length; i++)
             {
                 if (Path.HasExtension(filenames[i]))
@@ -105,6 +111,11 @@ namespace AssinadorDigital
                             filetype[0] = "5";
                             filetype[1] = "Microsoft Office Excel Macro-Enabled Worksheet";
                         }
+                        else if (fileextension == ".xps")
+                        {
+                            filetype[0] = "6";
+                            filetype[1] = "XPS Document";
+                        }
                         else
                         {
                             filetype[0] = "-1";
@@ -121,22 +132,6 @@ namespace AssinadorDigital
 
                             lstDocuments.Items.Add(listItem);
                         }
-                    }
-                }
-                else
-                {
-                    if (openSubFolders)
-                    {
-                        DirectoryInfo dInfo = new DirectoryInfo(filenames[i]);
-                        string[] files = new string[dInfo.GetFiles().Length];
-                        int j = 0;
-
-                        foreach (FileInfo file in dInfo.GetFiles())
-                        {
-                            files[j] = file.FullName.ToString();
-                            j++;
-                        }
-                        listFiles(files, false);
                     }
                 }
             }
@@ -161,7 +156,7 @@ namespace AssinadorDigital
             if (selectedDocuments.Count > 0)
             {
                 loadDigitalSignature(lstDocuments.FocusedItem.SubItems[2].Text);
-                DocumentCoreProperties coreProps = new DocumentCoreProperties(digitalSignature.package);
+                DocumentCoreProperties coreProps = new DocumentCoreProperties(digitalSignature.package, digitalSignature.xpsDocument, digitalSignature.DocumentType);
                 documentProperties = coreProps.DocumentProperties;
 
                 for (int i = 0; i < documentProperties.Count; i++)
@@ -204,11 +199,18 @@ namespace AssinadorDigital
             string fileextension = Path.GetExtension(filepath);
             try
             {
-                digitalSignature.package.Close();
+                if (digitalSignature.DocumentType.Equals(Types.XpsDocument))
+                {
+                    digitalSignature.xpsDocument.Close();
+                }
+                else
+                {
+                    digitalSignature.package.Close();
+                }
             }
             catch (OutOfMemoryException)
             {
-                MessageBox.Show("Memória insuficiênte para executar a aplicação", "Erro",
+                MessageBox.Show("Memoria insuficiênte para executar a aplicação.", "Erro",
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (ObjectDisposedException)
@@ -219,16 +221,18 @@ namespace AssinadorDigital
             catch { }
             finally
             {
-                    if ((fileextension == ".docx") || (fileextension == ".docm"))
-                        digitalSignature = new DigitalSignature(filepath, Types.WordProcessingML);
-                    else if ((fileextension == ".pptx") || (fileextension == ".pptm"))
-                        digitalSignature = new DigitalSignature(filepath, Types.PresentationML);
-                    else if ((fileextension == ".xlsx") || (fileextension == ".xlsm"))
-                        digitalSignature = new DigitalSignature(filepath, Types.SpreadSheetML);
+                if ((fileextension == ".docx") || (fileextension == ".docm"))
+                    digitalSignature = new DigitalSignature(filepath, Types.WordProcessingML);
+                else if ((fileextension == ".pptx") || (fileextension == ".pptm"))
+                    digitalSignature = new DigitalSignature(filepath, Types.PresentationML);
+                else if ((fileextension == ".xlsx") || (fileextension == ".xlsm"))
+                    digitalSignature = new DigitalSignature(filepath, Types.SpreadSheetML);
+                else if (fileextension == ".xps")
+                    digitalSignature = new DigitalSignature(filepath, Types.XpsDocument);
             }
         }
 
-        private bool loadSigners()
+        public bool loadSigners()
         {
             if (documents == null)
                 return false;
@@ -251,7 +255,14 @@ namespace AssinadorDigital
 
                         if (digitalSignature.error)
                         {
-                            digitalSignature.package.Close();
+                            if (digitalSignature.DocumentType.Equals(Types.XpsDocument))
+                            {
+                                digitalSignature.xpsDocument.Close();
+                            }
+                            else
+                            {
+                                digitalSignature.package.Close();
+                            }
                             this.Cursor = Cursors.Arrow;
                             return false;
                         }
@@ -475,75 +486,38 @@ namespace AssinadorDigital
             if (lstDocuments.SelectedItems.Count > 0)
             {
                 loadFileDescription();
-                digitalSignature.package.Close();
+                if (digitalSignature.DocumentType.Equals(Types.XpsDocument))
+                {
+                    digitalSignature.xpsDocument.Close();
+                }
+                else
+                {
+                    digitalSignature.package.Close();
+                }
             }
-            else if (lstDocuments.Items.Count  == 0)
+            else if (lstDocuments.Items.Count == 0)
             {
-                MessageBox.Show("Os arquivos selecionados não são pacotes Open XML Válidos", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Os arquivos selecionados não são pacotes Open XML válidos.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Close();
             }
             this.Cursor = Cursors.Arrow;
             return true;
         }
 
-        private void signDocuments()
-        {
-            //String that receives an specific XML object file (Office 2007 compatibility)
-            String officeDocument = Properties.Resources.OfficeObject;
-            if (digitalSignature != null)
-            {
-                //Call the method that get the digital certificate
-                X509Certificate2 certificate = digitalSignature.GetCertificate();
-                //Call the method that stores the XML in a properties
-                digitalSignature.SetOfficeDocument(officeDocument);
-                String key = null;
-                if (certificate != null)
-                {
-                    string[] newFiles = new string[selectedDocuments.Count];
-                    bool fileCreated = false;
-                    int i = 0;
-                    foreach (string fileToSign in selectedDocuments)
-                    {
-                        string filePath = fileToSign;
-                        string newPath = filePath;
-                        if (txtPath.Text != "")
-                        {
-                            if (txtPath.Text.EndsWith("\\"))
-                                newPath = txtPath.Text + Path.GetFileName(fileToSign);
-                            else
-                                newPath = txtPath.Text + "\\" + Path.GetFileName(fileToSign);
-                        }
-                        if (filePath != newPath)
-                        {
-                            File.Copy(filePath, newPath);
-                            filePath = newPath;
-                            newFiles[i] = newPath;
-                            fileCreated = true;
-                            i++;
-                        }
-                        key = filePath;
-                        loadDigitalSignature(filePath);
-
-                        //Call the method that Sign the open package
-                        digitalSignature.SignPackage(certificate);
-                    }
-                    if (fileCreated)
-                    {
-                        lstDocuments.Items.Clear();
-                        listFiles(newFiles, true);
-                    }
-                }
-            }
-        }
-
         #endregion                                 
-        
+
         #region Events
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void frmManageDigitalSignature_Load(object sender, EventArgs e)
         {
-            listFiles(documents, true);
-            loadSigners();
+            compatibleDocuments.Clear();
+            compatibleDocuments = FileOperations.ListAllowedFilesAndSubfolders(documents, true, includeSubfolders);
+            listFiles(compatibleDocuments.ToArray());
+        }
+
+        private void frmManageDigitalSignature_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Application.Exit();
         }
 
         private void lstFiles_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
@@ -556,10 +530,15 @@ namespace AssinadorDigital
                 status = false;
             }
             gpbSignatures.Enabled = status;
+            btnSign.Enabled = status;
+            btnRemoveAll.Enabled = status;
+            btnRemove.Enabled = false;
         }
 
         private void lstSigners_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
+            btnRemove.Enabled = e.Item.Selected;
+
             for (int i = 0; i < lstSigners.Items.Count; i++)
             {
                 if (lstSigners.Items[i].Selected)
@@ -567,6 +546,95 @@ namespace AssinadorDigital
             }            
             focusedSigner = e.Item;       
             
+        }
+
+        private void btnSign_Click(object sender, EventArgs e)
+        {
+            frmAddDigitalSignature FormAddDigitalSignature = new frmAddDigitalSignature(selectedDocuments.ToArray(), false);
+            FormAddDigitalSignature.ShowDialog();
+
+            listFiles(compatibleDocuments.ToArray());
+        }
+
+        private void btnRemove_Click(object sender, EventArgs e)
+        {
+            List<Signers> signaturesInDocumentsToBeRemoved = new List<Signers>();
+            foreach (ListViewGroup lvg in lstSigners.Groups)
+            {
+                if (lvg.Name != "commonSignatures")
+                {
+                    Signers signers = new Signers();
+                    for (int i = 0; i < lvg.Items.Count; i++)
+                    {
+                        if (lvg.Items[i].Selected)
+                        {
+                            signers.Path = lvg.Items[0].SubItems[3].Text;
+
+                            Signer sgn = new Signer();
+                            sgn.name = lvg.Items[i].SubItems[0].Text;
+                            sgn.issuer = lvg.Items[i].SubItems[1].Text;
+                            sgn.date = lvg.Items[i].SubItems[2].Text;
+                            sgn.serialNumber = lvg.Items[i].SubItems[4].Text;
+                            sgn.uri = lvg.Items[i].SubItems[5].Text;
+
+                            if (!signers.Contains(sgn))
+                            {
+                                signers.Add(sgn);
+                            }
+                        }
+                    }
+                    if (signers.Count > 0)
+                        signaturesInDocumentsToBeRemoved.Add(signers);
+                }
+                else
+                {
+                    Signers signers = new Signers();
+                    signers.Path = "commonSignatures";
+
+                    for (int i = 0; i < lvg.Items.Count; i++)
+                    {
+                        if (lvg.Items[i].Selected)
+                        {
+                            Signer sgn = new Signer();
+                            sgn.name = lvg.Items[i].SubItems[0].Text;
+                            sgn.issuer = lvg.Items[i].SubItems[1].Text;
+                            sgn.date = lvg.Items[i].SubItems[2].Text;
+                            sgn.serialNumber = lvg.Items[i].SubItems[4].Text;
+
+                            if (!signers.Contains(sgn))
+                            {
+                                signers.Add(sgn);
+                            }
+                        }
+                    }
+                    if (signers.Count > 0)
+                        signaturesInDocumentsToBeRemoved.Add(signers);
+                }
+            }
+            List<string> documentsToRemoveSignatures = new List<string>();
+            foreach (string documentPath in selectedDocuments)
+            {
+                documentsToRemoveSignatures.Add(documentPath);
+            }
+            frmRemoveDigitalSignatures FormRemoveDigitalSignatures = new frmRemoveDigitalSignatures(documentsToRemoveSignatures, signaturesInDocumentsToBeRemoved);
+            FormRemoveDigitalSignatures.Owner = (frmManageDigitalSignature)this;
+            FormRemoveDigitalSignatures.ShowDialog();
+
+            loadSigners();
+        }
+
+        private void btnRemoveAll_Click(object sender, EventArgs e)
+        {
+            List<string> documentsToRemoveAllSignatures = new List<string>();
+            foreach (string documentPath in selectedDocuments)
+            {
+                documentsToRemoveAllSignatures.Add(documentPath);
+            }
+            frmRemoveDigitalSignatures FormRemoveDigitalSignatures = new frmRemoveDigitalSignatures(documentsToRemoveAllSignatures);
+            FormRemoveDigitalSignatures.Owner = (frmManageDigitalSignature)this;
+            FormRemoveDigitalSignatures.ShowDialog();
+
+            loadSigners();
         }
 
         private void lstFiles_MouseUp(object sender, MouseEventArgs e)
@@ -580,24 +648,23 @@ namespace AssinadorDigital
             {
                 selectedDocuments.Add(lstDocuments.SelectedItems[i].SubItems[2].Text);
             }
-            //focusedDocument = lstFiles.FocusedItem;          
             lblSelected.Text = i.ToString();
             loadSigners();
         }
-        
+
         private void lstFiles_KeyDown(object sender, KeyEventArgs e)
         {
             selectedDocuments.Clear();
             int count = lstDocuments.SelectedItems.Count;
             if (count > 0)
-                gpbSignatures.Enabled = true;            
+                gpbSignatures.Enabled = true;
             for (int i = 0; i < count; i++)
             {
-                selectedDocuments.Add(lstDocuments.SelectedItems[i].SubItems[2].Text);             
+                selectedDocuments.Add(lstDocuments.SelectedItems[i].SubItems[2].Text);
             }
-            
+
             lblSelected.Text = count.ToString();
-            loadSigners();          
+            loadSigners();
         }
 
         private void btnSelectAll_Click(object sender, EventArgs e)
@@ -614,17 +681,6 @@ namespace AssinadorDigital
             loadSigners();
         }
 
-        private void btnSign_Click(object sender, EventArgs e)
-        {
-            signDocuments();
-        }
-
-        private void btnPath_Click(object sender, EventArgs e)
-        {
-            PathBrowserDialog.ShowDialog();
-            txtPath.Text = PathBrowserDialog.SelectedPath;
-        }
-
         #endregion
-    }
+     }
 }

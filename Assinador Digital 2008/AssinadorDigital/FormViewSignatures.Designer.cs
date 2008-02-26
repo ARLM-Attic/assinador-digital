@@ -1,6 +1,6 @@
 namespace AssinadorDigital
 {
-    partial class frmAddDigitalSignature
+    partial class frmViewDigitalSignature
     {
         /// <summary>
         /// Required designer variable.
@@ -29,12 +29,8 @@ namespace AssinadorDigital
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAddDigitalSignature));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmViewDigitalSignature));
             this.gpbFiles = new System.Windows.Forms.GroupBox();
-            this.lblPath = new System.Windows.Forms.Label();
-            this.txtPath = new System.Windows.Forms.TextBox();
-            this.btnPath = new System.Windows.Forms.Button();
-            this.btnSign = new System.Windows.Forms.Button();
             this.btnSelectAll = new System.Windows.Forms.Button();
             this.gpbDescription = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -68,7 +64,6 @@ namespace AssinadorDigital
             this.sgDate = new System.Windows.Forms.ColumnHeader();
             this.ilistValidate = new System.Windows.Forms.ImageList(this.components);
             this.formHeaderImage = new System.Windows.Forms.PictureBox();
-            this.PathBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.gpbFiles.SuspendLayout();
             this.gpbDescription.SuspendLayout();
             this.gpbSignatures.SuspendLayout();
@@ -80,10 +75,6 @@ namespace AssinadorDigital
             this.gpbFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.gpbFiles.Controls.Add(this.lblPath);
-            this.gpbFiles.Controls.Add(this.txtPath);
-            this.gpbFiles.Controls.Add(this.btnPath);
-            this.gpbFiles.Controls.Add(this.btnSign);
             this.gpbFiles.Controls.Add(this.btnSelectAll);
             this.gpbFiles.Controls.Add(this.gpbDescription);
             this.gpbFiles.Controls.Add(this.lstDocuments);
@@ -94,42 +85,6 @@ namespace AssinadorDigital
             this.gpbFiles.TabIndex = 8;
             this.gpbFiles.TabStop = false;
             this.gpbFiles.Text = "Arquivos";
-            // 
-            // lblPath
-            // 
-            this.lblPath.AutoSize = true;
-            this.lblPath.Location = new System.Drawing.Point(5, 224);
-            this.lblPath.Name = "lblPath";
-            this.lblPath.Size = new System.Drawing.Size(46, 13);
-            this.lblPath.TabIndex = 23;
-            this.lblPath.Text = "Destino:";
-            // 
-            // txtPath
-            // 
-            this.txtPath.Location = new System.Drawing.Point(57, 221);
-            this.txtPath.Name = "txtPath";
-            this.txtPath.Size = new System.Drawing.Size(228, 20);
-            this.txtPath.TabIndex = 22;
-            // 
-            // btnPath
-            // 
-            this.btnPath.Location = new System.Drawing.Point(291, 219);
-            this.btnPath.Name = "btnPath";
-            this.btnPath.Size = new System.Drawing.Size(75, 23);
-            this.btnPath.TabIndex = 21;
-            this.btnPath.Text = "Procurar";
-            this.btnPath.UseVisualStyleBackColor = true;
-            this.btnPath.Click += new System.EventHandler(this.btnPath_Click);
-            // 
-            // btnSign
-            // 
-            this.btnSign.Location = new System.Drawing.Point(390, 219);
-            this.btnSign.Name = "btnSign";
-            this.btnSign.Size = new System.Drawing.Size(75, 23);
-            this.btnSign.TabIndex = 20;
-            this.btnSign.Text = "Assinar";
-            this.btnSign.UseVisualStyleBackColor = true;
-            this.btnSign.Click += new System.EventHandler(this.btnSign_Click);
             // 
             // btnSelectAll
             // 
@@ -173,7 +128,6 @@ namespace AssinadorDigital
             // 
             // label1
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(9, 213);
             this.label1.Name = "label1";
@@ -209,7 +163,6 @@ namespace AssinadorDigital
             // 
             // lblSelected
             // 
-            this.lblSelected.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblSelected.AutoSize = true;
             this.lblSelected.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSelected.Location = new System.Drawing.Point(152, 213);
@@ -406,6 +359,7 @@ namespace AssinadorDigital
             this.ilistFiles.Images.SetKeyName(3, "pptx.gif");
             this.ilistFiles.Images.SetKeyName(4, "xlsx.gif");
             this.ilistFiles.Images.SetKeyName(5, "xlsx.gif");
+            this.ilistFiles.Images.SetKeyName(6, "xps.gif");
             // 
             // gpbSignatures
             // 
@@ -476,11 +430,7 @@ namespace AssinadorDigital
             this.formHeaderImage.TabStop = false;
             this.formHeaderImage.WaitOnLoad = true;
             // 
-            // PathBrowserDialog
-            // 
-            this.PathBrowserDialog.Description = "\"Selecione uma pasta de destino para os arquivos assinados.\"";
-            // 
-            // frmAddDigitalSignature
+            // frmViewDigitalSignature
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -489,11 +439,11 @@ namespace AssinadorDigital
             this.Controls.Add(this.gpbFiles);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(680, 617);
-            this.Name = "frmAddDigitalSignature";
+            this.Name = "frmViewDigitalSignature";
             this.Text = "Visualizar Assinaturas - Assinador Digital";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Load += new System.EventHandler(this.frmViewDigitalSignature_Load);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmViewDigitalSignature_FormClosed);
             this.gpbFiles.ResumeLayout(false);
-            this.gpbFiles.PerformLayout();
             this.gpbDescription.ResumeLayout(false);
             this.gpbDescription.PerformLayout();
             this.gpbSignatures.ResumeLayout(false);
@@ -538,11 +488,6 @@ namespace AssinadorDigital
         private System.Windows.Forms.Label lblDName;
         private System.Windows.Forms.TextBox tbPath;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button btnSign;
-        private System.Windows.Forms.Button btnPath;
-        private System.Windows.Forms.FolderBrowserDialog PathBrowserDialog;
-        private System.Windows.Forms.Label lblPath;
-        private System.Windows.Forms.TextBox txtPath;
     }
 }
 

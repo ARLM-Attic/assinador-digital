@@ -9,10 +9,14 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AssinadorDigital</RootNamespace>
     <AssemblyName>AssinadorDigital</AssemblyName>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
     <ManifestCertificateThumbprint>43074BC41432C05C7CC3E5ACF71CDB53081D7B2A</ManifestCertificateThumbprint>
     <ManifestKeyFile>AssinadorDigital_TemporaryKey.pfx</ManifestKeyFile>
     <GenerateManifests>false</GenerateManifests>
@@ -53,7 +57,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\ctxmenu_src\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -77,11 +81,11 @@
     <Reference Include="WindowsBase, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FormViewSignatures.cs">
+    <Compile Include="FormAddSignature.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormViewSignatures.Designer.cs">
-      <DependentUpon>FormViewSignatures.cs</DependentUpon>
+    <Compile Include="FormAddSignature.designer.cs">
+      <DependentUpon>FormAddSignature.cs</DependentUpon>
     </Compile>
     <Compile Include="FormRemoveSignatures.cs">
       <SubType>Form</SubType>
@@ -89,35 +93,65 @@
     <Compile Include="FormRemoveSignatures.Designer.cs">
       <DependentUpon>FormRemoveSignatures.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormReport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormReport.Designer.cs">
+      <DependentUpon>FormReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormIncludeSubFolders.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormIncludeSubFolders.Designer.cs">
+      <DependentUpon>FormIncludeSubFolders.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormViewSignatures.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormViewSignatures.Designer.cs">
+      <DependentUpon>FormViewSignatures.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormSelectSignaturesToRemove.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSelectSignaturesToRemove.Designer.cs">
+      <DependentUpon>FormSelectSignaturesToRemove.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormManageSignatures.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormManageSignatures.Designer.cs">
       <DependentUpon>FormManageSignatures.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormAddSignature.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormAddSignature.Designer.cs">
-      <DependentUpon>FormAddSignature.cs</DependentUpon>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="FormViewSignatures.resx">
-      <DependentUpon>FormViewSignatures.cs</DependentUpon>
+    <EmbeddedResource Include="FormAddSignature.resx">
+      <DependentUpon>FormAddSignature.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FormRemoveSignatures.resx">
       <DependentUpon>FormRemoveSignatures.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormReport.resx">
+      <DependentUpon>FormReport.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormIncludeSubFolders.resx">
+      <DependentUpon>FormIncludeSubFolders.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormViewSignatures.resx">
+      <DependentUpon>FormViewSignatures.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSelectSignaturesToRemove.resx">
+      <DependentUpon>FormSelectSignaturesToRemove.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormManageSignatures.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FormManageSignatures.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormAddSignature.resx">
-      <DependentUpon>FormAddSignature.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -140,13 +174,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DigitalSignature\OpenXML.csproj">
+    <ProjectReference Include="..\DigitalSignature\OPC.csproj">
       <Project>{DDAED572-6412-4E05-BCAB-0AC23D2A3180}</Project>
-      <Name>OpenXML</Name>
+      <Name>OPC</Name>
     </ProjectReference>
-    <ProjectReference Include="..\XPSDocument\XPSDocument.csproj">
-      <Project>{BEDB6909-4A3A-4427-9521-8ACF3E785C55}</Project>
-      <Name>XPSDocument</Name>
+    <ProjectReference Include="..\FileUtils\FileUtils.csproj">
+      <Project>{DBBFDB76-6E9B-448E-AF0C-FACAA51817A7}</Project>
+      <Name>FileUtils</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -184,6 +218,9 @@
   <ItemGroup>
     <BaseApplicationManifest Include="Properties\app.manifest" />
     <None Include="Resources\remover.1920.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\161.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
