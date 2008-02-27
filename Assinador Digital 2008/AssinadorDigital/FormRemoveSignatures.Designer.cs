@@ -152,9 +152,10 @@
             this.Controls.Add(this.chkCopyDocuments);
             this.Controls.Add(this.btnRemove);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximumSize = new System.Drawing.Size(407, 210);
+            this.MinimumSize = new System.Drawing.Size(407, 210);
             this.Name = "frmRemoveDigitalSignatures";
             this.Text = "Atenção";
-         
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.gpbCopyDoduments.ResumeLayout(false);
             this.gpbCopyDoduments.PerformLayout();

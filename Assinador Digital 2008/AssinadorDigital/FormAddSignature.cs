@@ -9,6 +9,7 @@ using System.IO;
 using OPC;
 using FileUtils;
 using System.Security.Cryptography.X509Certificates;
+using Microsoft.Win32;
 
 namespace AssinadorDigital
 {
@@ -27,6 +28,9 @@ namespace AssinadorDigital
 
             chkViewDocuments.Checked = showCheckBoxViewDocuments;
             chkViewDocuments.Visible = showCheckBoxViewDocuments;
+
+            LastBackedUpFolder = Registry.LocalMachine.OpenSubKey(@"Software\LTIA\Assinador Digital",true);
+            txtPath.Text = LastBackedUpFolder.GetValue("LastBackUpFolder").ToString();
         }
 
         #endregion
@@ -37,6 +41,7 @@ namespace AssinadorDigital
         private List<string> compatibleDocuments = new List<string>();
         private string[] documentsToSign;
         private List<FileStatus> documentsSignStatus = new List<FileStatus>();
+        private RegistryKey LastBackedUpFolder = null;
 
         #endregion
 
@@ -65,6 +70,15 @@ namespace AssinadorDigital
                                 digitalSignature.SetOfficeDocument(officeDocument);
                                 digitalSignature.SignDocument(certificate);
                                 signedDocuments.Add(documentToSign.Path);
+
+                                if (digitalSignature.DocumentType.Equals(Types.XpsDocument))
+                                {
+                                    digitalSignature.xpsDocument.Close();
+                                }
+                                else
+                                {
+                                    digitalSignature.package.Close();
+                                }
                             }
                             catch (NullReferenceException)
                             {
@@ -82,15 +96,6 @@ namespace AssinadorDigital
                             {
                                 documentToSign.Status = Status.GenericError;
                             }
-
-                            if (digitalSignature.DocumentType.Equals(Types.XpsDocument))
-                            {
-                                digitalSignature.xpsDocument.Close();
-                            }
-                            else
-                            {
-                                digitalSignature.package.Close();
-                            }
                         }
                     }
                 }
@@ -106,21 +111,22 @@ namespace AssinadorDigital
                             digitalSignature.SignDocument(certificate);
                             signedDocuments.Add(documentToSign);
 
+                            if (digitalSignature.DocumentType.Equals(Types.XpsDocument))
+                            {
+                                digitalSignature.xpsDocument.Close();
+                            }
+                            else
+                            {
+                                digitalSignature.package.Close();
+                            }
+
                             documentSignStatus = new FileStatus(documentToSign, FileUtils.Status.ModifiedButNotBackedUp);
                         }
                         catch
                         {
                             documentSignStatus = new FileStatus(documentToSign, FileUtils.Status.NotSigned);
                         }
-                        documentsSignStatus.Add(documentSignStatus);
-                        if (digitalSignature.DocumentType.Equals(Types.XpsDocument))
-                        {
-                            digitalSignature.xpsDocument.Close();
-                        }
-                        else
-                        {
-                            digitalSignature.package.Close();
-                        }
+                        documentsSignStatus.Add(documentSignStatus);                        
                     }
                 }
                 return signedDocuments.ToArray();
@@ -179,6 +185,7 @@ namespace AssinadorDigital
         {
             fbdSelectNewPath.ShowDialog();
             txtPath.Text = fbdSelectNewPath.SelectedPath;
+            LastBackedUpFolder.SetValue("LastBackUpFolder", txtPath.Text,RegistryValueKind.String);
         }
 
         private void chkOverwrite_CheckedChanged(object sender, EventArgs e)

@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.IO;
 using OPC;
 using FileUtils;
+using Microsoft.Win32;
 
 namespace AssinadorDigital
 {
@@ -25,6 +26,10 @@ namespace AssinadorDigital
 
             removeSignaturesActionType = removeSignaturesType.removeAllSignatures;
             selectedDocumentsToRemoveSignature = documents;
+
+
+            LastBackedUpFolder = Registry.LocalMachine.OpenSubKey(@"Software\LTIA\Assinador Digital", true);
+            txtPath.Text = LastBackedUpFolder.GetValue("LastBackUpFolder").ToString();
         }
         /// <summary>
         /// Remove the list os signers from the documents
@@ -38,6 +43,9 @@ namespace AssinadorDigital
             removeSignaturesActionType = removeSignaturesType.removeSelectedSignatures;
             selectedDocumentsToRemoveSignature = documents;
             selectedSignaturesInDocuments = selectedSignatures;
+
+            LastBackedUpFolder = Registry.LocalMachine.OpenSubKey(@"Software\LTIA\Assinador Digital", true);
+            txtPath.Text = LastBackedUpFolder.GetValue("LastBackUpFolder").ToString();
         }
 
         #endregion
@@ -52,6 +60,7 @@ namespace AssinadorDigital
         private removeSignaturesType removeSignaturesActionType = new removeSignaturesType();      
         private List<FileStatus> documentsRemoveSignStatus = new List<FileStatus>();
         private List<Signers> selectedSignaturesInDocuments;
+        private RegistryKey LastBackedUpFolder = null;
 
         #endregion
 
@@ -304,6 +313,7 @@ namespace AssinadorDigital
         {
             fbdSelectNewPath.ShowDialog();
             txtPath.Text = fbdSelectNewPath.SelectedPath;
+            LastBackedUpFolder.SetValue("LastBackUpFolder", txtPath.Text, RegistryValueKind.String);
         }
 
         private void chkOverwrite_CheckedChanged(object sender, EventArgs e)

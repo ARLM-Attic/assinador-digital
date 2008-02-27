@@ -87,7 +87,7 @@
             this.lblAlert.TabIndex = 5;
             this.lblAlert.Text = "Um lote de documentos foi selecionado, deseja prosseguir?";
             // 
-            // frmSubFolder
+            // frmIncludeSubFolders
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -98,7 +98,9 @@
             this.Controls.Add(this.btnYes);
             this.Controls.Add(this.chkIncludeSubfolders);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "frmSubFolder";
+            this.MaximumSize = new System.Drawing.Size(372, 109);
+            this.MinimumSize = new System.Drawing.Size(372, 109);
+            this.Name = "frmIncludeSubFolders";
             this.Text = "Atenção";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
