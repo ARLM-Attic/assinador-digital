@@ -440,6 +440,7 @@ namespace AssinadorDigital
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(680, 617);
             this.Name = "frmViewDigitalSignature";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Visualizar Assinaturas - Assinador Digital";
             this.Load += new System.EventHandler(this.frmViewDigitalSignature_Load);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmViewDigitalSignature_FormClosed);

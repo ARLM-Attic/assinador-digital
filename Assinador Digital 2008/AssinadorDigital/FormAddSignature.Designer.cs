@@ -41,13 +41,15 @@
             this.label1 = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
             this.chkIncludeSubfolders = new System.Windows.Forms.CheckBox();
+            this.chkNotSignIfAlreadyExists = new System.Windows.Forms.CheckBox();
             this.gpbCopyDoduments.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // btnSign
             // 
-            this.btnSign.Location = new System.Drawing.Point(312, 160);
+            this.btnSign.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSign.Location = new System.Drawing.Point(312, 183);
             this.btnSign.Name = "btnSign";
             this.btnSign.Size = new System.Drawing.Size(75, 23);
             this.btnSign.TabIndex = 0;
@@ -60,9 +62,9 @@
             this.chkCopyDocuments.AutoSize = true;
             this.chkCopyDocuments.Location = new System.Drawing.Point(75, 44);
             this.chkCopyDocuments.Name = "chkCopyDocuments";
-            this.chkCopyDocuments.Size = new System.Drawing.Size(179, 17);
+            this.chkCopyDocuments.Size = new System.Drawing.Size(192, 17);
             this.chkCopyDocuments.TabIndex = 1;
-            this.chkCopyDocuments.Text = "Salvar uma cópia do documento";
+            this.chkCopyDocuments.Text = "Salvar documento(s) em outro local";
             this.chkCopyDocuments.UseVisualStyleBackColor = true;
             this.chkCopyDocuments.CheckedChanged += new System.EventHandler(this.chkCopyDocuments_CheckedChanged);
             // 
@@ -91,7 +93,7 @@
             this.chkViewDocuments.AutoSize = true;
             this.chkViewDocuments.Checked = true;
             this.chkViewDocuments.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkViewDocuments.Location = new System.Drawing.Point(18, 164);
+            this.chkViewDocuments.Location = new System.Drawing.Point(18, 187);
             this.chkViewDocuments.Name = "chkViewDocuments";
             this.chkViewDocuments.Size = new System.Drawing.Size(181, 17);
             this.chkViewDocuments.TabIndex = 4;
@@ -118,9 +120,9 @@
             this.chkOverwrite.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkOverwrite.Location = new System.Drawing.Point(6, 45);
             this.chkOverwrite.Name = "chkOverwrite";
-            this.chkOverwrite.Size = new System.Drawing.Size(188, 17);
+            this.chkOverwrite.Size = new System.Drawing.Size(200, 17);
             this.chkOverwrite.TabIndex = 6;
-            this.chkOverwrite.Text = "Sobreescrever arquivos existentes";
+            this.chkOverwrite.Text = "Sobreescrever arquivo(s) existente(s)";
             this.chkOverwrite.UseVisualStyleBackColor = true;
             this.chkOverwrite.CheckedChanged += new System.EventHandler(this.chkOverwrite_CheckedChanged);
             // 
@@ -137,16 +139,17 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(72, 12);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(302, 16);
+            this.label1.Size = new System.Drawing.Size(307, 13);
             this.label1.TabIndex = 14;
-            this.label1.Text = "A assinatura será adicionada ao(s) documento(s)";
+            this.label1.Text = "A assinatura será adicionada ao(s) documento(s) selecionado(s)";
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(231, 160);
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCancel.Location = new System.Drawing.Point(231, 183);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 15;
@@ -159,18 +162,33 @@
             this.chkIncludeSubfolders.AutoSize = true;
             this.chkIncludeSubfolders.Checked = true;
             this.chkIncludeSubfolders.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkIncludeSubfolders.Location = new System.Drawing.Point(18, 141);
+            this.chkIncludeSubfolders.Location = new System.Drawing.Point(18, 164);
             this.chkIncludeSubfolders.Name = "chkIncludeSubfolders";
             this.chkIncludeSubfolders.Size = new System.Drawing.Size(105, 17);
             this.chkIncludeSubfolders.TabIndex = 16;
             this.chkIncludeSubfolders.Text = "Incluir subpastas";
             this.chkIncludeSubfolders.UseVisualStyleBackColor = true;
             // 
+            // chkNotSignIfAlreadyExists
+            // 
+            this.chkNotSignIfAlreadyExists.AutoSize = true;
+            this.chkNotSignIfAlreadyExists.Checked = true;
+            this.chkNotSignIfAlreadyExists.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkNotSignIfAlreadyExists.Location = new System.Drawing.Point(18, 141);
+            this.chkNotSignIfAlreadyExists.Name = "chkNotSignIfAlreadyExists";
+            this.chkNotSignIfAlreadyExists.Size = new System.Drawing.Size(199, 17);
+            this.chkNotSignIfAlreadyExists.TabIndex = 17;
+            this.chkNotSignIfAlreadyExists.Text = "Não adicionar assinatura já existente";
+            this.chkNotSignIfAlreadyExists.UseVisualStyleBackColor = true;
+            // 
             // frmAddDigitalSignature
             // 
+            this.AcceptButton = this.btnSign;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(399, 195);
+            this.CancelButton = this.btnCancel;
+            this.ClientSize = new System.Drawing.Size(399, 218);
+            this.Controls.Add(this.chkNotSignIfAlreadyExists);
             this.Controls.Add(this.chkIncludeSubfolders);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.label1);
@@ -179,10 +197,12 @@
             this.Controls.Add(this.chkViewDocuments);
             this.Controls.Add(this.chkCopyDocuments);
             this.Controls.Add(this.btnSign);
+            this.Cursor = System.Windows.Forms.Cursors.Default;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximumSize = new System.Drawing.Size(407, 229);
-            this.MinimumSize = new System.Drawing.Size(407, 229);
+            this.MaximumSize = new System.Drawing.Size(407, 246);
+            this.MinimumSize = new System.Drawing.Size(407, 246);
             this.Name = "frmAddDigitalSignature";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Atenção";
             this.gpbCopyDoduments.ResumeLayout(false);
             this.gpbCopyDoduments.PerformLayout();
@@ -206,5 +226,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.CheckBox chkIncludeSubfolders;
+        private System.Windows.Forms.CheckBox chkNotSignIfAlreadyExists;
     }
 }

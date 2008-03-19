@@ -458,16 +458,17 @@ namespace AssinadorDigital
             this.formHeaderImage.TabStop = false;
             this.formHeaderImage.WaitOnLoad = true;
             // 
-            // frmRemoveDigitalSignature
+            // frmSelectDigitalSignatureToRemove
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(672, 583);
+            this.ClientSize = new System.Drawing.Size(672, 589);
             this.Controls.Add(this.formHeaderImage);
             this.Controls.Add(this.gpbFiles);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(680, 617);
-            this.Name = "frmRemoveDigitalSignature";
+            this.Name = "frmSelectDigitalSignatureToRemove";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Remover Assinaturas - Assinador Digital";
             this.Load += new System.EventHandler(this.frmRemoveDigitalSignature_Load);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmRemoveDigitalSignature_FormClosed);

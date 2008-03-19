@@ -56,15 +56,15 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(72, 12);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(314, 16);
+            this.label1.Size = new System.Drawing.Size(243, 13);
             this.label1.TabIndex = 17;
             this.label1.Text = "Deseja  remover a(s) assinatura(s) selecionada(s)?";
             // 
             // btnCancel
             // 
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Location = new System.Drawing.Point(231, 141);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
@@ -93,9 +93,9 @@
             this.chkOverwrite.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkOverwrite.Location = new System.Drawing.Point(6, 45);
             this.chkOverwrite.Name = "chkOverwrite";
-            this.chkOverwrite.Size = new System.Drawing.Size(188, 17);
+            this.chkOverwrite.Size = new System.Drawing.Size(200, 17);
             this.chkOverwrite.TabIndex = 4;
-            this.chkOverwrite.Text = "Sobreescrever arquivos existentes";
+            this.chkOverwrite.Text = "Sobreescrever arquivo(s) existente(s)";
             this.chkOverwrite.UseVisualStyleBackColor = true;
             this.chkOverwrite.CheckedChanged += new System.EventHandler(this.chkOverwrite_CheckedChanged);
             // 
@@ -124,9 +124,9 @@
             this.chkCopyDocuments.AutoSize = true;
             this.chkCopyDocuments.Location = new System.Drawing.Point(75, 44);
             this.chkCopyDocuments.Name = "chkCopyDocuments";
-            this.chkCopyDocuments.Size = new System.Drawing.Size(179, 17);
+            this.chkCopyDocuments.Size = new System.Drawing.Size(192, 17);
             this.chkCopyDocuments.TabIndex = 14;
-            this.chkCopyDocuments.Text = "Salvar uma cópia do documento";
+            this.chkCopyDocuments.Text = "Salvar documento(s) em outro local";
             this.chkCopyDocuments.UseVisualStyleBackColor = true;
             this.chkCopyDocuments.CheckedChanged += new System.EventHandler(this.chkCopyDocuments_CheckedChanged);
             // 
@@ -142,9 +142,11 @@
             // 
             // frmRemoveDigitalSignatures
             // 
+            this.AcceptButton = this.btnRemove;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(399, 176);
+            this.CancelButton = this.btnCancel;
+            this.ClientSize = new System.Drawing.Size(399, 182);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnCancel);
@@ -155,6 +157,7 @@
             this.MaximumSize = new System.Drawing.Size(407, 210);
             this.MinimumSize = new System.Drawing.Size(407, 210);
             this.Name = "frmRemoveDigitalSignatures";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Atenção";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.gpbCopyDoduments.ResumeLayout(false);

@@ -39,7 +39,8 @@ namespace AssinadorDigital
         /// Object of DigitalSignature
         /// </summary>
         private DigitalSignature digitalSignature;      
-        private List<string> selectedDocuments = new List<string>();
+        //private List<string> selectedDocuments = new List<string>();
+        private List<FileHistory> selectedDocuments = new List<FileHistory>();
         /// <summary>
         /// String[] of listed documents
         /// </summary>
@@ -58,6 +59,106 @@ namespace AssinadorDigital
 
         #endregion        
 
+        #region Public Methods
+
+        public void listFiles(List<FileHistory> filenames)
+        {
+            string[] filetype = new string[2];
+
+            int length = filenames.Count;
+            for (int i = 0; i < length; i++)
+            {
+                string file = filenames[i].NewPath;
+                if (Path.HasExtension(file))
+                {
+                    string fileextension = Path.GetExtension(file);
+                    bool documentFound = false;
+                    foreach (ListViewItem documentAlreadyInList in lstDocuments.Items)
+                    {
+                        if (documentAlreadyInList.SubItems[3].Text == filenames[i].OriginalPath
+                                || documentAlreadyInList.SubItems[2].Text == filenames[i].OriginalPath)
+                        {
+                            documentFound = true;
+                            documentAlreadyInList.SubItems[2].Text = filenames[i].NewPath;
+                            break;
+                        }
+                    }
+                    if (!documentFound)
+                    {
+                        if (fileextension == ".docx")
+                        {
+                            filetype[0] = "0";
+                            filetype[1] = "Microsoft Office Word Document";
+                        }
+                        else if (fileextension == ".docm")
+                        {
+                            filetype[0] = "1";
+                            filetype[1] = "Microsoft Office Word Macro-Enabled Document";
+                        }
+                        else if (fileextension == ".pptx")
+                        {
+                            filetype[0] = "2";
+                            filetype[1] = "Microsoft Office PowerPoint Presentation";
+                        }
+                        else if (fileextension == ".pptm")
+                        {
+                            filetype[0] = "3";
+                            filetype[1] = "Microsoft Office PowerPoint Macro-Enabled Presentation";
+                        }
+                        else if (fileextension == ".xlsx")
+                        {
+                            filetype[0] = "4";
+                            filetype[1] = "Microsoft Office Excel Worksheet";
+                        }
+                        else if (fileextension == ".xlsm")
+                        {
+                            filetype[0] = "5";
+                            filetype[1] = "Microsoft Office Excel Macro-Enabled Worksheet";
+                        }
+                        else if (fileextension == ".xps")
+                        {
+                            filetype[0] = "6";
+                            filetype[1] = "XPS Document";
+                        }
+                        else
+                        {
+                            filetype[0] = "-1";
+                            filetype[1] = "Unknow";
+                        }
+
+                        if (filetype[0] != "-1")
+                        {
+                            ListViewItem listItem = new ListViewItem();         //INDEX
+                            listItem.Text = Path.GetFileName(file);             //0 filename
+                            listItem.ImageIndex = Convert.ToInt32(filetype[0]);
+                            listItem.SubItems.Add(filetype[1]);                 //1 filetype
+                            listItem.SubItems.Add(file);                        //2 filepath
+                            listItem.SubItems.Add(filenames[i].OriginalPath);   //3 originalFilePath
+
+                            lstDocuments.Items.Add(listItem);
+                        }
+                    }
+                }
+            }
+            selectedDocuments.Clear();
+            int count = lstDocuments.Items.Count;
+
+            for (int i = 0; i < count; i++)
+            {
+                lstDocuments.Items[i].Selected = true;
+                FileHistory fh = new FileHistory(lstDocuments.SelectedItems[i].SubItems[3].Text, lstDocuments.SelectedItems[i].SubItems[2].Text);
+                selectedDocuments.Add(fh);
+                lblSelected.Text = count.ToString();
+            }
+            if (lstDocuments.Items.Count > 0)
+            {
+                lstDocuments.Items[0].Focused = true;
+            }
+            loadSigners();
+        }
+
+        #endregion
+
         #region Private Methods
 
         private void listFiles(string[] filenames)
@@ -73,7 +174,7 @@ namespace AssinadorDigital
                     bool documentFound = false;
                     foreach (ListViewItem documentAlreadyInList in lstDocuments.Items)
                     {
-                        if (documentAlreadyInList.SubItems[2].Text == filenames[i])
+                        if (documentAlreadyInList.SubItems[3].Text == filenames[i])
                         {
                             documentFound = true;
                             break;
@@ -128,7 +229,8 @@ namespace AssinadorDigital
                             listItem.Text = Path.GetFileName(filenames[i]);     //0 filename
                             listItem.ImageIndex = Convert.ToInt32(filetype[0]);
                             listItem.SubItems.Add(filetype[1]);                 //1 filetype
-                            listItem.SubItems.Add(filenames[i].ToString());     //2 filepath
+                            listItem.SubItems.Add(filenames[i]);                //2 filepath
+                            listItem.SubItems.Add(filenames[i]);                //3 originalFilePath
 
                             lstDocuments.Items.Add(listItem);
                         }
@@ -141,7 +243,8 @@ namespace AssinadorDigital
             for (int i = 0; i < count; i++)
             {
                 lstDocuments.Items[i].Selected = true;
-                selectedDocuments.Add(lstDocuments.SelectedItems[i].SubItems[2].Text);
+                FileHistory fh = new FileHistory(lstDocuments.SelectedItems[i].SubItems[3].Text, lstDocuments.SelectedItems[i].SubItems[2].Text);
+                selectedDocuments.Add(fh);
                 lblSelected.Text = count.ToString();
             }
             if (lstDocuments.Items.Count > 0)
@@ -247,11 +350,11 @@ namespace AssinadorDigital
                 List<string> problematicFoundDocuments = new List<string>();
 
                 Signers commonSigners = new Signers();
-                foreach (string filepath in selectedDocuments)
+                foreach (FileHistory filepath in selectedDocuments)
                 {
                     try
                     {
-                        loadDigitalSignature(filepath);
+                        loadDigitalSignature(filepath.NewPath);
 
                         if (digitalSignature.error)
                         {
@@ -271,7 +374,7 @@ namespace AssinadorDigital
                         if (!digitalSignature.Validate())
                             invalidSignatures = digitalSignature.InvalidDigitalSignatureHolderNames;
 
-                        ListViewGroup sigaturesGroup = new ListViewGroup(Path.GetFileName(filepath));
+                        ListViewGroup sigaturesGroup = new ListViewGroup(Path.GetFileName(filepath.NewPath));
                         lstSigners.Groups.Add(sigaturesGroup);
 
                         foreach (Signer signer in digitalSignature.signers)
@@ -303,9 +406,10 @@ namespace AssinadorDigital
                             newSignerItem.Group = sigaturesGroup;
                             newSignerItem.SubItems.Add(signature[1]);           //1 signer.issuer
                             newSignerItem.SubItems.Add(signature[3]);           //2 signer.date
-                            newSignerItem.SubItems.Add(filepath);               //3 signer.path
+                            newSignerItem.SubItems.Add(filepath.NewPath);       //3 signer.path
                             newSignerItem.SubItems.Add(signature[4]);           //4 signer.serialNumber
                             newSignerItem.SubItems.Add(signature[2]);           //5 signer.URI
+                            newSignerItem.SubItems.Add(filepath.OriginalPath);  //6 signer.originalPath
 
                             lstSigners.Items.Add(newSignerItem);
 
@@ -338,12 +442,12 @@ namespace AssinadorDigital
                     }
                     catch (IOException)
                     {
-                        if (MessageBox.Show("Erro ao abrir o documento " + System.IO.Path.GetFileName(filepath) + ".\nCertifique-se de que o documento não foi movido ou está em uso por outra aplicação.\n\nDeseja retirá-lo da lista?", System.IO.Path.GetFileName(filepath),
+                        if (MessageBox.Show("Erro ao abrir o documento " + System.IO.Path.GetFileName(filepath.NewPath) + ".\nCertifique-se de que o documento não foi movido ou está em uso por outra aplicação.\n\nDeseja retirá-lo da lista?", System.IO.Path.GetFileName(filepath.NewPath),
             MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         {
                             foreach (ListViewItem item in lstDocuments.Items)
                             {
-                                if (item.SubItems[2].Text == filepath)
+                                if (item.SubItems[2].Text == filepath.NewPath)
                                 {
                                     problematicFoundDocuments.Add(item.SubItems[2].Text);
                                     lstDocuments.Items.Remove(item);
@@ -354,7 +458,7 @@ namespace AssinadorDigital
                         {
                             foreach (ListViewItem item in lstDocuments.Items)
                             {
-                                if (item.SubItems[2].Text == filepath)
+                                if (item.SubItems[2].Text == filepath.NewPath)
                                 {
                                     problematicFoundDocuments.Add(item.SubItems[2].Text);
                                     item.Selected = false;
@@ -368,12 +472,12 @@ namespace AssinadorDigital
                     }
                     catch (ArgumentNullException)
                     {
-                        if (MessageBox.Show("O Documento " + System.IO.Path.GetFileName(filepath) + "não está disponível para abertura.\n\nDeseja retirá-lo da lista?", System.IO.Path.GetFileName(filepath),
+                        if (MessageBox.Show("O Documento " + System.IO.Path.GetFileName(filepath.NewPath) + "não está disponível para abertura.\n\nDeseja retirá-lo da lista?", System.IO.Path.GetFileName(filepath.NewPath),
             MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         {
                             foreach (ListViewItem item in lstDocuments.Items)
                             {
-                                if (item.SubItems[2].Text == filepath)
+                                if (item.SubItems[2].Text == filepath.NewPath)
                                 {
                                     problematicFoundDocuments.Add(item.SubItems[2].Text);
                                     lstDocuments.Items.Remove(item);
@@ -384,7 +488,7 @@ namespace AssinadorDigital
                         {
                             foreach (ListViewItem item in lstDocuments.Items)
                             {
-                                if (item.SubItems[2].Text == filepath)
+                                if (item.SubItems[2].Text == filepath.NewPath)
                                 {
                                     problematicFoundDocuments.Add(item.SubItems[2].Text);
                                     item.Selected = false;
@@ -398,12 +502,12 @@ namespace AssinadorDigital
                     }
                     catch (OpenXmlPackageException)
                     {
-                        if (MessageBox.Show("O Documento " + System.IO.Path.GetFileName(filepath) + " não é um pacote Open XML válido.\n\nDeseja retirá-lo da lista?", System.IO.Path.GetFileName(filepath),
+                        if (MessageBox.Show("O Documento " + System.IO.Path.GetFileName(filepath.NewPath) + " não é um pacote Open XML válido.\n\nDeseja retirá-lo da lista?", System.IO.Path.GetFileName(filepath.NewPath),
             MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         {
                             foreach (ListViewItem item in lstDocuments.Items)
                             {
-                                if (item.SubItems[2].Text == filepath)
+                                if (item.SubItems[2].Text == filepath.NewPath)
                                 {
                                     problematicFoundDocuments.Add(item.SubItems[2].Text);
                                     lstDocuments.Items.Remove(item);
@@ -414,7 +518,7 @@ namespace AssinadorDigital
                         {
                             foreach (ListViewItem item in lstDocuments.Items)
                             {
-                                if (item.SubItems[2].Text == filepath)
+                                if (item.SubItems[2].Text == filepath.NewPath)
                                 {
                                     problematicFoundDocuments.Add(item.SubItems[2].Text);
                                     item.Selected = false;
@@ -429,12 +533,12 @@ namespace AssinadorDigital
                     catch (Exception err)
                     {
 
-                        if (MessageBox.Show("Houve um problema na listagem do seguinte documento:\n " + System.IO.Path.GetFileName(filepath) + "\n" + err.Message.Substring(0, err.Message.IndexOf(".") + 1) + "\n\nDeseja excluí-lo da lista?", System.IO.Path.GetFileName(filepath),
+                        if (MessageBox.Show("Houve um problema na listagem do seguinte documento:\n " + System.IO.Path.GetFileName(filepath.NewPath) + "\n" + err.Message.Substring(0, err.Message.IndexOf(".") + 1) + "\n\nDeseja excluí-lo da lista?", System.IO.Path.GetFileName(filepath.NewPath),
             MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         {
                             foreach (ListViewItem item in lstDocuments.Items)
                             {
-                                if (item.SubItems[2].Text == filepath)
+                                if (item.SubItems[2].Text == filepath.NewPath)
                                 {
                                     problematicFoundDocuments.Add(item.SubItems[2].Text);
                                     lstDocuments.Items.Remove(item);
@@ -445,7 +549,7 @@ namespace AssinadorDigital
                         {
                             foreach (ListViewItem item in lstDocuments.Items)
                             {
-                                if (item.SubItems[2].Text == filepath)
+                                if (item.SubItems[2].Text == filepath.NewPath)
                                 {
                                     problematicFoundDocuments.Add(item.SubItems[2].Text);
                                     item.Selected = false;
@@ -473,14 +577,17 @@ namespace AssinadorDigital
                         newCommonSignerItem.SubItems.Add("");                   //2 signer.date
                         newCommonSignerItem.SubItems.Add("");                   //3 signer.path
                         newCommonSignerItem.SubItems.Add(sig.serialNumber);     //4 signer.serialNumber
+                        newCommonSignerItem.SubItems.Add("");                   //5 signer.URI
+                        newCommonSignerItem.SubItems.Add("");                   //6 signer.originalPath
 
                         lstSigners.Items.Add(newCommonSignerItem);
                     }
                 }
                 selectedDocuments.Clear();
-                foreach (ListViewItem lvt in lstDocuments.SelectedItems)
+                foreach (ListViewItem lvi in lstDocuments.SelectedItems)
                 {
-                    selectedDocuments.Add(lvt.SubItems[2].Text);
+                    FileHistory fh = new FileHistory(lvi.SubItems[3].Text, lvi.SubItems[2].Text);
+                    selectedDocuments.Add(fh);
                 }
             }
             if (lstDocuments.SelectedItems.Count > 0)
@@ -537,7 +644,10 @@ namespace AssinadorDigital
 
         private void lstSigners_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
-            btnRemove.Enabled = e.Item.Selected;
+            if (lstSigners.SelectedItems.Count > 0)
+                btnRemove.Enabled = true;
+            else
+                btnRemove.Enabled = false;
 
             for (int i = 0; i < lstSigners.Items.Count; i++)
             {
@@ -550,10 +660,15 @@ namespace AssinadorDigital
 
         private void btnSign_Click(object sender, EventArgs e)
         {
-            frmAddDigitalSignature FormAddDigitalSignature = new frmAddDigitalSignature(selectedDocuments.ToArray(), false);
-            FormAddDigitalSignature.ShowDialog();
+            List<FileHistory> documentsToAddSignatures = new List<FileHistory>();
+            foreach (FileHistory document in selectedDocuments)
+            {
+                documentsToAddSignatures.Add(document);
+            }
 
-            listFiles(compatibleDocuments.ToArray());
+            frmAddDigitalSignature FormAddDigitalSignature = new frmAddDigitalSignature(documentsToAddSignatures, false);
+            FormAddDigitalSignature.Owner = (frmManageDigitalSignature)this;
+            FormAddDigitalSignature.ShowDialog();
         }
 
         private void btnRemove_Click(object sender, EventArgs e)
@@ -568,7 +683,7 @@ namespace AssinadorDigital
                     {
                         if (lvg.Items[i].Selected)
                         {
-                            signers.Path = lvg.Items[0].SubItems[3].Text;
+                            signers.Path = lvg.Items[0].SubItems[6].Text;
 
                             Signer sgn = new Signer();
                             sgn.name = lvg.Items[i].SubItems[0].Text;
@@ -611,48 +726,46 @@ namespace AssinadorDigital
                         signaturesInDocumentsToBeRemoved.Add(signers);
                 }
             }
-            List<string> documentsToRemoveSignatures = new List<string>();
-            foreach (string documentPath in selectedDocuments)
+            List<FileHistory> documentsToRemoveSignatures = new List<FileHistory>();
+            foreach (FileHistory document in selectedDocuments)
             {
-                documentsToRemoveSignatures.Add(documentPath);
+                documentsToRemoveSignatures.Add(document);
             }
             frmRemoveDigitalSignatures FormRemoveDigitalSignatures = new frmRemoveDigitalSignatures(documentsToRemoveSignatures, signaturesInDocumentsToBeRemoved);
             FormRemoveDigitalSignatures.Owner = (frmManageDigitalSignature)this;
             FormRemoveDigitalSignatures.ShowDialog();
-
-            loadSigners();
         }
 
         private void btnRemoveAll_Click(object sender, EventArgs e)
         {
-            List<string> documentsToRemoveAllSignatures = new List<string>();
-            foreach (string documentPath in selectedDocuments)
+            List<FileHistory> documentsToRemoveAllSignatures = new List<FileHistory>();
+            foreach (FileHistory document in selectedDocuments)
             {
-                documentsToRemoveAllSignatures.Add(documentPath);
+                documentsToRemoveAllSignatures.Add(document);
             }
             frmRemoveDigitalSignatures FormRemoveDigitalSignatures = new frmRemoveDigitalSignatures(documentsToRemoveAllSignatures);
             FormRemoveDigitalSignatures.Owner = (frmManageDigitalSignature)this;
             FormRemoveDigitalSignatures.ShowDialog();
-
-            loadSigners();
         }
 
         private void lstFiles_MouseUp(object sender, MouseEventArgs e)
         {
-            selectedDocuments.Clear();           
+            selectedDocuments.Clear();
             int count = lstDocuments.SelectedItems.Count;
-            if(count>0)
+            if (count > 0)
                 gpbSignatures.Enabled = true;
             int i = 0;
-            for (i=0; i < count; i++)
+            for (i = 0; i < count; i++)
             {
-                selectedDocuments.Add(lstDocuments.SelectedItems[i].SubItems[2].Text);
+                FileHistory fh = new FileHistory(lstDocuments.SelectedItems[i].SubItems[3].Text, lstDocuments.SelectedItems[i].SubItems[2].Text);
+                selectedDocuments.Add(fh);
             }
+
             lblSelected.Text = i.ToString();
             loadSigners();
         }
 
-        private void lstFiles_KeyDown(object sender, KeyEventArgs e)
+        private void lstFiles_KeyUp(object sender, KeyEventArgs e)
         {
             selectedDocuments.Clear();
             int count = lstDocuments.SelectedItems.Count;
@@ -660,7 +773,8 @@ namespace AssinadorDigital
                 gpbSignatures.Enabled = true;
             for (int i = 0; i < count; i++)
             {
-                selectedDocuments.Add(lstDocuments.SelectedItems[i].SubItems[2].Text);
+                FileHistory fh = new FileHistory(lstDocuments.SelectedItems[i].SubItems[3].Text, lstDocuments.SelectedItems[i].SubItems[2].Text);
+                selectedDocuments.Add(fh);
             }
 
             lblSelected.Text = count.ToString();
@@ -675,9 +789,15 @@ namespace AssinadorDigital
             for (int i = 0; i < count; i++)
             {
                 lstDocuments.Items[i].Selected = true;
-                selectedDocuments.Add(lstDocuments.SelectedItems[i].SubItems[2].Text);
-                lblSelected.Text = count.ToString();
+                FileHistory fh = new FileHistory(lstDocuments.SelectedItems[i].SubItems[3].Text, lstDocuments.SelectedItems[i].SubItems[2].Text);
+                selectedDocuments.Add(fh);
             }
+            if (lstDocuments.Items.Count > 0)
+            {
+                lstDocuments.Items[0].Focused = true;
+            }
+            lblSelected.Text = count.ToString();
+
             loadSigners();
         }
 

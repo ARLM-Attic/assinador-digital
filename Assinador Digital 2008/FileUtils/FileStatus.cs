@@ -7,11 +7,20 @@ namespace FileUtils
 {
     public class FileStatus
     {
+        public string OldPath;
         public string Path;
         public Status Status;
 
         public FileStatus(string path, Status status)
         {
+            OldPath = path;
+            Path = path;
+            Status = status;
+        }
+
+        public FileStatus(string oldPath, string path, Status status)
+        {
+            OldPath = oldPath;
             Path = path;
             Status = status;
         }
@@ -29,6 +38,8 @@ namespace FileUtils
         GenericError,
         CorruptedContent,
         NotSigned,
-        InUseByAnotherProcess
+        InUseByAnotherProcess,
+        SignatureAlreadyExists,
+        SignatureAlreadyExistsNotBackedUp
     }
 }

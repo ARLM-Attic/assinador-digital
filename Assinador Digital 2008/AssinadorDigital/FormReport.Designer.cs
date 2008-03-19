@@ -33,6 +33,7 @@
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
             this.btnOK = new System.Windows.Forms.Button();
+            this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
             this.SuspendLayout();
             // 
             // lstReport
@@ -44,11 +45,12 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.lstReport.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
+            this.columnHeader3,
             this.columnHeader2});
             this.lstReport.FullRowSelect = true;
             this.lstReport.Location = new System.Drawing.Point(13, 12);
             this.lstReport.Name = "lstReport";
-            this.lstReport.Size = new System.Drawing.Size(667, 413);
+            this.lstReport.Size = new System.Drawing.Size(717, 469);
             this.lstReport.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lstReport.TabIndex = 0;
             this.lstReport.UseCompatibleStateImageBehavior = false;
@@ -57,17 +59,18 @@
             // columnHeader1
             // 
             this.columnHeader1.Text = "Documento";
-            this.columnHeader1.Width = 263;
+            this.columnHeader1.Width = 273;
             // 
             // columnHeader2
             // 
             this.columnHeader2.Text = "Status";
-            this.columnHeader2.Width = 379;
+            this.columnHeader2.Width = 241;
             // 
             // btnOK
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOK.Location = new System.Drawing.Point(605, 431);
+            this.btnOK.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnOK.Location = new System.Drawing.Point(655, 487);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 1;
@@ -75,15 +78,23 @@
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "Documento original";
+            this.columnHeader3.Width = 187;
+            // 
             // frmReport
             // 
+            this.AcceptButton = this.btnOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(692, 466);
+            this.CancelButton = this.btnOK;
+            this.ClientSize = new System.Drawing.Size(742, 522);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.lstReport);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmReport";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Relatório";
             this.Load += new System.EventHandler(this.frmReport_Load);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmReport_FormClosed);
@@ -97,6 +108,7 @@
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.Button btnOK;
+        private System.Windows.Forms.ColumnHeader columnHeader3;
 
     }
 }

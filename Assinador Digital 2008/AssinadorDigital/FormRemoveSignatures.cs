@@ -48,15 +48,35 @@ namespace AssinadorDigital
             txtPath.Text = LastBackedUpFolder.GetValue("LastBackUpFolder").ToString();
         }
 
+        public frmRemoveDigitalSignatures(List<FileHistory> documents)
+        {
+            InitializeComponent();
+
+            removeSignaturesActionType = removeSignaturesType.removeAllSignatures;
+            selectedDocumentsToRemoveDigitalSignature = documents;
+
+            LastBackedUpFolder = Registry.LocalMachine.OpenSubKey(@"Software\LTIA\Assinador Digital", true);
+            txtPath.Text = LastBackedUpFolder.GetValue("LastBackUpFolder").ToString();
+        }
+
+        public frmRemoveDigitalSignatures(List<FileHistory> documents, List<Signers> selectedSignatures)
+        {
+            InitializeComponent();
+
+            removeSignaturesActionType = removeSignaturesType.removeSelectedSignatures;
+            selectedDocumentsToRemoveDigitalSignature = documents;
+            selectedSignaturesInDocuments = selectedSignatures;
+
+            LastBackedUpFolder = Registry.LocalMachine.OpenSubKey(@"Software\LTIA\Assinador Digital", true);
+            txtPath.Text = LastBackedUpFolder.GetValue("LastBackUpFolder").ToString();
+        }
         #endregion
 
         #region Private Properties
 
-        /// <summary>
-        /// Object of DigitalSignature
-        /// </summary>
         private DigitalSignature digitalSignature;
         private List<string> selectedDocumentsToRemoveSignature = new List<string>();
+        private List<FileHistory> selectedDocumentsToRemoveDigitalSignature = new List<FileHistory>();
         private removeSignaturesType removeSignaturesActionType = new removeSignaturesType();      
         private List<FileStatus> documentsRemoveSignStatus = new List<FileStatus>();
         private List<Signers> selectedSignaturesInDocuments;
@@ -123,58 +143,61 @@ namespace AssinadorDigital
         private void removeSignatures()
         {
             List<string> documentsReadyToRemoveSignature = new List<string>();
-
-            List<string> documentsToInteract = new List<string>();
+            List<FileHistory> documentsToInteract = new List<FileHistory>();
 
             switch (removeSignaturesActionType)
             {
                 case removeSignaturesType.removeAllSignatures:
-                    foreach (string documentsToRemoveSignatures in selectedDocumentsToRemoveSignature)
-                    {
-                        documentsToInteract.Add(documentsToRemoveSignatures);
-                    }
+                    documentsToInteract = selectedDocumentsToRemoveDigitalSignature;
                     break;
                 case removeSignaturesType.removeSelectedSignatures:
                     if (selectedSignaturesInDocuments != null)
                     {
+                        bool commonSignatures = false;
+                        List<string> docs = new List<string>();
                         foreach (Signers signers in selectedSignaturesInDocuments)
                         {
                             if (signers.Path != "commonSignatures")
                             {
-                                documentsToInteract.Add(signers.Path);
+                                docs.Add(signers.Path);
                             }
                             else
                             {
-                                documentsToInteract.Clear();
-                                documentsToInteract = selectedDocumentsToRemoveSignature;
+                                docs.Clear();
+                                commonSignatures = true;
                                 break;
                             }
+                        }
+                        if (!commonSignatures)
+                        {
+                            foreach (FileHistory fh in selectedDocumentsToRemoveDigitalSignature)
+                            {
+                                if (docs.Contains(fh.OriginalPath))
+                                {
+                                    documentsToInteract.Add(fh);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            documentsToInteract = selectedDocumentsToRemoveDigitalSignature;
                         }
                     }
                     break;
             }
-
-            if (chkCopyDocuments.Checked)
+            if (documentsToInteract.Count > 0)
             {
-                documentsRemoveSignStatus = FileOperations.Copy(documentsToInteract, txtPath.Text, chkOverwrite.Checked);
-
-                foreach (FileStatus documentToRemoveSign in documentsRemoveSignStatus)
+                if (chkCopyDocuments.Checked)
                 {
-                    if (documentToRemoveSign.Status == Status.Success ||
-                        documentToRemoveSign.Status == Status.Unmodified)
-                    {
-                        documentsReadyToRemoveSignature.Add(documentToRemoveSign.Path);
-                    }
+                    documentsRemoveSignStatus = FileOperations.Copy(documentsToInteract, txtPath.Text, chkOverwrite.Checked);
                 }
-            }
-            else
-            {
-                foreach (string documentToRemoveSignature in documentsToInteract)
+                else
                 {
-                    documentsReadyToRemoveSignature.Add(documentToRemoveSignature);
-                    FileStatus documentStatus = new FileStatus(documentToRemoveSignature, FileUtils.Status.ModifiedButNotBackedUp);
-
-                    documentsRemoveSignStatus.Add(documentStatus);
+                    foreach (FileHistory documentToRemoveSignature in documentsToInteract)
+                    {
+                        FileStatus documentStatus = new FileStatus(documentToRemoveSignature.OriginalPath, documentToRemoveSignature.NewPath, FileUtils.Status.ModifiedButNotBackedUp);
+                        documentsRemoveSignStatus.Add(documentStatus);
+                    }
                 }
             }
 
@@ -183,112 +206,113 @@ namespace AssinadorDigital
                 case removeSignaturesType.removeAllSignatures:
                     foreach (FileStatus documentToRemoveSignature in documentsRemoveSignStatus)
                     {
-                        try
+                        if (documentToRemoveSignature.Status == Status.Success)
                         {
-                            loadDigitalSignature(documentToRemoveSignature.Path);
-                            digitalSignature._RemoveAllSignatures();
-                        }
-                        catch (NullReferenceException)
-                        {
-                            documentToRemoveSignature.Status = Status.GenericError;
-                        }
-                        catch (FileFormatException)
-                        {
-                            documentToRemoveSignature.Status = Status.CorruptedContent;
-                        }
-                        catch (IOException)
-                        {
-                            documentToRemoveSignature.Status = Status.InUseByAnotherProcess;
-                        }
-                        catch (Exception)
-                        {
-                            documentToRemoveSignature.Status = Status.GenericError;
-                        }
+                            try
+                            {
+                                loadDigitalSignature(documentToRemoveSignature.Path);
+                                digitalSignature._RemoveAllSignatures();
+                            }
+                            catch (NullReferenceException)
+                            {
+                                documentToRemoveSignature.Status = Status.GenericError;
+                            }
+                            catch (FileFormatException)
+                            {
+                                documentToRemoveSignature.Status = Status.CorruptedContent;
+                            }
+                            catch (IOException)
+                            {
+                                documentToRemoveSignature.Status = Status.InUseByAnotherProcess;
+                            }
+                            catch (Exception)
+                            {
+                                documentToRemoveSignature.Status = Status.GenericError;
+                            }
 
-                        if (digitalSignature.DocumentType.Equals(Types.XpsDocument))
-                        {
-                            digitalSignature.xpsDocument.Close();
-                        }
-                        else
-                        {
-                            digitalSignature.package.Close();
+                            if (digitalSignature.DocumentType.Equals(Types.XpsDocument))
+                            {
+                                digitalSignature.xpsDocument.Close();
+                            }
+                            else
+                            {
+                                digitalSignature.package.Close();
+                            }
                         }
                     }
                     break;
                 case removeSignaturesType.removeSelectedSignatures:
                     List<FileStatus> removeSignatureStatusList = new List<FileStatus>();
                     FileStatus selectedFileStatus = null;
-                    foreach (string readyToRemoveSignature in documentsReadyToRemoveSignature)
+                    foreach (FileStatus documentToRemoveSignature in documentsRemoveSignStatus)
                     {
-                        foreach (Signers document in selectedSignaturesInDocuments)
+                        if (documentToRemoveSignature.Status == Status.Success
+                                || documentToRemoveSignature.Status == Status.ModifiedButNotBackedUp)
                         {
-                            if ((readyToRemoveSignature == document.Path) || (document.Path == "commonSignatures"))
+                            foreach (Signers document in selectedSignaturesInDocuments)
                             {
-                                try
+                                if ((documentToRemoveSignature.OldPath == document.Path) || (document.Path == "commonSignatures"))
                                 {
-                                    if (document.Path != "commonSignatures")
+                                    try
                                     {
-                                        foreach (Signer signer in document)
+                                        string documentPath;
+                                        string documentOldPath = "";
+                                        if (document.Path != "commonSignatures")
                                         {
-                                            loadDigitalSignature(document.Path);
-                                            Uri signUri = new Uri(signer.uri, UriKind.Relative);
-                                            digitalSignature.RemoveUniqueSignatureFromFile(signUri);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        foreach (string documentReady in documentsReadyToRemoveSignature)
-                                        {
-                                            loadDigitalSignature(documentReady);
+                                            documentOldPath = documentToRemoveSignature.OldPath;
+                                            documentPath = documentToRemoveSignature.Path;
                                             foreach (Signer signer in document)
                                             {
+                                                loadDigitalSignature(documentPath);
+                                                Uri signUri = new Uri(signer.uri, UriKind.Relative);
+                                                digitalSignature.RemoveUniqueSignatureFromFile(signUri);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            documentOldPath = documentToRemoveSignature.OldPath;
+                                            documentPath = documentToRemoveSignature.Path;
+                                            foreach (Signer signer in document)
+                                            {
+                                                loadDigitalSignature(documentPath);
                                                 string serialNumber = signer.serialNumber;
                                                 digitalSignature.RemoveSignaturesFromFilesBySigner(serialNumber);
                                             }
                                         }
+                                        if (chkCopyDocuments.Checked)
+                                        {
+                                            selectedFileStatus = new FileStatus(documentOldPath, documentPath, Status.Success);
+                                        }
+                                        else
+                                        {
+                                            selectedFileStatus = new FileStatus(documentOldPath, documentPath, Status.ModifiedButNotBackedUp);
+                                        }
                                     }
-                                    if (chkCopyDocuments.Checked)
+                                    catch (NullReferenceException)
                                     {
-                                        selectedFileStatus = new FileStatus(document.Path, Status.Success);
+                                        selectedFileStatus = new FileStatus(document.Path, Status.GenericError);
                                     }
-                                    else 
+                                    catch (FileFormatException)
                                     {
-                                        selectedFileStatus = new FileStatus(document.Path, Status.ModifiedButNotBackedUp);
+                                        selectedFileStatus = new FileStatus(document.Path, Status.CorruptedContent);
                                     }
-                                        removeSignatureStatusList.Add(selectedFileStatus);
-                                    
-                                }
-                                catch (NullReferenceException)
-                                {
-                                    selectedFileStatus = new FileStatus(document.Path, Status.GenericError);
-                                    removeSignatureStatusList.Add(selectedFileStatus);
-                                }
-                                catch (FileFormatException)
-                                {
-                                    selectedFileStatus = new FileStatus(document.Path, Status.CorruptedContent);
-                                    removeSignatureStatusList.Add(selectedFileStatus);
-                                }
-                                catch (IOException)
-                                {
-                                    selectedFileStatus = new FileStatus(document.Path, Status.InUseByAnotherProcess);
-                                    removeSignatureStatusList.Add(selectedFileStatus);
-                                }
-                                catch (Exception)
-                                {
-                                    selectedFileStatus = new FileStatus(document.Path, Status.GenericError);
-                                    removeSignatureStatusList.Add(selectedFileStatus);
-                                }
+                                    catch (IOException)
+                                    {
+                                        selectedFileStatus = new FileStatus(document.Path, Status.InUseByAnotherProcess);
+                                    }
+                                    catch (Exception)
+                                    {
+                                        selectedFileStatus = new FileStatus(document.Path, Status.GenericError);
+                                    }
 
+                                    if (!removeSignatureStatusList.Contains(selectedFileStatus))
+                                    {
+                                        removeSignatureStatusList.Add(selectedFileStatus);
+                                    }
+                                    //break;
+                                }
                             }
                         }
-                        //if (digitalSignature.DocumentType.Equals(Types.XpsDocument))
-                        //{
-                        //    digitalSignature.xpsDocument.Close();
-                        //}
-                        //else
-                        //{
-                        //    digitalSignature.package.Close();
-                        //}
                     }
 
                     foreach (FileStatus documentReadyStatus in documentsRemoveSignStatus)
@@ -334,9 +358,26 @@ namespace AssinadorDigital
 
         private void btnRemove_Click(object sender, EventArgs e)
         {
+            if (chkCopyDocuments.Checked)
+                LastBackedUpFolder.SetValue("LastBackUpFolder", txtPath.Text, RegistryValueKind.String);
+
             removeSignatures();
             viewReport(documentsRemoveSignStatus);
 
+            List<FileHistory> files = new List<FileHistory>();
+            foreach (FileStatus fs in documentsRemoveSignStatus)
+            {
+                FileHistory file = new FileHistory(fs.OldPath, fs.Path);
+                files.Add(file);
+            }
+            string formOwner = this.Owner.ToString();
+            int start = formOwner.IndexOf('.');
+            int end = formOwner.IndexOf(',');
+            formOwner = formOwner.Substring(start + 1, end - start - 1);
+            if (formOwner == "frmSelectDigitalSignatureToRemove")
+                ((frmSelectDigitalSignatureToRemove)this.Owner).listFiles(files);
+            if (formOwner == "frmManageDigitalSignature")
+                ((frmManageDigitalSignature)this.Owner).listFiles(files);
             this.Close();
         }
 

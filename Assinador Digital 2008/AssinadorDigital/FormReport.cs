@@ -29,31 +29,38 @@ namespace AssinadorDigital
                     foreach (FileStatus fileStatus in documentsStatus)
                     {
                         ListViewItem lviDocumentStatus = new ListViewItem(fileStatus.Path);
+                        lviDocumentStatus.SubItems.Add(fileStatus.OldPath);
                         switch (fileStatus.Status)
                         {
                             case Status.Success:
-                                lviDocumentStatus.SubItems.Add("Backup efetuado. Documento original assinado com sucesso.");
+                                lviDocumentStatus.SubItems.Add("Documento copiado e assinado com sucesso.");
+                                break;
+                            case Status.SignatureAlreadyExists:
+                                lviDocumentStatus.SubItems.Add("Documento copiado mas não assinado, assinatura já existente.");
+                                break;
+                            case Status.SignatureAlreadyExistsNotBackedUp:
+                                lviDocumentStatus.SubItems.Add("Assinatura já existente, o documento não foi assinado.");
                                 break;
                             case Status.Unmodified:
-                                lviDocumentStatus.SubItems.Add("Não foi possível efetuar o backup do documento, arquivo já existente. Documento original assinado com sucesso.");
+                                lviDocumentStatus.SubItems.Add("Documento já existente na pasta de destino. A assinatura não foi inserida.");
                                 break;
                             case Status.ModifiedButNotBackedUp:
-                                lviDocumentStatus.SubItems.Add("Backup não efetuado do documento. Documento original assinado com sucesso.");
+                                lviDocumentStatus.SubItems.Add("Documento assinado com sucesso.");
                                 break;
                             case Status.UnauthorizedAccess:
-                                lviDocumentStatus.SubItems.Add("Não foi possível efetuar o backup do documento, acesso não autorizado à pasta de destino. Documento original não foi assinado.");
+                                lviDocumentStatus.SubItems.Add("Não foi possível copiar o documento, acesso não autorizado à pasta de destino. A assinatura não foi inserida.");
                                 break;
                             case Status.PathTooLong:
-                                lviDocumentStatus.SubItems.Add("Não foi possível efetuar o backup do documento, caminho do diretório muito longo. Documento original não foi assinado.");
+                                lviDocumentStatus.SubItems.Add("Não foi possível copiar o documento, caminho do diretório muito longo. A assinatura não foi inserida.");
                                 break;
                             case Status.InUseByAnotherProcess:
-                                lviDocumentStatus.SubItems.Add("Não foi possível efetuar o backup do documento, verifique se ele não está em uso por outra aplicação. Documento original não foi assinado.");
+                                lviDocumentStatus.SubItems.Add("Não foi possível copiar o documento, verifique se ele não está em uso por outra aplicação. A assinatura não foi inserida.");
                                 break;
                             case Status.CorruptedContent:
-                                lviDocumentStatus.SubItems.Add("Não foi possível efetuar o backup do documento, o conteúdo do documento está corrompido (talvez seja um arquivo temporário). Documento original não foi assinado.");
+                                lviDocumentStatus.SubItems.Add("Não foi possível copiar o documento, o conteúdo do documento está corrompido (talvez seja um arquivo temporário). A assinatura não foi inserida.");
                                 break;
                             default:
-                                lviDocumentStatus.SubItems.Add("Não foi possível efetuar o backup do documento. Documento original não foi assinado.");
+                                lviDocumentStatus.SubItems.Add("Não foi possível copiar o documento. A assinatura não foi inserida.");
                                 break;
                         }
                         lstReport.Items.Add(lviDocumentStatus);
@@ -63,31 +70,32 @@ namespace AssinadorDigital
                     foreach (FileStatus fileStatus in documentsStatus)
                     {
                         ListViewItem lviDocumentStatus = new ListViewItem(fileStatus.Path);
+                        lviDocumentStatus.SubItems.Add(fileStatus.OldPath);
                         switch (fileStatus.Status)
                         {
                             case Status.Success:
-                                lviDocumentStatus.SubItems.Add("Backup efetuado. Assinatura removida do documento original com sucesso.");
+                                lviDocumentStatus.SubItems.Add("Documento copiado e assinatura removida com sucesso.");
                                 break;
                             case Status.Unmodified:
-                                lviDocumentStatus.SubItems.Add("Não foi possível efetuar o backup do documento, arquivo já existente. Assinatura removida do documento original com sucesso.");
+                                lviDocumentStatus.SubItems.Add("Não foi possível copiar o documento, arquivo já existente. A assinatura não foi removida.");
                                 break;
                             case Status.ModifiedButNotBackedUp:
-                                lviDocumentStatus.SubItems.Add("Backup não efetuado do documento. Assinatura removida do documento original com sucesso.");
+                                lviDocumentStatus.SubItems.Add("Assinatura removida do documento com sucesso.");
                                 break;
                             case Status.UnauthorizedAccess:
-                                lviDocumentStatus.SubItems.Add("Não foi possível efetuar o backup do documento, acesso não autorizado à pasta de destino. A assinatura não foi removida do documento original.");
+                                lviDocumentStatus.SubItems.Add("Não foi possível copiar o documento, acesso não autorizado à pasta de destino. A assinatura não foi removida.");
                                 break;
                             case Status.PathTooLong:
-                                lviDocumentStatus.SubItems.Add("Não foi possível efetuar o backup do documento, caminho do diretório muito longo. A assinatura não foi removida do documento original.");
+                                lviDocumentStatus.SubItems.Add("Não foi possível copiar o documento, caminho do diretório muito longo. A assinatura não foi removida.");
                                 break;
                             case Status.InUseByAnotherProcess:
-                                lviDocumentStatus.SubItems.Add("Não foi possível efetuar o backup do documento, verifique se ele não está em uso por outra aplicação. Documento original não foi assinado.");
+                                lviDocumentStatus.SubItems.Add("Não foi possível copiar o documento, verifique se ele não está em uso por outra aplicação. A assinatura não foi removida.");
                                 break;
                             case Status.CorruptedContent:
-                                lviDocumentStatus.SubItems.Add("Não foi possível efetuar o backup do documento, o conteúdo do documento está corrompido (talvez seja um arquivo temporário). Documento original não foi assinado.");
+                                lviDocumentStatus.SubItems.Add("Não foi possível copiar o documento, o conteúdo do documento está corrompido (talvez seja um arquivo temporário). A assinatura não foi removida.");
                                 break;
                             default:
-                                lviDocumentStatus.SubItems.Add("Não foi possível efetuar o backup do documento. A assinatura não foi removida do documento original.");
+                                lviDocumentStatus.SubItems.Add("Não foi possível copiar o documento. A assinatura não foi removida.");
                                 break;
                         }
                         lstReport.Items.Add(lviDocumentStatus);

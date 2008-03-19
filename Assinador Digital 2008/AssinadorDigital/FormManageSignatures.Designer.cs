@@ -377,7 +377,7 @@ namespace AssinadorDigital
             this.lstDocuments.View = System.Windows.Forms.View.Tile;
             this.lstDocuments.MouseUp += new System.Windows.Forms.MouseEventHandler(this.lstFiles_MouseUp);
             this.lstDocuments.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.lstFiles_ItemSelectionChanged);
-            this.lstDocuments.KeyUp += new System.Windows.Forms.KeyEventHandler(this.lstFiles_KeyDown);
+            this.lstDocuments.KeyUp += new System.Windows.Forms.KeyEventHandler(this.lstFiles_KeyUp);
             // 
             // flName
             // 
@@ -482,6 +482,7 @@ namespace AssinadorDigital
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(680, 617);
             this.Name = "frmManageDigitalSignature";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Visualizar Assinaturas - Assinador Digital";
             this.Load += new System.EventHandler(this.frmManageDigitalSignature_Load);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmManageDigitalSignature_FormClosed);

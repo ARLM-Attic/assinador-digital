@@ -186,7 +186,6 @@ namespace OPC
                 return true;
             }
         }
-
         /// <summary>
         /// Method that get the XML necessary to fix the validation problem
         /// </summary>
@@ -196,6 +195,36 @@ namespace OPC
             officeDocument = setedDocument;
         }
 
+        public bool DocumentHasSignature(X509Certificate2 certificate)
+        {
+            string signerSerialNumber = certificate.GetSerialNumberString();
+            string serialNumber = "";
+
+            if (DocumentType.Equals(Types.XpsDocument))
+            {
+                //Search the serial in a Xps signatures.
+                foreach (XpsDigitalSignature signature in xpsDocument.Signatures)
+                {
+                    serialNumber = signature.SignerCertificate.GetSerialNumberString();
+                    if (serialNumber == signerSerialNumber)
+                        return true;
+                }
+            }
+            else
+            {
+                PackageDigitalSignatureManager _assinaturas = null;
+                _assinaturas = new PackageDigitalSignatureManager(base.package);
+                _assinaturas.CertificateOption = CertificateEmbeddingOption.InSignaturePart;
+
+                foreach (PackageDigitalSignature signature in _assinaturas.Signatures)
+                {
+                    serialNumber = signature.Signer.GetSerialNumberString();
+                    if (serialNumber == signerSerialNumber)
+                        return true;
+                }
+            }
+            return false;
+        }
         /// <summary>
         /// Method that Sign the document, he call the others methods and uses the lists and OfficeObject to Sign
         /// </summary>
@@ -235,7 +264,6 @@ namespace OPC
                 }
             }
         }
-
         /// <summary>
         /// Method that remove a signer of the file
         /// </summary>
@@ -316,7 +344,6 @@ namespace OPC
                 package.Close();
             }
         }
-        
         /// <summary>
         /// Method that remove all signers of the file
         /// </summary>

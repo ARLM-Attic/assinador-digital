@@ -28,8 +28,22 @@ namespace AssinadorDigital
 
             chkViewDocuments.Checked = showCheckBoxViewDocuments;
             chkViewDocuments.Visible = showCheckBoxViewDocuments;
+            chkIncludeSubfolders.Visible = showCheckBoxViewDocuments;
 
-            LastBackedUpFolder = Registry.LocalMachine.OpenSubKey(@"Software\LTIA\Assinador Digital",true);
+            LastBackedUpFolder = Registry.LocalMachine.OpenSubKey(@"Software\LTIA\Assinador Digital", true);
+            txtPath.Text = LastBackedUpFolder.GetValue("LastBackUpFolder").ToString();
+        }
+
+        public frmAddDigitalSignature(List<FileHistory> selectedItens, bool showCheckBoxViewDocuments)
+        {
+            InitializeComponent();
+            compatibleDocumentsList = selectedItens;
+
+            chkViewDocuments.Checked = showCheckBoxViewDocuments;
+            chkViewDocuments.Visible = showCheckBoxViewDocuments;
+            chkIncludeSubfolders.Visible = showCheckBoxViewDocuments;
+
+            LastBackedUpFolder = Registry.LocalMachine.OpenSubKey(@"Software\LTIA\Assinador Digital", true);
             txtPath.Text = LastBackedUpFolder.GetValue("LastBackUpFolder").ToString();
         }
 
@@ -39,6 +53,7 @@ namespace AssinadorDigital
 
         private DigitalSignature digitalSignature;
         private List<string> compatibleDocuments = new List<string>();
+        private List<FileHistory> compatibleDocumentsList = new List<FileHistory>();
         private string[] documentsToSign;
         private List<FileStatus> documentsSignStatus = new List<FileStatus>();
         private RegistryKey LastBackedUpFolder = null;
@@ -58,19 +73,33 @@ namespace AssinadorDigital
                 List<string> signedDocuments = new List<string>();
                 if (chkCopyDocuments.Checked)
                 {
-                    documentsSignStatus = FileOperations.Copy(compatibleDocuments, txtPath.Text, chkOverwrite.Checked);
+                    documentsSignStatus = FileOperations.Copy(compatibleDocumentsList, txtPath.Text, chkOverwrite.Checked);
                     foreach (FileStatus documentToSign in documentsSignStatus)
                     {
-                        if (documentToSign.Status == Status.Success ||
-                            documentToSign.Status == Status.Unmodified)
+                        if (documentToSign.Status == Status.Success)
                         {
                             try
                             {
                                 loadDigitalSignature(documentToSign.Path);
-                                digitalSignature.SetOfficeDocument(officeDocument);
-                                digitalSignature.SignDocument(certificate);
+                                bool signatureExists = digitalSignature.DocumentHasSignature(certificate);
+                                if (signatureExists)
+                                {
+                                    if (!chkNotSignIfAlreadyExists.Checked)
+                                    {
+                                        digitalSignature.SetOfficeDocument(officeDocument);
+                                        digitalSignature.SignDocument(certificate);
+                                    }
+                                    else
+                                    {
+                                        documentToSign.Status = Status.SignatureAlreadyExists;
+                                    }
+                                }
+                                else
+                                {
+                                    digitalSignature.SetOfficeDocument(officeDocument);
+                                    digitalSignature.SignDocument(certificate);
+                                }   
                                 signedDocuments.Add(documentToSign.Path);
-
                                 if (digitalSignature.DocumentType.Equals(Types.XpsDocument))
                                 {
                                     digitalSignature.xpsDocument.Close();
@@ -103,12 +132,31 @@ namespace AssinadorDigital
                 {
                     foreach (string documentToSign in compatibleDocuments)
                     {
-                        FileStatus documentSignStatus = null;
+                        Status st = new Status();
                         try
                         {
                             loadDigitalSignature(documentToSign);
-                            digitalSignature.SetOfficeDocument(officeDocument);
-                            digitalSignature.SignDocument(certificate);
+                            bool signatureExists = digitalSignature.DocumentHasSignature(certificate);
+                            if (signatureExists)
+                            {
+                                if (!chkNotSignIfAlreadyExists.Checked)
+                                {
+                                    digitalSignature.SetOfficeDocument(officeDocument);
+                                    digitalSignature.SignDocument(certificate);
+                                    st = Status.ModifiedButNotBackedUp;
+                                }
+                                else
+                                {
+                                    st = Status.SignatureAlreadyExistsNotBackedUp;
+                                }
+                            }
+                            else
+                            {
+                                digitalSignature.SetOfficeDocument(officeDocument);
+                                digitalSignature.SignDocument(certificate);
+                                st = Status.ModifiedButNotBackedUp;
+                            }
+
                             signedDocuments.Add(documentToSign);
 
                             if (digitalSignature.DocumentType.Equals(Types.XpsDocument))
@@ -119,13 +167,13 @@ namespace AssinadorDigital
                             {
                                 digitalSignature.package.Close();
                             }
-
-                            documentSignStatus = new FileStatus(documentToSign, FileUtils.Status.ModifiedButNotBackedUp);
                         }
                         catch
                         {
-                            documentSignStatus = new FileStatus(documentToSign, FileUtils.Status.NotSigned);
+                            st = Status.NotSigned;
                         }
+
+                        FileStatus documentSignStatus = new FileStatus(documentToSign, st);
                         documentsSignStatus.Add(documentSignStatus);                        
                     }
                 }
@@ -218,17 +266,44 @@ namespace AssinadorDigital
 
         private void btnSign_Click(object sender, EventArgs e)
         {
+            if (chkCopyDocuments.Checked)
+                LastBackedUpFolder.SetValue("LastBackUpFolder", txtPath.Text, RegistryValueKind.String);
             compatibleDocuments.Clear();
-            compatibleDocuments = FileOperations.ListAllowedFilesAndSubfolders(documentsToSign, true, chkIncludeSubfolders.Checked);
+            if (compatibleDocumentsList.Count < 1)
+            {
+                compatibleDocuments = FileOperations.ListAllowedFilesAndSubfolders(documentsToSign, true, chkIncludeSubfolders.Checked);
+                foreach (string str in compatibleDocuments)
+                {
+                    FileHistory fh = new FileHistory(str, str);
+                    compatibleDocumentsList.Add(fh);
+                }
+            }
+            else
+                compatibleDocuments = FileOperations.ListAllowedFilesAndSubfolders(compatibleDocumentsList, true, chkIncludeSubfolders.Checked);
 
             if (compatibleDocuments.Count > 0)
             {
                 string[] signedDocuments = signDocuments();
+
+                List<string> docs = new List<string>();
+                List<FileHistory> docsHist = new List<FileHistory>();
+                foreach (FileStatus fs in documentsSignStatus)
+                {
+                    docs.Add(fs.Path);
+
+                    FileHistory fh = new FileHistory(fs.OldPath, fs.Path);
+                    docsHist.Add(fh);
+                }
+                
                 if (signedDocuments != null)
                 {
+                    if (!chkViewDocuments.Visible)
+                    {
+                        ((frmManageDigitalSignature)this.Owner).listFiles(docsHist);
+                    }
                     if (chkViewDocuments.Checked)
                     {
-                        frmViewDigitalSignature FormViewDigitalSignature = new frmViewDigitalSignature(compatibleDocuments.ToArray());
+                        frmViewDigitalSignature FormViewDigitalSignature = new frmViewDigitalSignature(docs.ToArray());
                         FormViewDigitalSignature.Show();
                     }
 

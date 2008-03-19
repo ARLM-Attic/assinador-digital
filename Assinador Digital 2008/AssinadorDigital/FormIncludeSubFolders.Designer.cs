@@ -61,6 +61,7 @@
             // 
             // btnNo
             // 
+            this.btnNo.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnNo.Location = new System.Drawing.Point(196, 41);
             this.btnNo.Name = "btnNo";
             this.btnNo.Size = new System.Drawing.Size(75, 23);
@@ -89,9 +90,11 @@
             // 
             // frmIncludeSubFolders
             // 
+            this.AcceptButton = this.btnYes;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(364, 75);
+            this.CancelButton = this.btnNo;
+            this.ClientSize = new System.Drawing.Size(364, 81);
             this.Controls.Add(this.lblAlert);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.btnNo);
@@ -101,6 +104,7 @@
             this.MaximumSize = new System.Drawing.Size(372, 109);
             this.MinimumSize = new System.Drawing.Size(372, 109);
             this.Name = "frmIncludeSubFolders";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Atenção";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
