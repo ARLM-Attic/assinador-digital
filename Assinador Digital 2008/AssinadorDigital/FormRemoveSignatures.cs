@@ -335,9 +335,8 @@ namespace AssinadorDigital
 
         private void btnChangeFolder_Click(object sender, EventArgs e)
         {
-            fbdSelectNewPath.ShowDialog();
-            txtPath.Text = fbdSelectNewPath.SelectedPath;
-            LastBackedUpFolder.SetValue("LastBackUpFolder", txtPath.Text, RegistryValueKind.String);
+            if (fbdSelectNewPath.ShowDialog() == DialogResult.OK)
+                txtPath.Text = fbdSelectNewPath.SelectedPath;
         }
 
         private void chkOverwrite_CheckedChanged(object sender, EventArgs e)
