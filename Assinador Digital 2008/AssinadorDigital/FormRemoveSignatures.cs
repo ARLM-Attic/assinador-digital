@@ -206,7 +206,7 @@ namespace AssinadorDigital
                 case removeSignaturesType.removeAllSignatures:
                     foreach (FileStatus documentToRemoveSignature in documentsRemoveSignStatus)
                     {
-                        if (documentToRemoveSignature.Status == Status.Success)
+                        if ((documentToRemoveSignature.Status == Status.Success) || (documentToRemoveSignature.Status == Status.ModifiedButNotBackedUp))
                         {
                             try
                             {
