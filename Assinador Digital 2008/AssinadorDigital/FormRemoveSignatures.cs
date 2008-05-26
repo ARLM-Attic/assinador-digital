@@ -27,8 +27,7 @@ namespace AssinadorDigital
             removeSignaturesActionType = removeSignaturesType.removeAllSignatures;
             selectedDocumentsToRemoveSignature = documents;
 
-
-            LastBackedUpFolder = Registry.LocalMachine.OpenSubKey(@"Software\LTIA\Assinador Digital", true);
+            LastBackedUpFolder = Registry.CurrentUser.OpenSubKey(@"Software\LTIA\Assinador Digital", true);
             txtPath.Text = LastBackedUpFolder.GetValue("LastBackUpFolder").ToString();
         }
         /// <summary>
@@ -44,7 +43,7 @@ namespace AssinadorDigital
             selectedDocumentsToRemoveSignature = documents;
             selectedSignaturesInDocuments = selectedSignatures;
 
-            LastBackedUpFolder = Registry.LocalMachine.OpenSubKey(@"Software\LTIA\Assinador Digital", true);
+            LastBackedUpFolder = Registry.CurrentUser.OpenSubKey(@"Software\LTIA\Assinador Digital", true);
             txtPath.Text = LastBackedUpFolder.GetValue("LastBackUpFolder").ToString();
         }
 
@@ -55,7 +54,7 @@ namespace AssinadorDigital
             removeSignaturesActionType = removeSignaturesType.removeAllSignatures;
             selectedDocumentsToRemoveDigitalSignature = documents;
 
-            LastBackedUpFolder = Registry.LocalMachine.OpenSubKey(@"Software\LTIA\Assinador Digital", true);
+            LastBackedUpFolder = Registry.CurrentUser.OpenSubKey(@"Software\LTIA\Assinador Digital", true);
             txtPath.Text = LastBackedUpFolder.GetValue("LastBackUpFolder").ToString();
         }
 
@@ -67,7 +66,7 @@ namespace AssinadorDigital
             selectedDocumentsToRemoveDigitalSignature = documents;
             selectedSignaturesInDocuments = selectedSignatures;
 
-            LastBackedUpFolder = Registry.LocalMachine.OpenSubKey(@"Software\LTIA\Assinador Digital", true);
+            LastBackedUpFolder = Registry.CurrentUser.OpenSubKey(@"Software\LTIA\Assinador Digital", true);
             txtPath.Text = LastBackedUpFolder.GetValue("LastBackUpFolder").ToString();
         }
         #endregion

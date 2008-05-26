@@ -21,8 +21,8 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_1F18BE13643D436084BF674246AC2A96"
-        "OwnerKey" = "8:_610F117309FD49FABC463015E91EEAD2"
+        "MsmKey" = "8:_1D27DF9D977F7DB60E7D80373E95CE7E"
+        "OwnerKey" = "8:_CC2A0FB715C8422C91EF7E2097A72DB7"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -39,20 +39,14 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_75466D83789341F4B6F85A7C3FE4E0F6"
-        "OwnerKey" = "8:_1F18BE13643D436084BF674246AC2A96"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_A6FE37E3AC47416E9EFC07FD3A395A00"
+        "MsmKey" = "8:_78BD710FFCDE47908EF767167021C57F"
         "OwnerKey" = "8:_610F117309FD49FABC463015E91EEAD2"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_AB6F626DA2A84D94A07DABD7F6DC7246"
-        "OwnerKey" = "8:_A6FE37E3AC47416E9EFC07FD3A395A00"
+        "MsmKey" = "8:_9EF4360883BC426AAD3C35D91511DF27"
+        "OwnerKey" = "8:_610F117309FD49FABC463015E91EEAD2"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -64,7 +58,7 @@
         "Entry"
         {
         "MsmKey" = "8:_C31280BD8D27608A7DC799BB1F907AB9"
-        "OwnerKey" = "8:_E3DF2B8DD33C6EEEDEB42712874F92B5"
+        "OwnerKey" = "8:_FA569096113F43F51DBDFA411122E366"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -81,8 +75,14 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_E3DF2B8DD33C6EEEDEB42712874F92B5"
-        "OwnerKey" = "8:_CC2A0FB715C8422C91EF7E2097A72DB7"
+        "MsmKey" = "8:_EFC7937DA36A4838B4EBD93CFAF13F2A"
+        "OwnerKey" = "8:_78BD710FFCDE47908EF767167021C57F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F20832135BC44679876E3E6D58C2B232"
+        "OwnerKey" = "8:_9EF4360883BC426AAD3C35D91511DF27"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -93,7 +93,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_F46622033E09198F136DC16037F2CAD9"
+        "MsmKey" = "8:_FA569096113F43F51DBDFA411122E366"
         "OwnerKey" = "8:_CC2A0FB715C8422C91EF7E2097A72DB7"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -101,30 +101,30 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_CC2A0FB715C8422C91EF7E2097A72DB7"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_F46622033E09198F136DC16037F2CAD9"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_E3DF2B8DD33C6EEEDEB42712874F92B5"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_1CF5B28C52D1475187D578FD337F6EAC"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_C31280BD8D27608A7DC799BB1F907AB9"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_1D27DF9D977F7DB60E7D80373E95CE7E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_FA569096113F43F51DBDFA411122E366"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_1CF5B28C52D1475187D578FD337F6EAC"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -222,6 +222,37 @@
         }
         "File"
         {
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_1D27DF9D977F7DB60E7D80373E95CE7E"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:FileUtils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_1D27DF9D977F7DB60E7D80373E95CE7E"
+                    {
+                    "Name" = "8:FileUtils.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:FileUtils.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_E8DF91C7B01B4B1C9854EC350D23861F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_42E2750F8FAD43018F0A9DCBC028CFB5"
             {
             "SourcePath" = "8:..\\AssinadorDigital\\Resources\\icone.ico"
@@ -273,32 +304,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_E3DF2B8DD33C6EEEDEB42712874F92B5"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DigitalSignature, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                }
-            "SourcePath" = "8:DigitalSignature.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_E8DF91C7B01B4B1C9854EC350D23861F"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F42E2511995A476687712C291112ABE7"
             {
             "SourcePath" = "8:..\\AssinadorDigital\\Resources\\faixa_installer.bmp"
@@ -319,15 +324,20 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F46622033E09198F136DC16037F2CAD9"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_FA569096113F43F51DBDFA411122E366"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:FileUtils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:DigitalSignature, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
+                    "_FA569096113F43F51DBDFA411122E366"
+                    {
+                    "Name" = "8:DigitalSignature.dll"
+                    "Attributes" = "3:512"
+                    }
                 }
-            "SourcePath" = "8:FileUtils.dll"
+            "SourcePath" = "8:DigitalSignature.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_E8DF91C7B01B4B1C9854EC350D23861F"
@@ -402,7 +412,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Assinador Digital"
         "ProductCode" = "8:{29918FE0-49FD-4029-90D4-50154E6CB5D7}"
-        "PackageCode" = "8:{378027FF-CBB3-4B08-97B6-D90393CAA722}"
+        "PackageCode" = "8:{982D4566-CFBB-462E-851F-5F43398CFCF8}"
         "UpgradeCode" = "8:{71F198FD-0004-4373-AB0D-EEE66CB7AFEF}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
@@ -451,28 +461,6 @@
                             "Transitive" = "11:FALSE"
                                 "Keys"
                                 {
-                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_AA0806502B2645F4A7581B4FC48C03B9"
-                                    {
-                                    "Name" = "8:[ProductName]"
-                                    "Condition" = "8:"
-                                    "AlwaysCreate" = "11:FALSE"
-                                    "DeleteAtUninstall" = "11:FALSE"
-                                    "Transitive" = "11:FALSE"
-                                        "Keys"
-                                        {
-                                        }
-                                        "Values"
-                                        {
-                                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_5B286A97D08849BB94E0F95286655C49"
-                                            {
-                                            "Name" = "8:LastBackUpFolder"
-                                            "Condition" = "8:"
-                                            "Transitive" = "11:FALSE"
-                                            "ValueTypes" = "3:1"
-                                            "Value" = "8:"
-                                            }
-                                        }
-                                    }
                                 }
                                 "Values"
                                 {
@@ -507,6 +495,28 @@
                             "Transitive" = "11:FALSE"
                                 "Keys"
                                 {
+                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_D59A50F3FB2943C2A0FADAA87DA56B54"
+                                    {
+                                    "Name" = "8:[ProductName]"
+                                    "Condition" = "8:"
+                                    "AlwaysCreate" = "11:FALSE"
+                                    "DeleteAtUninstall" = "11:FALSE"
+                                    "Transitive" = "11:FALSE"
+                                        "Keys"
+                                        {
+                                        }
+                                        "Values"
+                                        {
+                                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_CFEDEF3636A442F091C46036576A814D"
+                                            {
+                                            "Name" = "8:LastBackUpFolder"
+                                            "Condition" = "8:"
+                                            "Transitive" = "11:FALSE"
+                                            "ValueTypes" = "3:1"
+                                            "Value" = "8:"
+                                            }
+                                        }
+                                    }
                                 }
                                 "Values"
                                 {
@@ -949,7 +959,7 @@
         }
         "MergeModule"
         {
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_1F18BE13643D436084BF674246AC2A96"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_78BD710FFCDE47908EF767167021C57F"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
@@ -963,21 +973,7 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_75466D83789341F4B6F85A7C3FE4E0F6"
-            {
-            "UseDynamicProperties" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "SourcePath" = "8:microsoft_vc90_mfc_x86.msm"
-                "Properties"
-                {
-                }
-            "LanguageId" = "3:0"
-            "Exclude" = "11:FALSE"
-            "Folder" = "8:"
-            "Feature" = "8:"
-            "IsolateTo" = "8:"
-            }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_A6FE37E3AC47416E9EFC07FD3A395A00"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_9EF4360883BC426AAD3C35D91511DF27"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
@@ -991,7 +987,21 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_AB6F626DA2A84D94A07DABD7F6DC7246"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_EFC7937DA36A4838B4EBD93CFAF13F2A"
+            {
+            "UseDynamicProperties" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "SourcePath" = "8:microsoft_vc90_mfc_x86.msm"
+                "Properties"
+                {
+                }
+            "LanguageId" = "3:0"
+            "Exclude" = "11:FALSE"
+            "Folder" = "8:"
+            "Feature" = "8:"
+            "IsolateTo" = "8:"
+            }
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_F20832135BC44679876E3E6D58C2B232"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
