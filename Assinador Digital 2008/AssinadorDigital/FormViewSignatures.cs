@@ -1,20 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Collections;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using OPC;
-using System.Security.Cryptography.X509Certificates;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
-using System.IO.Packaging;
-using System.Xml;
-using System.Security;
-using System.Security.Cryptography;
-using System.Security.Cryptography.Xml;
+using System.Windows.Forms;
 using Microsoft.Office.DocumentFormat.OpenXml.Packaging;
+using OPC;
 
 namespace AssinadorDigital
 {
@@ -573,6 +564,11 @@ namespace AssinadorDigital
             //focusedDocument = lstFiles.FocusedItem;          
             lblSelected.Text = i.ToString();
             loadSigners();
+
+            if ((e.Button == MouseButtons.Right) && (selectedDocuments.Count == 1))
+            {
+                ctxArquivo.Show(lstDocuments, e.Location);
+            }
         }
         
         private void lstFiles_KeyDown(object sender, KeyEventArgs e)
@@ -602,6 +598,24 @@ namespace AssinadorDigital
                 lblSelected.Text = count.ToString();
             }
             loadSigners();
+        }
+
+        private void abrirArquivoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (lstDocuments.SelectedItems.Count > 0)
+            {
+                string filePath = lstDocuments.SelectedItems[0].SubItems[2].Text;
+                Process.Start(filePath);
+            }
+        }
+
+        private void abrirLocalDoArquivoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (lstDocuments.SelectedItems.Count > 0)
+            {
+                string argument = @"/select, " + lstDocuments.SelectedItems[0].SubItems[2].Text;
+                Process.Start("explorer.exe", argument);
+            }
         }
 
         #endregion

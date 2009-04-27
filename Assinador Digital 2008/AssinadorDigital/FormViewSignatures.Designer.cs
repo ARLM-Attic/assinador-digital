@@ -64,10 +64,14 @@ namespace AssinadorDigital
             this.sgDate = new System.Windows.Forms.ColumnHeader();
             this.ilistValidate = new System.Windows.Forms.ImageList(this.components);
             this.formHeaderImage = new System.Windows.Forms.PictureBox();
+            this.ctxArquivo = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.abrirArquivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.abrirLocalDoArquivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gpbFiles.SuspendLayout();
             this.gpbDescription.SuspendLayout();
             this.gpbSignatures.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.formHeaderImage)).BeginInit();
+            this.ctxArquivo.SuspendLayout();
             this.SuspendLayout();
             // 
             // gpbFiles
@@ -430,6 +434,28 @@ namespace AssinadorDigital
             this.formHeaderImage.TabStop = false;
             this.formHeaderImage.WaitOnLoad = true;
             // 
+            // ctxArquivo
+            // 
+            this.ctxArquivo.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.abrirArquivoToolStripMenuItem,
+            this.abrirLocalDoArquivoToolStripMenuItem});
+            this.ctxArquivo.Name = "ctxArquivo";
+            this.ctxArquivo.Size = new System.Drawing.Size(194, 70);
+            // 
+            // abrirArquivoToolStripMenuItem
+            // 
+            this.abrirArquivoToolStripMenuItem.Name = "abrirArquivoToolStripMenuItem";
+            this.abrirArquivoToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.abrirArquivoToolStripMenuItem.Text = "Abrir Arquivo";
+            this.abrirArquivoToolStripMenuItem.Click += new System.EventHandler(this.abrirArquivoToolStripMenuItem_Click);
+            // 
+            // abrirLocalDoArquivoToolStripMenuItem
+            // 
+            this.abrirLocalDoArquivoToolStripMenuItem.Name = "abrirLocalDoArquivoToolStripMenuItem";
+            this.abrirLocalDoArquivoToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.abrirLocalDoArquivoToolStripMenuItem.Text = "Abrir Local do Arquivo";
+            this.abrirLocalDoArquivoToolStripMenuItem.Click += new System.EventHandler(this.abrirLocalDoArquivoToolStripMenuItem_Click);
+            // 
             // frmViewDigitalSignature
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -449,6 +475,7 @@ namespace AssinadorDigital
             this.gpbDescription.PerformLayout();
             this.gpbSignatures.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.formHeaderImage)).EndInit();
+            this.ctxArquivo.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -489,6 +516,9 @@ namespace AssinadorDigital
         private System.Windows.Forms.Label lblDName;
         private System.Windows.Forms.TextBox tbPath;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ContextMenuStrip ctxArquivo;
+        private System.Windows.Forms.ToolStripMenuItem abrirArquivoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem abrirLocalDoArquivoToolStripMenuItem;
     }
 }
 
