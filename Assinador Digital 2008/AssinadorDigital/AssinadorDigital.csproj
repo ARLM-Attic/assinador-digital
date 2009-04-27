@@ -13,8 +13,9 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <ManifestCertificateThumbprint>43074BC41432C05C7CC3E5ACF71CDB53081D7B2A</ManifestCertificateThumbprint>
-    <ManifestKeyFile>AssinadorDigital_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestCertificateThumbprint>3D597F1090164AFDFD54B39C853FDA858D44C449</ManifestCertificateThumbprint>
+    <ManifestKeyFile>
+    </ManifestKeyFile>
     <GenerateManifests>false</GenerateManifests>
     <SignManifests>true</SignManifests>
     <IsWebBootstrapper>true</IsWebBootstrapper>
@@ -77,6 +78,12 @@
     <Reference Include="WindowsBase, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AboutBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutBox.Designer.cs">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormAddSignature.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -121,6 +128,10 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AboutBox.resx">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormAddSignature.resx">
       <DependentUpon>FormAddSignature.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -217,6 +228,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\161.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\banner_assinador.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

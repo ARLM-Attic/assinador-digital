@@ -391,6 +391,9 @@
         AQMBgAEDAfABHwIAAcABBwHAAQcB+AE/AgAB8AEfAfABHwH8AX8CAAs=
 </value>
   </data>
+  <metadata name="ctxSobre.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>331, 17</value>
+  </metadata>
   <metadata name="ctxArquivo.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>221, 17</value>
   </metadata>

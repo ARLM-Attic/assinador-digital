@@ -813,7 +813,13 @@ namespace AssinadorDigital
                 Process.Start("explorer.exe", argument);
             }
         }
-    
+
+        private void sobreOAssinadorDigitalToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AboutBox about = new AboutBox();
+            about.ShowDialog();
+        }
+
         #endregion
     }
 }
