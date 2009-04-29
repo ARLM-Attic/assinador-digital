@@ -95,9 +95,9 @@
             this.chkViewDocuments.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkViewDocuments.Location = new System.Drawing.Point(18, 187);
             this.chkViewDocuments.Name = "chkViewDocuments";
-            this.chkViewDocuments.Size = new System.Drawing.Size(181, 17);
+            this.chkViewDocuments.Size = new System.Drawing.Size(193, 17);
             this.chkViewDocuments.TabIndex = 4;
-            this.chkViewDocuments.Text = "Visualizar documentos assinados";
+            this.chkViewDocuments.Text = "Visualizar documento(s) assinado(s)";
             this.chkViewDocuments.UseVisualStyleBackColor = true;
             // 
             // gpbCopyDoduments
@@ -120,9 +120,9 @@
             this.chkOverwrite.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkOverwrite.Location = new System.Drawing.Point(6, 45);
             this.chkOverwrite.Name = "chkOverwrite";
-            this.chkOverwrite.Size = new System.Drawing.Size(200, 17);
+            this.chkOverwrite.Size = new System.Drawing.Size(194, 17);
             this.chkOverwrite.TabIndex = 6;
-            this.chkOverwrite.Text = "Sobreescrever arquivo(s) existente(s)";
+            this.chkOverwrite.Text = "Sobrescrever arquivo(s) existente(s)";
             this.chkOverwrite.UseVisualStyleBackColor = true;
             this.chkOverwrite.CheckedChanged += new System.EventHandler(this.chkOverwrite_CheckedChanged);
             // 
@@ -187,7 +187,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(399, 218);
+            this.ClientSize = new System.Drawing.Size(391, 210);
             this.Controls.Add(this.chkNotSignIfAlreadyExists);
             this.Controls.Add(this.chkIncludeSubfolders);
             this.Controls.Add(this.btnCancel);
