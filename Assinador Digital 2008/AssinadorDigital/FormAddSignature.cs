@@ -9,6 +9,8 @@ using System.IO;
 using OPC;
 using FileUtils;
 using System.Security.Cryptography.X509Certificates;
+using System.Security.Cryptography.Pkcs;
+using System.Security.Cryptography;
 using Microsoft.Win32;
 
 namespace AssinadorDigital
@@ -31,8 +33,7 @@ namespace AssinadorDigital
             chkIncludeSubfolders.Visible = showCheckBoxViewDocuments;
 
             LastBackedUpFolder = Registry.CurrentUser.OpenSubKey(@"Software\LTIA\Assinador Digital", true);
-            txtPath.Text = LastBackedUpFolder.GetValue("LastBackUpFolder").ToString();
-        }
+            txtPath.Text = LastBackedUpFolder.GetValue("LastBackUpFolder").ToString();        }
 
         public frmAddDigitalSignature(List<FileHistory> selectedItens, bool showCheckBoxViewDocuments)
         {
@@ -57,7 +58,6 @@ namespace AssinadorDigital
         private string[] documentsToSign;
         private List<FileStatus> documentsSignStatus = new List<FileStatus>();
         private RegistryKey LastBackedUpFolder = null;
-
         #endregion
 
         #region Private Methods

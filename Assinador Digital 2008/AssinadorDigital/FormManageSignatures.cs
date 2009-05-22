@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using FileUtils;
 using Microsoft.Office.DocumentFormat.OpenXml.Packaging;
 using OPC;
+using Microsoft.Win32;
 
 namespace AssinadorDigital
 {
@@ -814,12 +815,9 @@ namespace AssinadorDigital
             }
         }
 
-        private void sobreOAssinadorDigitalToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            AboutBox about = new AboutBox();
-            about.ShowDialog();
-        }
-
         #endregion
+
+        
+
     }
 }

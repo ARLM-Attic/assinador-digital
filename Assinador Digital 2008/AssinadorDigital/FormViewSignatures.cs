@@ -624,6 +624,12 @@ namespace AssinadorDigital
             about.ShowDialog();
         }
 
+        private void sairToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
         #endregion
+
     }
 }

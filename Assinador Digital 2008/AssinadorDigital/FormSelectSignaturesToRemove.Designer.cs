@@ -456,7 +456,6 @@ namespace AssinadorDigital
             // formHeaderImage
             // 
             this.formHeaderImage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.formHeaderImage.ContextMenuStrip = this.ctxSobre;
             this.formHeaderImage.Image = global::AssinadorDigital.Properties.Resources.remover_1920;
             this.formHeaderImage.InitialImage = global::AssinadorDigital.Properties.Resources.remover_1920;
             this.formHeaderImage.Location = new System.Drawing.Point(-1240, 0);
