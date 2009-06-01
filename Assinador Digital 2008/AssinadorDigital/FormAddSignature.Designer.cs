@@ -5,7 +5,7 @@
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        public System.ComponentModel.IContainer components = new System.ComponentModel.Container();
 
         /// <summary>
         /// Clean up any resources being used.
@@ -187,7 +187,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(391, 210);
+            this.ClientSize = new System.Drawing.Size(399, 212);
             this.Controls.Add(this.chkNotSignIfAlreadyExists);
             this.Controls.Add(this.chkIncludeSubfolders);
             this.Controls.Add(this.btnCancel);

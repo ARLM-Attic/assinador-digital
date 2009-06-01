@@ -39,6 +39,7 @@ namespace AssinadorDigital
         {
             InitializeComponent();
             documents = args;
+            VerifyCRL.VerifyConsultCRL();
         }
         #endregion
 

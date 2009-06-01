@@ -22,6 +22,7 @@ namespace AssinadorDigital
             InitializeComponent();
             documents = paths;
             includeSubfolders = subfolders;
+            VerifyCRL.VerifyConsultCRL();
         }
         #endregion
 

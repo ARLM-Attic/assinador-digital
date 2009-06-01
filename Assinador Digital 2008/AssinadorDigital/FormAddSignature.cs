@@ -33,7 +33,10 @@ namespace AssinadorDigital
             chkIncludeSubfolders.Visible = showCheckBoxViewDocuments;
 
             LastBackedUpFolder = Registry.CurrentUser.OpenSubKey(@"Software\LTIA\Assinador Digital", true);
-            txtPath.Text = LastBackedUpFolder.GetValue("LastBackUpFolder").ToString();        }
+            txtPath.Text = LastBackedUpFolder.GetValue("LastBackUpFolder").ToString();
+
+            VerifyCRL.VerifyConsultCRL();
+        }
 
         public frmAddDigitalSignature(List<FileHistory> selectedItens, bool showCheckBoxViewDocuments)
         {
@@ -46,6 +49,8 @@ namespace AssinadorDigital
 
             LastBackedUpFolder = Registry.CurrentUser.OpenSubKey(@"Software\LTIA\Assinador Digital", true);
             txtPath.Text = LastBackedUpFolder.GetValue("LastBackUpFolder").ToString();
+
+            VerifyCRL.VerifyConsultCRL();
         }
 
         #endregion
