@@ -63,7 +63,7 @@ namespace AssinadorDigital
             this.sgIssuer = new System.Windows.Forms.ColumnHeader();
             this.sgDate = new System.Windows.Forms.ColumnHeader();
             this.ctxAssinatura = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.AssinatuaXML = new System.Windows.Forms.ToolStripMenuItem();
+            this.AssinaturaXML = new System.Windows.Forms.ToolStripMenuItem();
             this.ilistValidate = new System.Windows.Forms.ImageList(this.components);
             this.formHeaderImage = new System.Windows.Forms.PictureBox();
             this.ctxSobre = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -424,16 +424,16 @@ namespace AssinadorDigital
             // ctxAssinatura
             // 
             this.ctxAssinatura.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.AssinatuaXML});
+            this.AssinaturaXML});
             this.ctxAssinatura.Name = "ctxAssinatura";
             this.ctxAssinatura.Size = new System.Drawing.Size(187, 48);
             // 
-            // AssinatuaXML
+            // AssinaturaXML
             // 
-            this.AssinatuaXML.Name = "AssinatuaXML";
-            this.AssinatuaXML.Size = new System.Drawing.Size(186, 22);
-            this.AssinatuaXML.Text = "Exibir assinatura XML";
-            this.AssinatuaXML.Click += new System.EventHandler(this.AssinatuaXML_Click);
+            this.AssinaturaXML.Name = "AssinaturaXML";
+            this.AssinaturaXML.Size = new System.Drawing.Size(186, 22);
+            this.AssinaturaXML.Text = "Exibir assinatura XML";
+            this.AssinaturaXML.Click += new System.EventHandler(this.AssinatuaXML_Click);
             // 
             // ilistValidate
             // 
@@ -560,7 +560,7 @@ namespace AssinadorDigital
         private System.Windows.Forms.ContextMenuStrip ctxSobre;
         private System.Windows.Forms.ToolStripMenuItem sobreOAssinadorDigitalToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip ctxAssinatura;
-        private System.Windows.Forms.ToolStripMenuItem AssinatuaXML;
+        private System.Windows.Forms.ToolStripMenuItem AssinaturaXML;
     }
 }
 
