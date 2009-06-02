@@ -62,6 +62,8 @@ namespace AssinadorDigital
             this.sgName = new System.Windows.Forms.ColumnHeader();
             this.sgIssuer = new System.Windows.Forms.ColumnHeader();
             this.sgDate = new System.Windows.Forms.ColumnHeader();
+            this.ctxAssinatura = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.AssinatuaXML = new System.Windows.Forms.ToolStripMenuItem();
             this.ilistValidate = new System.Windows.Forms.ImageList(this.components);
             this.formHeaderImage = new System.Windows.Forms.PictureBox();
             this.ctxSobre = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -72,6 +74,7 @@ namespace AssinadorDigital
             this.gpbFiles.SuspendLayout();
             this.gpbDescription.SuspendLayout();
             this.gpbSignatures.SuspendLayout();
+            this.ctxAssinatura.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.formHeaderImage)).BeginInit();
             this.ctxSobre.SuspendLayout();
             this.ctxArquivo.SuspendLayout();
@@ -391,6 +394,7 @@ namespace AssinadorDigital
             this.sgName,
             this.sgIssuer,
             this.sgDate});
+            this.lstSigners.ContextMenuStrip = this.ctxAssinatura;
             this.lstSigners.FullRowSelect = true;
             this.lstSigners.LargeImageList = this.ilistValidate;
             this.lstSigners.Location = new System.Drawing.Point(6, 19);
@@ -416,6 +420,20 @@ namespace AssinadorDigital
             // 
             this.sgDate.Text = "Data";
             this.sgDate.Width = 145;
+            // 
+            // ctxAssinatura
+            // 
+            this.ctxAssinatura.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.AssinatuaXML});
+            this.ctxAssinatura.Name = "ctxAssinatura";
+            this.ctxAssinatura.Size = new System.Drawing.Size(187, 48);
+            // 
+            // AssinatuaXML
+            // 
+            this.AssinatuaXML.Name = "AssinatuaXML";
+            this.AssinatuaXML.Size = new System.Drawing.Size(186, 22);
+            this.AssinatuaXML.Text = "Exibir assinatura XML";
+            this.AssinatuaXML.Click += new System.EventHandler(this.AssinatuaXML_Click);
             // 
             // ilistValidate
             // 
@@ -492,6 +510,7 @@ namespace AssinadorDigital
             this.gpbDescription.ResumeLayout(false);
             this.gpbDescription.PerformLayout();
             this.gpbSignatures.ResumeLayout(false);
+            this.ctxAssinatura.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.formHeaderImage)).EndInit();
             this.ctxSobre.ResumeLayout(false);
             this.ctxArquivo.ResumeLayout(false);
@@ -540,6 +559,8 @@ namespace AssinadorDigital
         private System.Windows.Forms.ToolStripMenuItem abrirLocalDoArquivoToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip ctxSobre;
         private System.Windows.Forms.ToolStripMenuItem sobreOAssinadorDigitalToolStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip ctxAssinatura;
+        private System.Windows.Forms.ToolStripMenuItem AssinatuaXML;
     }
 }
 

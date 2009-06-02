@@ -632,5 +632,19 @@ namespace AssinadorDigital
 
         #endregion
 
+        private void AssinatuaXML_Click(object sender, EventArgs e)
+        {
+            if (lstDocuments.SelectedItems.Count > 0)
+            {
+               /*foreach (Signer signer in digitalSignature.signers)
+                {                  
+                    Process.Start(signer.uri);
+                }*/
+            }
+        }
+
+       
+        
+
     }
 }

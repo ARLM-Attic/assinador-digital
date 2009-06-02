@@ -2,10 +2,6 @@ namespace AssinadorDigital
 {
     partial class frmManageDigitalSignature
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        public System.ComponentModel.IContainer components = new System.ComponentModel.Container();
 
         /// <summary>
         /// Clean up any resources being used.
@@ -485,7 +481,12 @@ namespace AssinadorDigital
             this.ctxSobre.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.sobreOAssinadorDigitalToolStripMenuItem});
             this.ctxSobre.Name = "ctxSobre";
-            this.ctxSobre.Size = new System.Drawing.Size(205, 26);
+            this.ctxSobre.Size = new System.Drawing.Size(79, 26);
+            // 
+            // sobreOAssinadorDigitalToolStripMenuItem
+            // 
+            this.sobreOAssinadorDigitalToolStripMenuItem.Name = "sobreOAssinadorDigitalToolStripMenuItem";
+            this.sobreOAssinadorDigitalToolStripMenuItem.Size = new System.Drawing.Size(78, 22);
             // 
             // ctxArquivo
             // 
@@ -578,6 +579,7 @@ namespace AssinadorDigital
         private System.Windows.Forms.ToolStripMenuItem abrirLocalDoArquivoToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip ctxSobre;
         private System.Windows.Forms.ToolStripMenuItem sobreOAssinadorDigitalToolStripMenuItem;
+        private System.ComponentModel.IContainer components;
     }
 }
 
