@@ -551,6 +551,14 @@ namespace AssinadorDigital
             
         }
 
+        private void lstSigners_MouseUp(object sender, MouseEventArgs e)
+        {
+            if ((e.Button == MouseButtons.Right) && (lstSigners.SelectedItems.Count == 1))
+            {
+                ctxAssinatura.Show(lstSigners, e.Location);
+            }
+        }
+
         private void lstFiles_MouseUp(object sender, MouseEventArgs e)
         {
             selectedDocuments.Clear();           
@@ -601,6 +609,48 @@ namespace AssinadorDigital
             loadSigners();
         }
 
+        private void visualizarXMLDaAssinaturaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if ((lstSigners.SelectedItems.Count > 0) && (lstSigners.SelectedItems[0].Group.Header != "commonSignatures"))
+            {
+                if (lstSigners.SelectedItems[0].SubItems[5] != null)
+                {
+                    string filePath = lstSigners.SelectedItems[0].SubItems[3].Text;
+                    string uri = lstSigners.SelectedItems[0].SubItems[5].Text;
+                    string fileExtension = Path.GetExtension(filePath);
+                    string tempFilePath;
+
+                    if ((fileExtension == ".docx") || (fileExtension == ".docm"))
+                    {
+                        using (WordprocessingDocument wdoc = WordprocessingDocument.Open(filePath, false))
+                        {
+                            foreach (XmlSignaturePart xmlSignature in wdoc.DigitalSignatureOriginPart.XmlSignatureParts)
+                            {
+                                if (xmlSignature.Uri.OriginalString == uri)
+                                {
+                                    tempFilePath = Path.GetTempFileName() + ".xml";
+
+                                    //TODO: Bianca, escreva o xml do "xmlSignature" no arquivo "tempFilePath"
+                                    //faça para os outros tipos de documento também! (pptx, xlsx)
+
+                                    Process.Start(tempFilePath);
+                                }
+                            }
+                        }
+                    }
+                    else if ((fileExtension == ".pptx") || (fileExtension == ".pptm"))
+                    {
+                    }
+                    else if ((fileExtension == ".xlsx") || (fileExtension == ".xlsm"))
+                    {
+                    }
+                    else if (fileExtension == ".xps")
+                    {
+                    }
+                }
+            }
+        }
+
         private void abrirArquivoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (lstDocuments.SelectedItems.Count > 0)
@@ -631,20 +681,5 @@ namespace AssinadorDigital
         }
 
         #endregion
-
-        private void AssinatuaXML_Click(object sender, EventArgs e)
-        {
-            if (lstDocuments.SelectedItems.Count > 0)
-            {
-               /*foreach (Signer signer in digitalSignature.signers)
-                {                  
-                    Process.Start(signer.uri);
-                }*/
-            }
-        }
-
-       
-        
-
     }
 }
