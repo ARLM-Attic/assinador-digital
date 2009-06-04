@@ -6,6 +6,9 @@ using System.IO;
 using System.Windows.Forms;
 using Microsoft.Office.DocumentFormat.OpenXml.Packaging;
 using OPC;
+using System.Security.Cryptography;
+using System.Security.Cryptography.Xml;
+using System.Xml;
 
 namespace AssinadorDigital
 {
@@ -619,7 +622,7 @@ namespace AssinadorDigital
                     string uri = lstSigners.SelectedItems[0].SubItems[5].Text;
                     string fileExtension = Path.GetExtension(filePath);
                     string tempFilePath;
-
+                    XmlDocument xdoc = new XmlDocument(); //
                     if ((fileExtension == ".docx") || (fileExtension == ".docm"))
                     {
                         using (WordprocessingDocument wdoc = WordprocessingDocument.Open(filePath, false))
@@ -632,14 +635,16 @@ namespace AssinadorDigital
 
                                     //TODO: Bianca, escreva o xml do "xmlSignature" no arquivo "tempFilePath"
                                     //faça para os outros tipos de documento também! (pptx, xlsx)
-
+                                  //  File.Copy(tempFilePath,xmlSignature);    
                                     Process.Start(tempFilePath);
+                                    
+                                    
                                 }
                             }
                         }
                     }
                     else if ((fileExtension == ".pptx") || (fileExtension == ".pptm"))
-                    {
+                    { 
                     }
                     else if ((fileExtension == ".xlsx") || (fileExtension == ".xlsm"))
                     {
@@ -681,5 +686,7 @@ namespace AssinadorDigital
         }
 
         #endregion
+
+        
     }
 }
