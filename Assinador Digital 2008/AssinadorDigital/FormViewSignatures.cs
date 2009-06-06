@@ -10,6 +10,7 @@ using System.Security.Cryptography;
 using System.Security.Cryptography.Xml;
 using System.Xml;
 
+
 namespace AssinadorDigital
 {
     public partial class frmViewDigitalSignature : Form
@@ -622,7 +623,8 @@ namespace AssinadorDigital
                     string uri = lstSigners.SelectedItems[0].SubItems[5].Text;
                     string fileExtension = Path.GetExtension(filePath);
                     string tempFilePath;
-                    XmlDocument xdoc = new XmlDocument(); //
+                    XmlDocument xDoc = new XmlDocument();
+                    
                     if ((fileExtension == ".docx") || (fileExtension == ".docm"))
                     {
                         using (WordprocessingDocument wdoc = WordprocessingDocument.Open(filePath, false))
@@ -632,13 +634,12 @@ namespace AssinadorDigital
                                 if (xmlSignature.Uri.OriginalString == uri)
                                 {
                                     tempFilePath = Path.GetTempFileName() + ".xml";
-
+                                    xDoc.Load(xmlSignature.GetStream());
                                     //TODO: Bianca, escreva o xml do "xmlSignature" no arquivo "tempFilePath"
-                                    //faça para os outros tipos de documento também! (pptx, xlsx)
-                                  //  File.Copy(tempFilePath,xmlSignature);    
-                                    Process.Start(tempFilePath);
-                                    
-                                    
+                                    //faça para os outros tipos de documento também! (pptx, xlsx)                                   
+                                    XmlTextWriter xmlWriter = new XmlTextWriter(tempFilePath, System.Text.Encoding.UTF8);
+                                    xmlWriter.WriteString(xDoc.InnerXml);
+                                    Process.Start(tempFilePath);    
                                 }
                             }
                         }
