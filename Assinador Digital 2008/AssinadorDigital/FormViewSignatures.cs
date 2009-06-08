@@ -9,6 +9,8 @@ using OPC;
 using System.Security.Cryptography;
 using System.Security.Cryptography.Xml;
 using System.Xml;
+using System.Windows.Xps.Packaging;
+using System.IO.Packaging;
 
 
 namespace AssinadorDigital
@@ -635,23 +637,80 @@ namespace AssinadorDigital
                                 {
                                     tempFilePath = Path.GetTempFileName() + ".xml";
                                     xDoc.Load(xmlSignature.GetStream());
-                                    //TODO: Bianca, escreva o xml do "xmlSignature" no arquivo "tempFilePath"
-                                    //faça para os outros tipos de documento também! (pptx, xlsx)                                   
-                                    XmlTextWriter xmlWriter = new XmlTextWriter(tempFilePath, System.Text.Encoding.UTF8);
-                                    xmlWriter.WriteString(xDoc.InnerXml);
+
+                                    TextWriter tw = new StreamWriter(tempFilePath, true, System.Text.Encoding.UTF8);
+                                    tw.Write(xDoc.InnerXml);
+                                    tw.Flush();
+                                    tw.Close();
+                                    
                                     Process.Start(tempFilePath);    
                                 }
                             }
                         }
                     }
                     else if ((fileExtension == ".pptx") || (fileExtension == ".pptm"))
-                    { 
+                    {
+                        using (PresentationDocument pptdoc = PresentationDocument.Open(filePath, false))
+                        {
+                            foreach (XmlSignaturePart xmlSignature in pptdoc.DigitalSignatureOriginPart.XmlSignatureParts)
+                            {
+                                if (xmlSignature.Uri.OriginalString == uri)
+                                {
+                                    tempFilePath = Path.GetTempFileName() + ".xml";
+                                    xDoc.Load(xmlSignature.GetStream());
+
+                                    TextWriter tw = new StreamWriter(tempFilePath, true, System.Text.Encoding.UTF8);
+                                    tw.Write(xDoc.InnerXml);
+                                    tw.Flush();
+                                    tw.Close();
+
+                                    Process.Start(tempFilePath);
+                                }
+                            }
+                        }
                     }
                     else if ((fileExtension == ".xlsx") || (fileExtension == ".xlsm"))
                     {
+                        using (SpreadsheetDocument xlsdoc = SpreadsheetDocument.Open(filePath, false))
+                        {
+                            foreach (XmlSignaturePart xmlSignature in xlsdoc.DigitalSignatureOriginPart.XmlSignatureParts)
+                            {
+                                if (xmlSignature.Uri.OriginalString == uri)
+                                {
+                                    tempFilePath = Path.GetTempFileName() + ".xml";
+                                    xDoc.Load(xmlSignature.GetStream());
+
+                                    TextWriter tw = new StreamWriter(tempFilePath, true, System.Text.Encoding.UTF8);
+                                    tw.Write(xDoc.InnerXml);
+                                    tw.Flush();
+                                    tw.Close();
+
+                                    Process.Start(tempFilePath);
+                                }
+                            }
+                        }
                     }
                     else if (fileExtension == ".xps")
-                    {
+                    { 
+                      /*  Package package = Package.Open(filePath);
+                        using ( XpsDocument xpdoc = new XpsDocument(package))
+                        {
+                            foreach (XmlSignaturePart xmlSignature in xpdoc.DigitalSignatureOriginPart.XmlSignatureParts)
+                            {
+                                if (xmlSignature.Uri.OriginalString == uri)
+                                {
+                                    tempFilePath = Path.GetTempFileName() + ".xml";
+                                    xDoc.Load(xmlSignature.GetStream());
+
+                                    TextWriter tw = new StreamWriter(tempFilePath, true, System.Text.Encoding.UTF8);
+                                    tw.Write(xDoc.InnerXml);
+                                    tw.Flush();
+                                    tw.Close();
+
+                                    Process.Start(tempFilePath);
+                                }
+                            }
+                        }*/
                     }
                 }
             }
