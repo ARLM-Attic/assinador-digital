@@ -691,16 +691,19 @@ namespace AssinadorDigital
                         }
                     }
                     else if (fileExtension == ".xps")
-                    { 
-                      /*  Package package = Package.Open(filePath);
-                        using ( XpsDocument xpdoc = new XpsDocument(package))
+                    {
+                        using (Package package = Package.Open(filePath, FileMode.Open, FileAccess.ReadWrite))
                         {
-                            foreach (XmlSignaturePart xmlSignature in xpdoc.DigitalSignatureOriginPart.XmlSignatureParts)
+                            PackageDigitalSignatureManager _signatures = null;
+                            _signatures = new PackageDigitalSignatureManager(package);
+
+                            foreach (PackageDigitalSignature sig in _signatures.Signatures)
                             {
-                                if (xmlSignature.Uri.OriginalString == uri)
+                                if (sig.SignaturePart.Uri.OriginalString == uri)
                                 {
                                     tempFilePath = Path.GetTempFileName() + ".xml";
-                                    xDoc.Load(xmlSignature.GetStream());
+
+                                    xDoc.Load(sig.SignaturePart.GetStream());
 
                                     TextWriter tw = new StreamWriter(tempFilePath, true, System.Text.Encoding.UTF8);
                                     tw.Write(xDoc.InnerXml);
@@ -710,7 +713,7 @@ namespace AssinadorDigital
                                     Process.Start(tempFilePath);
                                 }
                             }
-                        }*/
+                        }
                     }
                 }
             }
