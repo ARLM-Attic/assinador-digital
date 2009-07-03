@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections;
 using System.Text;
+using System.Security.Cryptography.X509Certificates;
 
 namespace OPC
 {
@@ -56,7 +57,7 @@ namespace OPC
         /// <param name="issuer"></param>
         /// <param name="date"></param>
         /// <param name="serial"></param>
-        public void Add(string name, string uri, string issuer, string date, string serial)
+        public void Add(string name, string uri, string issuer, string date, string serial, X509Certificate2 signerCertificate)
         {
             MoveNext();
             Signer sig = new Signer();
@@ -65,6 +66,7 @@ namespace OPC
             sig.uri = uri;
             sig.issuer = issuer;
             sig.serialNumber = serial;
+            sig.signerCertificate = signerCertificate;
             this.List.Add(sig);
         }
         /// <summary>

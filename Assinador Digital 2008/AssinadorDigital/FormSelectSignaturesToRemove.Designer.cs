@@ -2,10 +2,6 @@ namespace AssinadorDigital
 {
     partial class frmSelectDigitalSignatureToRemove
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        public System.ComponentModel.IContainer components = new System.ComponentModel.Container();
 
         /// <summary>
         /// Clean up any resources being used.
@@ -450,8 +446,8 @@ namespace AssinadorDigital
             this.ilistValidate.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("ilistValidate.ImageStream")));
             this.ilistValidate.TransparentColor = System.Drawing.Color.Transparent;
             this.ilistValidate.Images.SetKeyName(0, "signinvalid.gif");
-            this.ilistValidate.Images.SetKeyName(1, "signvalid.gif");
-            this.ilistValidate.Images.SetKeyName(2, "signalert.gif");
+            this.ilistValidate.Images.SetKeyName(1, "signalert.gif");
+            this.ilistValidate.Images.SetKeyName(2, "signvalid.gif");
             // 
             // formHeaderImage
             // 
@@ -485,7 +481,7 @@ namespace AssinadorDigital
             this.abrirArquivoToolStripMenuItem,
             this.abrirLocalDoArquivoToolStripMenuItem});
             this.ctxArquivo.Name = "ctxArquivo";
-            this.ctxArquivo.Size = new System.Drawing.Size(194, 70);
+            this.ctxArquivo.Size = new System.Drawing.Size(194, 48);
             // 
             // abrirArquivoToolStripMenuItem
             // 
@@ -570,6 +566,7 @@ namespace AssinadorDigital
         private System.Windows.Forms.ToolStripMenuItem abrirLocalDoArquivoToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip ctxSobre;
         private System.Windows.Forms.ToolStripMenuItem sobreOAssinadorDigitalToolStripMenuItem;
+        private System.ComponentModel.IContainer components;
     }
 }
 

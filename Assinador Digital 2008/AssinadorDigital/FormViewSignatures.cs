@@ -11,6 +11,8 @@ using System.Security.Cryptography.Xml;
 using System.Xml;
 using System.Windows.Xps.Packaging;
 using System.IO.Packaging;
+using System.Security.Cryptography.X509Certificates;
+using Microsoft.Win32;
 
 
 namespace AssinadorDigital
@@ -45,7 +47,7 @@ namespace AssinadorDigital
         {
             InitializeComponent();
             documents = args;
-            VerifyCRL.VerifyConsultCRL();
+            CertificateUtils.VerifyConsultCRL();
         }
         #endregion
 
@@ -270,19 +272,19 @@ namespace AssinadorDigital
                             signature[2] = signer.uri;
                             signature[3] = signer.date;
                             signature[4] = signer.serialNumber;
+                            X509Certificate2 signatureCertificate = signer.signerCertificate;
 
                             int signatureIcon = 0;
-
-                            if (invalidSignatures.Contains(signature[0]) &&
-                                invalidSignatures.Contains(signature[1]) &&
-                                invalidSignatures.Contains(signature[2]) &&
-                                invalidSignatures.Contains(signature[3]))
-                            {
+                            if (invalidSignatures.Contains(signature[0]) && invalidSignatures.Contains(signature[1]) && invalidSignatures.Contains(signature[2]) && invalidSignatures.Contains(signature[3]))
                                 signatureIcon = 0;
-                            }
                             else
                             {
-                                signatureIcon = 1;
+                                RegistryKey ConsultCRL = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\LTIA\Assinador Digital", true);
+                                bool checkCRL = Convert.ToBoolean(ConsultCRL.GetValue("ConsultCRL"));
+                                if (!CertificateUtils.ValidateCertificate(signatureCertificate, checkCRL, false) ?? true)
+                                    signatureIcon = 1;
+                                else
+                                    signatureIcon = 2;
                             }
 
                             ListViewItem newSignerItem = new ListViewItem();    //INDEX
@@ -294,6 +296,7 @@ namespace AssinadorDigital
                             newSignerItem.SubItems.Add(filepath);               //3 signer.path
                             newSignerItem.SubItems.Add(signature[4]);           //4 signer.serialNumber
                             newSignerItem.SubItems.Add(signature[2]);           //5 signer.URI
+                            newSignerItem.Tag = (object)signatureCertificate;   //Tag signer.signerCertificate
 
                             lstSigners.Items.Add(newSignerItem);
 
@@ -303,6 +306,7 @@ namespace AssinadorDigital
                                 sgn.name = signature[0].ToString();
                                 sgn.issuer = signature[1].ToString();
                                 sgn.serialNumber = signature[4].ToString();
+                                sgn.signerCertificate = signatureCertificate;
                                 if (!commonSigners.Contains(sgn))
                                     commonSigners.Add(sgn);
                             }
@@ -491,6 +495,7 @@ namespace AssinadorDigital
                         newCommonSignerItem.SubItems.Add("");                   //2 signer.date
                         newCommonSignerItem.SubItems.Add("");                   //3 signer.path
                         newCommonSignerItem.SubItems.Add(sig.serialNumber);     //4 signer.serialNumber
+                        newCommonSignerItem.Tag = (object)sig.signerCertificate;//Tag signer.signerCertificate
 
                         lstSigners.Items.Add(newCommonSignerItem);
                     }
@@ -534,9 +539,11 @@ namespace AssinadorDigital
             Application.Exit();
         }
 
+        #region ListView Documents
+
         private void lstFiles_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
-            bool status = true;            
+            bool status = true;
             if (lstDocuments.SelectedItems.Count < 1)
             {
                 lstSigners.Items.Clear();
@@ -546,33 +553,14 @@ namespace AssinadorDigital
             gpbSignatures.Enabled = status;
         }
 
-        private void lstSigners_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
-        {
-            for (int i = 0; i < lstSigners.Items.Count; i++)
-            {
-                if (lstSigners.Items[i].Selected)
-                    signers.Add(lstSigners.Items[i]);
-            }            
-            focusedSigner = e.Item;       
-            
-        }
-
-        private void lstSigners_MouseUp(object sender, MouseEventArgs e)
-        {
-            if ((e.Button == MouseButtons.Right) && (lstSigners.SelectedItems.Count == 1))
-            {
-                ctxAssinatura.Show(lstSigners, e.Location);
-            }
-        }
-
         private void lstFiles_MouseUp(object sender, MouseEventArgs e)
         {
-            selectedDocuments.Clear();           
+            selectedDocuments.Clear();
             int count = lstDocuments.SelectedItems.Count;
-            if(count>0)
+            if (count > 0)
                 gpbSignatures.Enabled = true;
             int i = 0;
-            for (i=0; i < count; i++)
+            for (i = 0; i < count; i++)
             {
                 selectedDocuments.Add(lstDocuments.SelectedItems[i].SubItems[2].Text);
             }
@@ -585,34 +573,61 @@ namespace AssinadorDigital
                 ctxArquivo.Show(lstDocuments, e.Location);
             }
         }
-        
+
         private void lstFiles_KeyDown(object sender, KeyEventArgs e)
         {
             selectedDocuments.Clear();
             int count = lstDocuments.SelectedItems.Count;
             if (count > 0)
-                gpbSignatures.Enabled = true;            
+                gpbSignatures.Enabled = true;
             for (int i = 0; i < count; i++)
             {
-                selectedDocuments.Add(lstDocuments.SelectedItems[i].SubItems[2].Text);             
+                selectedDocuments.Add(lstDocuments.SelectedItems[i].SubItems[2].Text);
             }
-            
+
             lblSelected.Text = count.ToString();
-            loadSigners();          
+            loadSigners();
         }
 
-        private void btnSelectAll_Click(object sender, EventArgs e)
+        private void abrirArquivoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            selectedDocuments.Clear();
-            int count = lstDocuments.Items.Count;
-
-            for (int i = 0; i < count; i++)
+            if (lstDocuments.SelectedItems.Count > 0)
             {
-                lstDocuments.Items[i].Selected = true;
-                selectedDocuments.Add(lstDocuments.SelectedItems[i].SubItems[2].Text);
-                lblSelected.Text = count.ToString();
+                string filePath = lstDocuments.SelectedItems[0].SubItems[2].Text;
+                Process.Start(filePath);
             }
-            loadSigners();
+        }
+
+        private void abrirLocalDoArquivoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (lstDocuments.SelectedItems.Count > 0)
+            {
+                string argument = @"/select, " + lstDocuments.SelectedItems[0].SubItems[2].Text;
+                Process.Start("explorer.exe", argument);
+            }
+        }
+
+        #endregion
+
+        #region ListView Signers
+
+        private void lstSigners_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            for (int i = 0; i < lstSigners.Items.Count; i++)
+            {
+                if (lstSigners.Items[i].Selected)
+                    signers.Add(lstSigners.Items[i]);
+            }
+            focusedSigner = e.Item;
+
+        }
+
+        private void lstSigners_MouseUp(object sender, MouseEventArgs e)
+        {
+            if ((e.Button == MouseButtons.Right) && (lstSigners.SelectedItems.Count == 1))
+            {
+                ctxAssinatura.Show(lstSigners, e.Location);
+            }
         }
 
         private void visualizarXMLDaAssinaturaToolStripMenuItem_Click(object sender, EventArgs e)
@@ -719,22 +734,30 @@ namespace AssinadorDigital
             }
         }
 
-        private void abrirArquivoToolStripMenuItem_Click(object sender, EventArgs e)
+        private void visualizarCertificadoDigitalToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (lstDocuments.SelectedItems.Count > 0)
+            if (lstSigners.SelectedItems.Count > 0)
             {
-                string filePath = lstDocuments.SelectedItems[0].SubItems[2].Text;
-                Process.Start(filePath);
+                X509Certificate2UI.DisplayCertificate((X509Certificate2)lstSigners.SelectedItems[0].Tag);
             }
         }
 
-        private void abrirLocalDoArquivoToolStripMenuItem_Click(object sender, EventArgs e)
+        #endregion
+
+        #region Other Controls
+
+        private void btnSelectAll_Click(object sender, EventArgs e)
         {
-            if (lstDocuments.SelectedItems.Count > 0)
+            selectedDocuments.Clear();
+            int count = lstDocuments.Items.Count;
+
+            for (int i = 0; i < count; i++)
             {
-                string argument = @"/select, " + lstDocuments.SelectedItems[0].SubItems[2].Text;
-                Process.Start("explorer.exe", argument);
+                lstDocuments.Items[i].Selected = true;
+                selectedDocuments.Add(lstDocuments.SelectedItems[i].SubItems[2].Text);
+                lblSelected.Text = count.ToString();
             }
+            loadSigners();
         }
 
         private void sobreOAssinadorDigitalToolStripMenuItem_Click(object sender, EventArgs e)
@@ -750,6 +773,6 @@ namespace AssinadorDigital
 
         #endregion
 
-        
+        #endregion
     }
 }

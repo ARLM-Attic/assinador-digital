@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Security.Cryptography.X509Certificates;
 
 namespace OPC
 {
@@ -14,6 +15,7 @@ namespace OPC
         public string serialNumber;
         public string date;
         public bool isValid;
+        public X509Certificate2 signerCertificate;
 
         #endregion
 

@@ -35,7 +35,7 @@ namespace AssinadorDigital
             LastBackedUpFolder = Registry.CurrentUser.OpenSubKey(@"Software\LTIA\Assinador Digital", true);
             txtPath.Text = LastBackedUpFolder.GetValue("LastBackUpFolder").ToString();
 
-            VerifyCRL.VerifyConsultCRL();
+            CertificateUtils.VerifyConsultCRL();
         }
 
         public frmAddDigitalSignature(List<FileHistory> selectedItens, bool showCheckBoxViewDocuments)
@@ -50,7 +50,7 @@ namespace AssinadorDigital
             LastBackedUpFolder = Registry.CurrentUser.OpenSubKey(@"Software\LTIA\Assinador Digital", true);
             txtPath.Text = LastBackedUpFolder.GetValue("LastBackUpFolder").ToString();
 
-            VerifyCRL.VerifyConsultCRL();
+            CertificateUtils.VerifyConsultCRL();
         }
 
         #endregion
@@ -71,7 +71,7 @@ namespace AssinadorDigital
         {
             String officeDocument = Properties.Resources.OfficeObject;
 
-            X509Certificate2 certificate = GetCertificate();
+            X509Certificate2 certificate = CertificateUtils.GetCertificate();
 
             if (certificate != null)
             {
@@ -185,34 +185,6 @@ namespace AssinadorDigital
                 return signedDocuments.ToArray();
             }
             return null;
-        }
-
-        private X509Certificate2 GetCertificate()
-        {
-            X509Store certStore = new X509Store(StoreLocation.CurrentUser);
-            certStore.Open(OpenFlags.ReadOnly);
-            X509Certificate2Collection certs =
-                X509Certificate2UI.SelectFromCollection(
-                    certStore.Certificates,
-                    "Selecionar um Certificado Digital.",
-                    "Por favor selecione um certificado para assinatura.",
-                    X509SelectionFlag.SingleSelection);
-            if (certs.Count > 0)
-            {
-                bool chainIsValid = false;
-                var chain = new X509Chain();
-                chain.ChainPolicy.RevocationFlag = X509RevocationFlag.ExcludeRoot;
-                chain.ChainPolicy.RevocationMode = X509RevocationMode.Online;
-                chain.ChainPolicy.UrlRetrievalTimeout = new TimeSpan(0, 1, 0);
-                chain.ChainPolicy.VerificationFlags = X509VerificationFlags.NoFlag;
-                
-                chainIsValid = chain.Build(certs[0]);
-                bool a = certs[0].Verify();
-
-                byte[] bt = certs[0].Extensions[5].RawData;
-                string s = System.Text.Encoding.ASCII.GetString(bt);
-            }
-            return certs.Count > 0 ? certs[0] : null;
         }
 
         private void loadDigitalSignature(string filepath)

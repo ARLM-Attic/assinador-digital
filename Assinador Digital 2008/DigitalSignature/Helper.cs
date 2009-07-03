@@ -161,7 +161,9 @@ namespace OPC
                     string date = signature.SigningTime.ToString();
                     string issuer = signature.Signer.Issuer.Replace("CN=", "");
                     string serial = signature.Signer.GetSerialNumberString();
-                    sigs.Add(name, uri, issuer, date, serial);
+                    X509Certificate2 signatureCertificate = (X509Certificate2)signature.Signer;
+
+                    sigs.Add(name, uri, issuer, date, serial, signatureCertificate);
                 }
                 package.Close();            
                 xpsDocument = new XpsDocument(signers.Path, FileAccess.ReadWrite);
@@ -181,7 +183,9 @@ namespace OPC
                     string date = signature.SigningTime.ToString();
                     string issuer = signature.Signer.Issuer.Replace("CN=", "");
                     string serial = signature.Signer.GetSerialNumberString();
-                    sigs.Add(name, uri, issuer, date, serial);
+                    X509Certificate2 signatureCertificate = (X509Certificate2)signature.Signer;
+
+                    sigs.Add(name, uri, issuer, date, serial, signatureCertificate);
                 }
                 return sigs;
             }
