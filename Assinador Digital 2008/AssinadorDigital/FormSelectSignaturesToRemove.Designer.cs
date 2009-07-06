@@ -566,7 +566,8 @@ namespace AssinadorDigital
         private System.Windows.Forms.ToolStripMenuItem abrirLocalDoArquivoToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip ctxSobre;
         private System.Windows.Forms.ToolStripMenuItem sobreOAssinadorDigitalToolStripMenuItem;
-        private System.ComponentModel.IContainer components;
+
+        public System.ComponentModel.IContainer components;
     }
 }
 

@@ -607,10 +607,11 @@ namespace AssinadorDigital
         private System.Windows.Forms.ToolStripMenuItem abrirLocalDoArquivoToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip ctxSobre;
         private System.Windows.Forms.ToolStripMenuItem sobreOAssinadorDigitalToolStripMenuItem;
-        private System.ComponentModel.IContainer components;
         private System.Windows.Forms.ContextMenuStrip ctxAssinatura;
         private System.Windows.Forms.ToolStripMenuItem visualizarXMLDaAssinaturaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem visualizarCertificadoDigitalToolStripMenuItem;
+
+        public System.ComponentModel.IContainer components;
     }
 }
 

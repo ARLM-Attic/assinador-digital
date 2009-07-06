@@ -24,7 +24,7 @@ namespace AssinadorDigital
                         && System.IO.Path.HasExtension(paths[0]))
                     {
                         frmManageDigitalSignature frmManage = new frmManageDigitalSignature(paths, false);
-                      //  notifyInconInstance(frmManage.components);
+                        notifyInconInstance(frmManage.components);
                         Application.Run(frmManage);
                     }
                     else
