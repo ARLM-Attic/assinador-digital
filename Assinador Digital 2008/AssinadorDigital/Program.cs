@@ -18,43 +18,44 @@ namespace AssinadorDigital
             if (args.Length > 0)
             {
                 string[] paths = args[1].Split('|');
-                if (args[0] == "/v")
+                switch (args[0])
                 {
-                    if ((paths.Length <= 1)
-                        && System.IO.Path.HasExtension(paths[0]))
-                    {
-                        frmManageDigitalSignature frmManage = new frmManageDigitalSignature(paths, false);
-                        notifyInconInstance(frmManage.components);
-                        Application.Run(frmManage);
-                    }
-                    else
-                    {
-                        frmIncludeSubFolders frmInclude = new frmIncludeSubFolders(paths, args[0]);
-                        notifyInconInstance(frmInclude.components);
-                        Application.Run(frmInclude);
-                    }
-                }
-                else if (args[0] == "/r")
-                {
-                    if ((paths.Length <= 1)
-                        && System.IO.Path.HasExtension(paths[0]))
-                    {
-                        frmSelectDigitalSignatureToRemove frmSelect = new frmSelectDigitalSignatureToRemove(paths, false);
-                        notifyInconInstance(frmSelect.components);
-                        Application.Run(frmSelect);
-                    }
-                    else
-                    {
-                        frmIncludeSubFolders frmInclude = new frmIncludeSubFolders(paths, args[0]);
-                        notifyInconInstance(frmInclude.components);
-                        Application.Run(frmInclude);
-                    }
-                }
-                else if (args[0] == "/a")
-                {
-                    frmAddDigitalSignature frmAdd = new frmAddDigitalSignature(paths, true);
-                    notifyInconInstance(frmAdd.components);
-                    Application.Run(frmAdd);
+                    case "/v":
+                        if ((paths.Length <= 1) && System.IO.Path.HasExtension(paths[0]))
+                        {
+                            frmManageDigitalSignature frmManage = new frmManageDigitalSignature(paths, false);
+                            notifyInconInstance(frmManage.components);
+                            Application.Run(frmManage);
+                        }
+                        else
+                        {
+                            frmIncludeSubFolders frmInclude = new frmIncludeSubFolders(paths, args[0]);
+                            notifyInconInstance(frmInclude.components);
+                            Application.Run(frmInclude);
+                        }
+                        break;
+                    case "/r":
+                        if ((paths.Length <= 1) && System.IO.Path.HasExtension(paths[0]))
+                        {
+                            frmSelectDigitalSignatureToRemove frmSelect = new frmSelectDigitalSignatureToRemove(paths, false);
+                            notifyInconInstance(frmSelect.components);
+                            Application.Run(frmSelect);
+                        }
+                        else
+                        {
+                            frmIncludeSubFolders frmInclude = new frmIncludeSubFolders(paths, args[0]);
+                            notifyInconInstance(frmInclude.components);
+                            Application.Run(frmInclude);
+                        }
+                        break;
+                    case "/a":
+                        frmAddDigitalSignature frmAdd = new frmAddDigitalSignature(paths, true);
+                        notifyInconInstance(frmAdd.components);
+                        Application.Run(frmAdd);
+                        break;
+                    default:
+                        Application.Exit();
+                        break;
                 }
             }
         }
