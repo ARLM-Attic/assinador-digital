@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="CtxMenu"
 	ProjectGUID="{41C2892D-C9D2-4396-BDD9-D7B86B6A414D}"
 	RootNamespace="CtxMenu"
@@ -483,15 +483,11 @@
 				>
 			</File>
 			<File
-				RelativePath="ani_2.ico"
-				>
-			</File>
-			<File
 				RelativePath="res\ani_2.ico"
 				>
 			</File>
 			<File
-				RelativePath="res\ani_3.ico"
+				RelativePath="ani_2.ico"
 				>
 			</File>
 			<File
@@ -499,11 +495,15 @@
 				>
 			</File>
 			<File
-				RelativePath="ani_4.ico"
+				RelativePath="res\ani_3.ico"
 				>
 			</File>
 			<File
 				RelativePath="res\ani_4.ico"
+				>
+			</File>
+			<File
+				RelativePath="ani_4.ico"
 				>
 			</File>
 			<File
@@ -515,15 +515,11 @@
 				>
 			</File>
 			<File
-				RelativePath="res\ani_6.ico"
-				>
-			</File>
-			<File
 				RelativePath="ani_6.ico"
 				>
 			</File>
 			<File
-				RelativePath="ani_7.ico"
+				RelativePath="res\ani_6.ico"
 				>
 			</File>
 			<File
@@ -531,7 +527,7 @@
 				>
 			</File>
 			<File
-				RelativePath="res\ani_8.ico"
+				RelativePath="ani_7.ico"
 				>
 			</File>
 			<File
@@ -539,11 +535,15 @@
 				>
 			</File>
 			<File
-				RelativePath="ani_9.ico"
+				RelativePath="res\ani_8.ico"
 				>
 			</File>
 			<File
 				RelativePath="res\ani_9.ico"
+				>
+			</File>
+			<File
+				RelativePath="ani_9.ico"
 				>
 			</File>
 			<File
@@ -563,11 +563,11 @@
 				>
 			</File>
 			<File
-				RelativePath="ico00001.ico"
+				RelativePath="res\ico00001.ico"
 				>
 			</File>
 			<File
-				RelativePath="res\ico00001.ico"
+				RelativePath="ico00001.ico"
 				>
 			</File>
 			<File
@@ -575,11 +575,11 @@
 				>
 			</File>
 			<File
-				RelativePath="res\icon1.ico"
+				RelativePath="icon1.ico"
 				>
 			</File>
 			<File
-				RelativePath="icon1.ico"
+				RelativePath="res\icon1.ico"
 				>
 			</File>
 			<File

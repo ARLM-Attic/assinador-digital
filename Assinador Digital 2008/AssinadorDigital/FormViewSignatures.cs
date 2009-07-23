@@ -13,6 +13,7 @@ using System.Windows.Xps.Packaging;
 using System.IO.Packaging;
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.Win32;
+using System.Threading;
 
 
 namespace AssinadorDigital
@@ -20,6 +21,7 @@ namespace AssinadorDigital
     public partial class frmViewDigitalSignature : Form
     {
         #region private Properties
+        RegistryKey assinadorRegistry = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\LTIA\Assinador Digital", true);
         /// <summary>
         /// Object of DigitalSignature
         /// </summary>
@@ -31,6 +33,7 @@ namespace AssinadorDigital
         private string[] documents;
         private ArrayList signers = new ArrayList();
         private ListViewItem focusedSigner;
+        List<X509Certificate2> allSignersAllDocuments = new List<X509Certificate2>();
         /// <summary>
         /// ArrayList of selected documents in the list
         /// </summary>
@@ -222,8 +225,22 @@ namespace AssinadorDigital
             }
         }
 
-        private bool loadSigners()
+        private void loadSignersThread()
         {
+            //Thread loadSignersT = new Thread(new ThreadStart(this.loadSigners()));
+            //loadSignersT.Start();
+
+            //bool checkCRL = Convert.ToBoolean(assinadorRegistry.GetValue("ConsultCRL"));
+            //if (!CertificateUtils.ValidateCertificate(signatureCertificate, checkCRL, false) ?? true)
+            //if (nonconformitySigners.Contains(signatureCertificate))
+            //    signatureIcon = 1;
+            //else
+        }
+
+        public bool loadSigners()
+        {
+            bool checkCRL = Convert.ToBoolean(assinadorRegistry.GetValue("ConsultCRL"));
+
             if (documents == null)
                 return false;
 
@@ -235,8 +252,10 @@ namespace AssinadorDigital
             if (lstDocuments.SelectedItems.Count > 0)
             {
                 List<string> problematicFoundDocuments = new List<string>();
-
                 Signers commonSigners = new Signers();
+
+                List<X509Certificate2> nonconformitySigners = new List<X509Certificate2>();
+                List<X509Certificate2> conformitySigners = new List<X509Certificate2>();
                 foreach (string filepath in selectedDocuments)
                 {
                     try
@@ -272,16 +291,24 @@ namespace AssinadorDigital
                             signature[2] = signer.uri;
                             signature[3] = signer.date;
                             signature[4] = signer.serialNumber;
+
                             X509Certificate2 signatureCertificate = signer.signerCertificate;
+                            if ((!nonconformitySigners.Contains(signatureCertificate)) && (!conformitySigners.Contains(signatureCertificate)))
+                            {
+                                if (!CertificateUtils.ValidateCertificate(signatureCertificate, checkCRL, false) ?? true)
+                                    nonconformitySigners.Add(signatureCertificate);
+                                else
+                                    conformitySigners.Add(signatureCertificate);
+                            }
+                            //if (!allSignersAllDocuments.Contains(signatureCertificate))
+                            //    allSignersAllDocuments.Add(signatureCertificate);
 
                             int signatureIcon = 0;
                             if (invalidSignatures.Contains(signature[0]) && invalidSignatures.Contains(signature[1]) && invalidSignatures.Contains(signature[2]) && invalidSignatures.Contains(signature[3]))
                                 signatureIcon = 0;
                             else
                             {
-                                RegistryKey ConsultCRL = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\LTIA\Assinador Digital", true);
-                                bool checkCRL = Convert.ToBoolean(ConsultCRL.GetValue("ConsultCRL"));
-                                if (!CertificateUtils.ValidateCertificate(signatureCertificate, checkCRL, false) ?? true)
+                                if (nonconformitySigners.Contains(signatureCertificate))
                                     signatureIcon = 1;
                                 else
                                     signatureIcon = 2;
