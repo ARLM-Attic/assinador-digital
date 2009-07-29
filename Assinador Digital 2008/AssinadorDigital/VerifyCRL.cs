@@ -9,6 +9,8 @@ namespace AssinadorDigital
 {
     public static class CertificateUtils
     {
+        public static X509ChainStatus buildStatus;
+
         public static void VerifyConsultCRL()
         { 
             RegistryKey ConsultCRL = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\LTIA\Assinador Digital", true);
@@ -52,6 +54,8 @@ namespace AssinadorDigital
         /// <returns></returns>
         public static bool? ValidateCertificate(X509Certificate2 certificate, bool checkCRL, bool showAlert)
         {
+            buildStatus = new X509ChainStatus();
+
             var chain = new X509Chain();
             chain.ChainPolicy.RevocationFlag = X509RevocationFlag.EntireChain;
             chain.ChainPolicy.UrlRetrievalTimeout = new TimeSpan(0, 1, 0);
@@ -65,16 +69,19 @@ namespace AssinadorDigital
 
             bool valid = chain.Build(certificate);
 
-            if (!valid && showAlert)
+            if (!valid)
             {
-                X509ChainStatus status = chain.ChainStatus[0];
-                if (MessageBox.Show("O Certificado Digital selecionado apresentou problemas de não conformidade.\n" +
-                    "O seguinte erro foi apresentado:\n\n" +
-                    status.StatusInformation + "\n" +
-                    "Deseja utilizá-lo mesmo assim?", "Problema de não conformidade - " + status.Status.ToString(), MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation,
-                    MessageBoxDefaultButton.Button1) == DialogResult.No)
+                buildStatus = chain.ChainStatus[0];
+                if (showAlert)
                 {
-                    return null;
+                    if (MessageBox.Show("O Certificado Digital selecionado apresentou problemas de não conformidade.\n" +
+                        "O seguinte erro foi apresentado:\n\n" +
+                        buildStatus.StatusInformation + "\n" +
+                        "Deseja utilizá-lo mesmo assim?", "Problema de não conformidade - " + buildStatus.Status.ToString(), MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation,
+                        MessageBoxDefaultButton.Button1) == DialogResult.No)
+                    {
+                        return null;
+                    }
                 }
             }
             return valid;

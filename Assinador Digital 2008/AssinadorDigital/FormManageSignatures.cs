@@ -394,6 +394,8 @@ namespace AssinadorDigital
                                 else
                                     conformitySigners.Add(signatureCertificate);
                             }
+                            X509ChainStatus chainStatus = new X509ChainStatus();
+                            chainStatus = CertificateUtils.buildStatus;
 
                             int signatureIcon = 0;
                             if (!(invalidSignatures.Contains(signature[0]) && invalidSignatures.Contains(signature[1]) &&
@@ -415,6 +417,12 @@ namespace AssinadorDigital
                             newSignerItem.SubItems.Add(signature[4]);           //4 signer.serialNumber
                             newSignerItem.SubItems.Add(signature[2]);           //5 signer.URI
                             newSignerItem.SubItems.Add(filepath.OriginalPath);  //6 signer.originalPath
+
+                            ListViewItem.ListViewSubItem chainSt = new ListViewItem.ListViewSubItem();
+                            chainSt.Text = "";
+                            chainSt.Tag = (object)chainStatus;
+                            newSignerItem.SubItems.Add(chainSt);                //7 chainStatus
+
                             newSignerItem.Tag = (object)signatureCertificate;   //Tag signer.signerCertificate
 
                             lstSigners.Items.Add(newSignerItem);
@@ -842,9 +850,11 @@ namespace AssinadorDigital
 
         private void visualizarCertificadoDigitalToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (lstSigners.SelectedItems.Count >0)
+            if (lstSigners.SelectedItems.Count > 0)
             {
-                X509Certificate2UI.DisplayCertificate((X509Certificate2)lstSigners.SelectedItems[0].Tag);
+                FormSignatureDetails FormSignatureDetails = new FormSignatureDetails((X509Certificate2)lstSigners.SelectedItems[0].Tag, (X509ChainStatus)lstSigners.SelectedItems[0].SubItems[7].Tag);
+                FormSignatureDetails.Owner = (frmManageDigitalSignature)this;
+                FormSignatureDetails.ShowDialog();
             }
         }
         
