@@ -28,15 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSignatureDetails));
             this.lstDetails = new System.Windows.Forms.ListView();
             this.headerCampo = new System.Windows.Forms.ColumnHeader();
             this.headerValor = new System.Windows.Forms.ColumnHeader();
             this.txtStatus = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.gpbValidation = new System.Windows.Forms.GroupBox();
             this.btnViewDetails = new System.Windows.Forms.Button();
+            this.gpbValidation = new System.Windows.Forms.GroupBox();
+            this.pctValidate = new System.Windows.Forms.PictureBox();
+            this.ilistValidate = new System.Windows.Forms.ImageList(this.components);
             this.groupBox1.SuspendLayout();
             this.gpbValidation.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pctValidate)).BeginInit();
             this.SuspendLayout();
             // 
             // lstDetails
@@ -77,11 +82,11 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.txtStatus.BackColor = System.Drawing.SystemColors.Control;
             this.txtStatus.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtStatus.Location = new System.Drawing.Point(6, 19);
+            this.txtStatus.Location = new System.Drawing.Point(28, 19);
             this.txtStatus.Multiline = true;
             this.txtStatus.Name = "txtStatus";
             this.txtStatus.ReadOnly = true;
-            this.txtStatus.Size = new System.Drawing.Size(379, 62);
+            this.txtStatus.Size = new System.Drawing.Size(357, 62);
             this.txtStatus.TabIndex = 3;
             // 
             // groupBox1
@@ -96,19 +101,7 @@
             this.groupBox1.Size = new System.Drawing.Size(397, 267);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Detalhes do Certificado";
-            // 
-            // gpbValidation
-            // 
-            this.gpbValidation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.gpbValidation.Controls.Add(this.txtStatus);
-            this.gpbValidation.Location = new System.Drawing.Point(12, 12);
-            this.gpbValidation.Name = "gpbValidation";
-            this.gpbValidation.Size = new System.Drawing.Size(391, 87);
-            this.gpbValidation.TabIndex = 5;
-            this.gpbValidation.TabStop = false;
-            this.gpbValidation.Text = "Validação";
+            this.groupBox1.Text = "Resumo do Certificado";
             // 
             // btnViewDetails
             // 
@@ -121,6 +114,35 @@
             this.btnViewDetails.UseVisualStyleBackColor = true;
             this.btnViewDetails.Click += new System.EventHandler(this.btnViewDetails_Click);
             // 
+            // gpbValidation
+            // 
+            this.gpbValidation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.gpbValidation.Controls.Add(this.pctValidate);
+            this.gpbValidation.Controls.Add(this.txtStatus);
+            this.gpbValidation.Location = new System.Drawing.Point(12, 12);
+            this.gpbValidation.Name = "gpbValidation";
+            this.gpbValidation.Size = new System.Drawing.Size(391, 87);
+            this.gpbValidation.TabIndex = 5;
+            this.gpbValidation.TabStop = false;
+            this.gpbValidation.Text = "Validação";
+            // 
+            // pctValidate
+            // 
+            this.pctValidate.Location = new System.Drawing.Point(6, 19);
+            this.pctValidate.Name = "pctValidate";
+            this.pctValidate.Size = new System.Drawing.Size(16, 16);
+            this.pctValidate.TabIndex = 4;
+            this.pctValidate.TabStop = false;
+            // 
+            // ilistValidate
+            // 
+            this.ilistValidate.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("ilistValidate.ImageStream")));
+            this.ilistValidate.TransparentColor = System.Drawing.Color.Transparent;
+            this.ilistValidate.Images.SetKeyName(0, "signinvalid.gif");
+            this.ilistValidate.Images.SetKeyName(1, "signalert.gif");
+            this.ilistValidate.Images.SetKeyName(2, "signvalid.gif");
+            // 
             // FormSignatureDetails
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -128,12 +150,14 @@
             this.ClientSize = new System.Drawing.Size(421, 384);
             this.Controls.Add(this.gpbValidation);
             this.Controls.Add(this.groupBox1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormSignatureDetails";
             this.Text = "Detalhes do Certificado";
             this.Load += new System.EventHandler(this.FormSignatureDetails_Load);
             this.groupBox1.ResumeLayout(false);
             this.gpbValidation.ResumeLayout(false);
             this.gpbValidation.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pctValidate)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -147,6 +171,8 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button btnViewDetails;
         private System.Windows.Forms.GroupBox gpbValidation;
+        private System.Windows.Forms.ImageList ilistValidate;
+        private System.Windows.Forms.PictureBox pctValidate;
 
     }
 }

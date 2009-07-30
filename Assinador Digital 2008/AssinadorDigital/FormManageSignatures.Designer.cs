@@ -69,8 +69,8 @@ namespace AssinadorDigital
             this.abrirArquivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.abrirLocalDoArquivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxAssinatura = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.visualizarXMLDaAssinaturaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.visualizarCertificadoDigitalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.visualizarXMLDaAssinaturaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gpbFiles.SuspendLayout();
             this.gpbDescription.SuspendLayout();
             this.gpbSignatures.SuspendLayout();
@@ -523,19 +523,19 @@ namespace AssinadorDigital
             this.ctxAssinatura.Name = "ctxAssinatura";
             this.ctxAssinatura.Size = new System.Drawing.Size(225, 48);
             // 
-            // visualizarXMLDaAssinaturaToolStripMenuItem
-            // 
-            this.visualizarXMLDaAssinaturaToolStripMenuItem.Name = "visualizarXMLDaAssinaturaToolStripMenuItem";
-            this.visualizarXMLDaAssinaturaToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
-            this.visualizarXMLDaAssinaturaToolStripMenuItem.Text = "Visualizar XML da &Assinatura";
-            this.visualizarXMLDaAssinaturaToolStripMenuItem.Click += new System.EventHandler(this.visualizarXMLDaAssinaturaToolStripMenuItem_Click);
-            // 
             // visualizarCertificadoDigitalToolStripMenuItem
             // 
             this.visualizarCertificadoDigitalToolStripMenuItem.Name = "visualizarCertificadoDigitalToolStripMenuItem";
             this.visualizarCertificadoDigitalToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
             this.visualizarCertificadoDigitalToolStripMenuItem.Text = "Visualizar Certificado Digital";
             this.visualizarCertificadoDigitalToolStripMenuItem.Click += new System.EventHandler(this.visualizarCertificadoDigitalToolStripMenuItem_Click);
+            // 
+            // visualizarXMLDaAssinaturaToolStripMenuItem
+            // 
+            this.visualizarXMLDaAssinaturaToolStripMenuItem.Name = "visualizarXMLDaAssinaturaToolStripMenuItem";
+            this.visualizarXMLDaAssinaturaToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
+            this.visualizarXMLDaAssinaturaToolStripMenuItem.Text = "Visualizar XML da &Assinatura";
+            this.visualizarXMLDaAssinaturaToolStripMenuItem.Click += new System.EventHandler(this.visualizarXMLDaAssinaturaToolStripMenuItem_Click);
             // 
             // frmManageDigitalSignature
             // 
@@ -610,7 +610,6 @@ namespace AssinadorDigital
         private System.Windows.Forms.ContextMenuStrip ctxAssinatura;
         private System.Windows.Forms.ToolStripMenuItem visualizarXMLDaAssinaturaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem visualizarCertificadoDigitalToolStripMenuItem;
-
         public System.ComponentModel.IContainer components;
     }
 }

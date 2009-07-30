@@ -1,20 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using System.Security.Cryptography.X509Certificates;
+using System.Windows.Forms;
 
 namespace AssinadorDigital
 {
     public partial class FormSignatureDetails : Form
     {
         private X509Certificate2 signatureCertificate = new X509Certificate2();
-        private X509ChainStatus chainStatus = new X509ChainStatus();
+        private ChainDocumentStatus chainStatus = new ChainDocumentStatus();
 
-        public FormSignatureDetails(X509Certificate2 certificate, X509ChainStatus status)
+        public FormSignatureDetails(X509Certificate2 certificate, ChainDocumentStatus status)
         {
             signatureCertificate = certificate;
             chainStatus = status;
@@ -24,60 +19,89 @@ namespace AssinadorDigital
 
         private void statusUpdate()
         {
-            if (chainStatus.Status == X509ChainStatusFlags.NoError)
+            txtStatus.Text = chainStatus.StatusInformation;
+
+            //txtStatus.Text = chainStatus.StatusText + "\r\n" +
+            //   chainStatus.StatusInformation;
+
+            switch (chainStatus.Status)
             {
-                txtStatus.Text = "Assinatura válida.\r\nEsta assinatura e o conteúdo assinado não foram alterados desde a aplicação da assinatura.\r\n" +
-                   chainStatus.StatusInformation;
-            }
-            else
-            {
-                txtStatus.Text = chainStatus.Status.ToString() + "\r\n" +
-                   chainStatus.StatusInformation;
+                case ChainDocumentStatus.ChainDocumentStatusFlags.CorruptedDocument:
+                    pctValidate.Image = ilistValidate.Images[0];
+                    break;
+                case ChainDocumentStatus.ChainDocumentStatusFlags.CtlNotSignatureValid:
+                case ChainDocumentStatus.ChainDocumentStatusFlags.CtlNotTimeValid:
+                case ChainDocumentStatus.ChainDocumentStatusFlags.CtlNotValidForUsage:
+                case ChainDocumentStatus.ChainDocumentStatusFlags.Cyclic:
+                case ChainDocumentStatus.ChainDocumentStatusFlags.HasExcludedNameConstraint:
+                case ChainDocumentStatus.ChainDocumentStatusFlags.HasNotDefinedNameConstraint:
+                case ChainDocumentStatus.ChainDocumentStatusFlags.HasNotPermittedNameConstraint:
+                case ChainDocumentStatus.ChainDocumentStatusFlags.HasNotSupportedNameConstraint:
+                case ChainDocumentStatus.ChainDocumentStatusFlags.InvalidBasicConstraints:
+                case ChainDocumentStatus.ChainDocumentStatusFlags.InvalidExtension:
+                case ChainDocumentStatus.ChainDocumentStatusFlags.InvalidNameConstraints:
+                case ChainDocumentStatus.ChainDocumentStatusFlags.InvalidPolicyConstraints:
+                case ChainDocumentStatus.ChainDocumentStatusFlags.NoIssuanceChainPolicy:
+                case ChainDocumentStatus.ChainDocumentStatusFlags.NotSignatureValid:
+                case ChainDocumentStatus.ChainDocumentStatusFlags.NotTimeNested:
+                case ChainDocumentStatus.ChainDocumentStatusFlags.NotTimeValid:
+                case ChainDocumentStatus.ChainDocumentStatusFlags.NotValidForUsage:
+                case ChainDocumentStatus.ChainDocumentStatusFlags.OfflineRevocation:
+                case ChainDocumentStatus.ChainDocumentStatusFlags.PartialChain:
+                case ChainDocumentStatus.ChainDocumentStatusFlags.RevocationStatusUnknown:
+                case ChainDocumentStatus.ChainDocumentStatusFlags.Revoked:
+                case ChainDocumentStatus.ChainDocumentStatusFlags.UntrustedRoot:
+                    pctValidate.Image = ilistValidate.Images[1];
+                    break;
+                case ChainDocumentStatus.ChainDocumentStatusFlags.NoError:
+                default:
+                    pctValidate.Image = ilistValidate.Images[2];
+                    break;
             }
         }
 
         private void certificateUpdate()
         {
-            ListViewGroup standardGroup = new ListViewGroup("standard", "Extensões padrão");
-            lstDetails.Groups.Insert(0, standardGroup);
-
-            ListViewItem itemSubject = new ListViewItem("Requerente");
-            itemSubject.SubItems.Add(signatureCertificate.Subject.Replace("CN=", "").Replace("OU=", "").Replace("DC=", "").Replace("O=", "").Replace("C=", ""));
-            itemSubject.Group = standardGroup;
-            lstDetails.Items.Add(itemSubject);
-
-            ListViewItem itemFriendlyName = new ListViewItem("Nome amigável");
-            itemFriendlyName.SubItems.Add(signatureCertificate.FriendlyName);
-            itemFriendlyName.Group = standardGroup;
-            lstDetails.Items.Add(itemFriendlyName);
-
-            ListViewItem itemIssuerName = new ListViewItem("Emissor");
-            itemIssuerName.SubItems.Add(signatureCertificate.IssuerName.Name.Replace("CN=", "").Replace("OU=", "").Replace("DC=", "").Replace("O=", "").Replace("C=", ""));
-            itemIssuerName.Group = standardGroup;
-            lstDetails.Items.Add(itemIssuerName);
+            ListViewGroup v1Group = new ListViewGroup("v1Group", "Campos");
+            lstDetails.Groups.Insert(0, v1Group);
 
             ListViewItem itemSerialNumber = new ListViewItem("Número de série");
             itemSerialNumber.SubItems.Add(signatureCertificate.SerialNumber);
-            itemSerialNumber.Group = standardGroup;
+            itemSerialNumber.Group = v1Group;
             lstDetails.Items.Add(itemSerialNumber);
 
-            ListViewItem itemNotBefore = new ListViewItem("Válido de");
+            ListViewItem itemIssuerName = new ListViewItem("Emissor");
+            itemIssuerName.SubItems.Add(signatureCertificate.IssuerName.Name.Replace("CN=", "").Replace("OU=", "").Replace("DC=", "").Replace("O=", "").Replace("C=", ""));
+            itemIssuerName.Group = v1Group;
+            lstDetails.Items.Add(itemIssuerName);
+
+            ListViewItem itemNotBefore = new ListViewItem("Válido a partir de");
             itemNotBefore.SubItems.Add(signatureCertificate.NotBefore.ToString());
-            itemNotBefore.Group = standardGroup;
+            itemNotBefore.Group = v1Group;
             lstDetails.Items.Add(itemNotBefore);
 
             ListViewItem itemNotAfter = new ListViewItem("Válido até");
             itemNotAfter.SubItems.Add(signatureCertificate.NotAfter.ToString());
-            itemNotAfter.Group = standardGroup;
+            itemNotAfter.Group = v1Group;
             lstDetails.Items.Add(itemNotAfter);
 
-            ListViewGroup customGroup = new ListViewGroup("custom", "Extensões adicionais");
-            lstDetails.Groups.Insert(1, customGroup);
+            ListViewItem itemSubject = new ListViewItem("Requerente");
+            itemSubject.SubItems.Add(signatureCertificate.Subject.Replace("CN=", "").Replace("OU=", "").Replace("DC=", "").Replace("O=", "").Replace("C=", ""));
+            itemSubject.Group = v1Group;
+            lstDetails.Items.Add(itemSubject);
+
+            ListViewItem itemFriendlyName = new ListViewItem("Nome amigável");
+            itemFriendlyName.SubItems.Add(signatureCertificate.FriendlyName);
+            itemFriendlyName.Group = v1Group;
+            lstDetails.Items.Add(itemFriendlyName);
+
+            ListViewGroup extensionsGroup = new ListViewGroup("extensions", "Extensões");
+            lstDetails.Groups.Insert(1, extensionsGroup);
             foreach (X509Extension ext in signatureCertificate.Extensions)
             {
                 ListViewItem item = new ListViewItem(ext.Oid.FriendlyName);
                 item.SubItems.Add(ext.Format(true));
-                item.Group = customGroup;
+                item.Group = extensionsGroup;
 
                 lstDetails.Items.Add(item);
             }
@@ -87,6 +111,7 @@ namespace AssinadorDigital
         {
             certificateUpdate();
             statusUpdate();
+            lstDetails.AutoResizeColumn(1, ColumnHeaderAutoResizeStyle.ColumnContent);
         }
 
         private void btnViewDetails_Click(object sender, EventArgs e)

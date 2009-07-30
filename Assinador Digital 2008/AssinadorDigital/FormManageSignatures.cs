@@ -350,6 +350,7 @@ namespace AssinadorDigital
 
                 List<X509Certificate2> nonconformitySigners = new List<X509Certificate2>();
                 List<X509Certificate2> conformitySigners = new List<X509Certificate2>();
+                Hashtable certificatesList = new Hashtable();
                 foreach (FileHistory filepath in selectedDocuments)
                 {
                     try
@@ -393,18 +394,27 @@ namespace AssinadorDigital
                                     nonconformitySigners.Add(signatureCertificate);
                                 else
                                     conformitySigners.Add(signatureCertificate);
+                                certificatesList.Add(signatureCertificate, CertificateUtils.buildStatus);
                             }
-                            X509ChainStatus chainStatus = new X509ChainStatus();
-                            chainStatus = CertificateUtils.buildStatus;
 
-                            int signatureIcon = 0;
+                            X509ChainStatus chainStatus = new X509ChainStatus();
+                            chainStatus = (X509ChainStatus)certificatesList[signatureCertificate];
+
+                            ChainDocumentStatus chainDocumentStatus = new ChainDocumentStatus();
+                            int signatureIcon;
                             if (!(invalidSignatures.Contains(signature[0]) && invalidSignatures.Contains(signature[1]) &&
                                 invalidSignatures.Contains(signature[2]) && invalidSignatures.Contains(signature[3])))
                             {
+                                chainDocumentStatus = new ChainDocumentStatus(chainStatus, null);                                
                                 if (nonconformitySigners.Contains(signatureCertificate))
                                     signatureIcon = 1;
                                 else
                                     signatureIcon = 2;
+                            }
+                            else
+                            {
+                                signatureIcon = 0;
+                                chainDocumentStatus = new ChainDocumentStatus(chainStatus, ChainDocumentStatus.ChainDocumentStatusFlags.CorruptedDocument);
                             }
 
                             ListViewItem newSignerItem = new ListViewItem();    //INDEX
@@ -420,8 +430,8 @@ namespace AssinadorDigital
 
                             ListViewItem.ListViewSubItem chainSt = new ListViewItem.ListViewSubItem();
                             chainSt.Text = "";
-                            chainSt.Tag = (object)chainStatus;
-                            newSignerItem.SubItems.Add(chainSt);                //7 chainStatus
+                            chainSt.Tag = (object)chainDocumentStatus;
+                            newSignerItem.SubItems.Add(chainSt);                //7 Tag chainStatus
 
                             newSignerItem.Tag = (object)signatureCertificate;   //Tag signer.signerCertificate
 
@@ -738,7 +748,9 @@ namespace AssinadorDigital
 
         private void lstSigners_MouseUp(object sender, MouseEventArgs e)
         {
-            if ((e.Button == MouseButtons.Right) && (lstSigners.SelectedItems.Count == 1))
+            if ((e.Button == MouseButtons.Right) &&
+                (lstSigners.SelectedItems.Count == 1))// &&
+                //(lstSigners.SelectedItems[0].Group.Tag != "commonSigaturesGroup")) //TODO: Fazer a comparacao correta
             {
                 ctxAssinatura.Show(lstSigners, e.Location);
             }
@@ -852,7 +864,7 @@ namespace AssinadorDigital
         {
             if (lstSigners.SelectedItems.Count > 0)
             {
-                FormSignatureDetails FormSignatureDetails = new FormSignatureDetails((X509Certificate2)lstSigners.SelectedItems[0].Tag, (X509ChainStatus)lstSigners.SelectedItems[0].SubItems[7].Tag);
+                FormSignatureDetails FormSignatureDetails = new FormSignatureDetails((X509Certificate2)lstSigners.SelectedItems[0].Tag, (ChainDocumentStatus)lstSigners.SelectedItems[0].SubItems[7].Tag);
                 FormSignatureDetails.Owner = (frmManageDigitalSignature)this;
                 FormSignatureDetails.ShowDialog();
             }
