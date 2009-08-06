@@ -34,15 +34,13 @@ namespace AssinadorDigital
         /// <summary>
         /// Object of DigitalSignature
         /// </summary>
-        private DigitalSignature digitalSignature;      
-        //private List<string> selectedDocuments = new List<string>();
+        private DigitalSignature digitalSignature;
         private List<FileHistory> selectedDocuments = new List<FileHistory>();
         /// <summary>
         /// String[] of listed documents
         /// </summary>
         private string[] documents;
         private ArrayList signers = new ArrayList();
-        private ListViewItem focusedSigner;
         /// <summary>
         /// ArrayList of selected documents in the list
         /// </summary>
@@ -405,7 +403,7 @@ namespace AssinadorDigital
                             if (!(invalidSignatures.Contains(signature[0]) && invalidSignatures.Contains(signature[1]) &&
                                 invalidSignatures.Contains(signature[2]) && invalidSignatures.Contains(signature[3])))
                             {
-                                chainDocumentStatus = new ChainDocumentStatus(chainStatus, null);                                
+                                chainDocumentStatus = new ChainDocumentStatus(chainStatus, null);
                                 if (nonconformitySigners.Contains(signatureCertificate))
                                     signatureIcon = 1;
                                 else
@@ -469,6 +467,36 @@ namespace AssinadorDigital
                     catch (IOException)
                     {
                         if (MessageBox.Show("Erro ao abrir o documento " + System.IO.Path.GetFileName(filepath.NewPath) + ".\nCertifique-se de que o documento não foi movido ou está em uso por outra aplicação.\n\nDeseja retirá-lo da lista?", System.IO.Path.GetFileName(filepath.NewPath),
+            MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                        {
+                            foreach (ListViewItem item in lstDocuments.Items)
+                            {
+                                if (item.SubItems[2].Text == filepath.NewPath)
+                                {
+                                    problematicFoundDocuments.Add(item.SubItems[2].Text);
+                                    lstDocuments.Items.Remove(item);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            foreach (ListViewItem item in lstDocuments.Items)
+                            {
+                                if (item.SubItems[2].Text == filepath.NewPath)
+                                {
+                                    problematicFoundDocuments.Add(item.SubItems[2].Text);
+                                    item.Selected = false;
+                                    if (lstDocuments.SelectedItems.Count > 0)
+                                    {
+                                        lstDocuments.FocusedItem = lstDocuments.SelectedItems[0];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (FileFormatException)
+                    {
+                        if (MessageBox.Show("Erro ao abrir o documento " + System.IO.Path.GetFileName(filepath.NewPath) + ".\nSeu conteúdo está corrompido, talvez seja um arquivo temporário.\n\nDeseja retirá-lo da lista?", System.IO.Path.GetFileName(filepath.NewPath),
             MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         {
                             foreach (ListViewItem item in lstDocuments.Items)
@@ -560,7 +588,7 @@ namespace AssinadorDigital
                     {
 
                         if (MessageBox.Show("Houve um problema na listagem do seguinte documento:\n " + System.IO.Path.GetFileName(filepath.NewPath) + "\n" + err.Message.Substring(0, err.Message.IndexOf(".") + 1) + "\n\nDeseja excluí-lo da lista?", System.IO.Path.GetFileName(filepath.NewPath),
-            MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                            MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         {
                             foreach (ListViewItem item in lstDocuments.Items)
                             {
@@ -654,6 +682,7 @@ namespace AssinadorDigital
         {
             Application.Exit();
         }
+
         #region ListView Documents
 
         private void lstFiles_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
@@ -742,15 +771,13 @@ namespace AssinadorDigital
                 if (lstSigners.Items[i].Selected)
                     signers.Add(lstSigners.Items[i]);
             }
-            focusedSigner = e.Item;
-
         }
 
         private void lstSigners_MouseUp(object sender, MouseEventArgs e)
         {
             if ((e.Button == MouseButtons.Right) &&
-                (lstSigners.SelectedItems.Count == 1))// &&
-                //(lstSigners.SelectedItems[0].Group.Tag != "commonSigaturesGroup")) //TODO: Fazer a comparacao correta
+                (lstSigners.SelectedItems.Count == 1) &&
+                (lstSigners.SelectedItems[0].Group.Name != "commonSignatures"))
             {
                 ctxAssinatura.Show(lstSigners, e.Location);
             }

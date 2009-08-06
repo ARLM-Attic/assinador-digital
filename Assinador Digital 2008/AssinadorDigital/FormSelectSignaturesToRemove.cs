@@ -3,12 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Packaging;
+using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
+using System.Xml;
 using FileUtils;
 using Microsoft.Office.DocumentFormat.OpenXml.Packaging;
-using OPC;
 using Microsoft.Win32;
-using System.Security.Cryptography.X509Certificates;
+using OPC;
 
 namespace AssinadorDigital
 {
@@ -28,6 +30,7 @@ namespace AssinadorDigital
         #endregion
 
         #region Private Properties
+        RegistryKey assinadorRegistry = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\LTIA\Assinador Digital", true);
         /// <summary>
         /// Object of DigitalSignature
         /// </summary>
@@ -325,6 +328,8 @@ namespace AssinadorDigital
 
         public bool loadSigners()
         {
+            bool checkCRL = Convert.ToBoolean(assinadorRegistry.GetValue("ConsultCRL"));
+
             if (documents == null)
                 return false;
 
@@ -336,8 +341,11 @@ namespace AssinadorDigital
             if (lstDocuments.SelectedItems.Count > 0)
             {
                 List<string> problematicFoundDocuments = new List<string>();
-
                 Signers commonSigners = new Signers();
+
+                List<X509Certificate2> nonconformitySigners = new List<X509Certificate2>();
+                List<X509Certificate2> conformitySigners = new List<X509Certificate2>();
+                Hashtable certificatesList = new Hashtable();
                 foreach (FileHistory filepath in selectedDocuments)
                 {
                     try
@@ -375,18 +383,33 @@ namespace AssinadorDigital
                             signature[4] = signer.serialNumber;
 
                             X509Certificate2 signatureCertificate = signer.signerCertificate;
-
-                            int signatureIcon = 0;
-                            if (invalidSignatures.Contains(signature[0]) && invalidSignatures.Contains(signature[1]) && invalidSignatures.Contains(signature[2]) && invalidSignatures.Contains(signature[3]))
-                                signatureIcon = 0;
-                            else
+                            if ((!nonconformitySigners.Contains(signatureCertificate)) && (!conformitySigners.Contains(signatureCertificate)))
                             {
-                                RegistryKey ConsultCRL = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\LTIA\Assinador Digital", true);
-                                bool checkCRL = Convert.ToBoolean(ConsultCRL.GetValue("ConsultCRL"));
                                 if (!CertificateUtils.ValidateCertificate(signatureCertificate, checkCRL, false) ?? true)
+                                    nonconformitySigners.Add(signatureCertificate);
+                                else
+                                    conformitySigners.Add(signatureCertificate);
+                                certificatesList.Add(signatureCertificate, CertificateUtils.buildStatus);
+                            }
+
+                            X509ChainStatus chainStatus = new X509ChainStatus();
+                            chainStatus = (X509ChainStatus)certificatesList[signatureCertificate];
+
+                            ChainDocumentStatus chainDocumentStatus = new ChainDocumentStatus();
+                            int signatureIcon;
+                            if (!(invalidSignatures.Contains(signature[0]) && invalidSignatures.Contains(signature[1]) &&
+                                invalidSignatures.Contains(signature[2]) && invalidSignatures.Contains(signature[3])))
+                            {
+                                chainDocumentStatus = new ChainDocumentStatus(chainStatus, null);
+                                if (nonconformitySigners.Contains(signatureCertificate))
                                     signatureIcon = 1;
                                 else
                                     signatureIcon = 2;
+                            }
+                            else
+                            {
+                                signatureIcon = 0;
+                                chainDocumentStatus = new ChainDocumentStatus(chainStatus, ChainDocumentStatus.ChainDocumentStatusFlags.CorruptedDocument);
                             }
 
                             ListViewItem newSignerItem = new ListViewItem();    //INDEX
@@ -399,6 +422,12 @@ namespace AssinadorDigital
                             newSignerItem.SubItems.Add(signature[4]);           //4 signer.serialNumber
                             newSignerItem.SubItems.Add(signature[2]);           //5 signer.URI
                             newSignerItem.SubItems.Add(filepath.OriginalPath);  //6 signer.originalPath
+
+                            ListViewItem.ListViewSubItem chainSt = new ListViewItem.ListViewSubItem();
+                            chainSt.Text = "";
+                            chainSt.Tag = (object)chainDocumentStatus;
+                            newSignerItem.SubItems.Add(chainSt);                //7 Tag chainStatus
+
                             newSignerItem.Tag = (object)signatureCertificate;   //Tag signer.signerCertificate
 
                             lstSigners.Items.Add(newSignerItem);
@@ -431,9 +460,40 @@ namespace AssinadorDigital
                         }
                         commonSigners = commonRecentlyFoundSigners;
                     }
+                    #region catch
                     catch (IOException)
                     {
                         if (MessageBox.Show("Erro ao abrir o documento " + System.IO.Path.GetFileName(filepath.NewPath) + ".\nCertifique-se de que o documento não foi movido ou está em uso por outra aplicação.\n\nDeseja retirá-lo da lista?", System.IO.Path.GetFileName(filepath.NewPath),
+            MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                        {
+                            foreach (ListViewItem item in lstDocuments.Items)
+                            {
+                                if (item.SubItems[2].Text == filepath.NewPath)
+                                {
+                                    problematicFoundDocuments.Add(item.SubItems[2].Text);
+                                    lstDocuments.Items.Remove(item);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            foreach (ListViewItem item in lstDocuments.Items)
+                            {
+                                if (item.SubItems[2].Text == filepath.NewPath)
+                                {
+                                    problematicFoundDocuments.Add(item.SubItems[2].Text);
+                                    item.Selected = false;
+                                    if (lstDocuments.SelectedItems.Count > 0)
+                                    {
+                                        lstDocuments.FocusedItem = lstDocuments.SelectedItems[0];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (FileFormatException)
+                    {
+                        if (MessageBox.Show("Erro ao abrir o documento " + System.IO.Path.GetFileName(filepath.NewPath) + ".\nSeu conteúdo está corrompido, talvez seja um arquivo temporário.\n\nDeseja retirá-lo da lista?", System.IO.Path.GetFileName(filepath.NewPath),
             MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         {
                             foreach (ListViewItem item in lstDocuments.Items)
@@ -525,7 +585,7 @@ namespace AssinadorDigital
                     {
 
                         if (MessageBox.Show("Houve um problema na listagem do seguinte documento:\n " + System.IO.Path.GetFileName(filepath.NewPath) + "\n" + err.Message.Substring(0, err.Message.IndexOf(".") + 1) + "\n\nDeseja excluí-lo da lista?", System.IO.Path.GetFileName(filepath.NewPath),
-            MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                            MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         {
                             foreach (ListViewItem item in lstDocuments.Items)
                             {
@@ -552,6 +612,7 @@ namespace AssinadorDigital
                             }
                         }
                     }
+                    #endregion
                 }
 
                 if (lstDocuments.SelectedItems.Count > 1)
@@ -596,15 +657,10 @@ namespace AssinadorDigital
             }
             else if (lstDocuments.Items.Count == 0)
             {
-                MessageBox.Show("Os arquivos selecionados não são pacotes Open XML Válidos","Erro",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                MessageBox.Show("Os arquivos selecionados não são pacotes Open XML válidos.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Close();
             }
             this.Cursor = Cursors.Arrow;
-            btnRemoveAll.Enabled = false;
-            if (lstSigners.Items.Count > 0)
-            {
-                btnRemoveAll.Enabled = true;
-            }
             return true;
         }
 
@@ -678,20 +734,6 @@ namespace AssinadorDigital
             loadSigners();
         }
 
-        #endregion
-        #region ListView Signers
-
-        private void lstSigners_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
-        {
-            btnRemove.Enabled = e.Item.Selected;
-
-            for (int i = 0; i < lstSigners.Items.Count; i++)
-            {
-                if (lstSigners.Items[i].Selected)
-                    signers.Add(lstSigners.Items[i]);
-            }
-        }
-
         private void abrirArquivoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (lstDocuments.SelectedItems.Count > 0)
@@ -708,6 +750,141 @@ namespace AssinadorDigital
                 string argument = @"/select, " + lstDocuments.SelectedItems[0].SubItems[2].Text;
                 Process.Start("explorer.exe", argument);
             }
+        }
+
+        #endregion
+        #region ListView Signers
+
+        private void lstSigners_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            btnRemove.Enabled = e.Item.Selected;
+
+            for (int i = 0; i < lstSigners.Items.Count; i++)
+            {
+                if (lstSigners.Items[i].Selected)
+                    signers.Add(lstSigners.Items[i]);
+            }
+        }
+
+        private void lstSigners_MouseUp(object sender, MouseEventArgs e)
+        {
+            if ((e.Button == MouseButtons.Right) &&
+                (lstSigners.SelectedItems.Count == 1) &&
+                (lstSigners.SelectedItems[0].Group.Name != "commonSignatures"))
+            {
+                ctxAssinatura.Show(lstSigners, e.Location);
+            }
+        }
+
+        private void visualizarXMLDaAssinaturaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if ((lstSigners.SelectedItems.Count > 0) && (lstSigners.SelectedItems[0].Group.Header != "commonSignatures"))
+            {
+                if (lstSigners.SelectedItems[0].SubItems[5] != null)
+                {
+                    string filePath = lstSigners.SelectedItems[0].SubItems[3].Text;
+                    string uri = lstSigners.SelectedItems[0].SubItems[5].Text;
+                    string fileExtension = Path.GetExtension(filePath);
+                    string tempFilePath;
+                    XmlDocument xDoc = new XmlDocument();
+
+                    if ((fileExtension == ".docx") || (fileExtension == ".docm"))
+                    {
+                        using (WordprocessingDocument wdoc = WordprocessingDocument.Open(filePath, false))
+                        {
+                            foreach (XmlSignaturePart xmlSignature in wdoc.DigitalSignatureOriginPart.XmlSignatureParts)
+                            {
+                                if (xmlSignature.Uri.OriginalString == uri)
+                                {
+                                    tempFilePath = Path.GetTempFileName() + ".xml";
+                                    xDoc.Load(xmlSignature.GetStream());
+
+                                    TextWriter tw = new StreamWriter(tempFilePath, true, System.Text.Encoding.UTF8);
+                                    tw.Write(xDoc.InnerXml);
+                                    tw.Flush();
+                                    tw.Close();
+
+                                    Process.Start(tempFilePath);
+                                }
+                            }
+                        }
+                    }
+                    else if ((fileExtension == ".pptx") || (fileExtension == ".pptm"))
+                    {
+                        using (PresentationDocument pptdoc = PresentationDocument.Open(filePath, false))
+                        {
+                            foreach (XmlSignaturePart xmlSignature in pptdoc.DigitalSignatureOriginPart.XmlSignatureParts)
+                            {
+                                if (xmlSignature.Uri.OriginalString == uri)
+                                {
+                                    tempFilePath = Path.GetTempFileName() + ".xml";
+                                    xDoc.Load(xmlSignature.GetStream());
+
+                                    TextWriter tw = new StreamWriter(tempFilePath, true, System.Text.Encoding.UTF8);
+                                    tw.Write(xDoc.InnerXml);
+                                    tw.Flush();
+                                    tw.Close();
+
+                                    Process.Start(tempFilePath);
+                                }
+                            }
+                        }
+                    }
+                    else if ((fileExtension == ".xlsx") || (fileExtension == ".xlsm"))
+                    {
+                        using (SpreadsheetDocument xlsdoc = SpreadsheetDocument.Open(filePath, false))
+                        {
+                            foreach (XmlSignaturePart xmlSignature in xlsdoc.DigitalSignatureOriginPart.XmlSignatureParts)
+                            {
+                                if (xmlSignature.Uri.OriginalString == uri)
+                                {
+                                    tempFilePath = Path.GetTempFileName() + ".xml";
+                                    xDoc.Load(xmlSignature.GetStream());
+
+                                    TextWriter tw = new StreamWriter(tempFilePath, true, System.Text.Encoding.UTF8);
+                                    tw.Write(xDoc.InnerXml);
+                                    tw.Flush();
+                                    tw.Close();
+
+                                    Process.Start(tempFilePath);
+                                }
+                            }
+                        }
+                    }
+                    else if (fileExtension == ".xps")
+                    {
+                        using (Package package = Package.Open(filePath, FileMode.Open, FileAccess.ReadWrite))
+                        {
+                            PackageDigitalSignatureManager _signatures = null;
+                            _signatures = new PackageDigitalSignatureManager(package);
+
+                            foreach (PackageDigitalSignature sig in _signatures.Signatures)
+                            {
+                                if (sig.SignaturePart.Uri.OriginalString == uri)
+                                {
+                                    tempFilePath = Path.GetTempFileName() + ".xml";
+
+                                    xDoc.Load(sig.SignaturePart.GetStream());
+
+                                    TextWriter tw = new StreamWriter(tempFilePath, true, System.Text.Encoding.UTF8);
+                                    tw.Write(xDoc.InnerXml);
+                                    tw.Flush();
+                                    tw.Close();
+
+                                    Process.Start(tempFilePath);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void visualizarCertificadoDigitalToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormSignatureDetails FormSignatureDetails = new FormSignatureDetails((X509Certificate2)lstSigners.SelectedItems[0].Tag, (ChainDocumentStatus)lstSigners.SelectedItems[0].SubItems[7].Tag);
+            FormSignatureDetails.Owner = (frmSelectDigitalSignatureToRemove)this;
+            FormSignatureDetails.ShowDialog();
         }
 
         #endregion

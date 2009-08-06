@@ -11,9 +11,11 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileUtils", "FileUtils\FileUtils.csproj", "{DBBFDB76-6E9B-448E-AF0C-FACAA51817A7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegistraOID", "RegistraOID\RegistraOID.csproj", "{612841FA-5B09-4277-85BD-4B52385EB73A}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 6
+		SccNumberOfProjects = 7
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs05.codeplex.com/
 		SccLocalPath0 = .
@@ -32,6 +34,9 @@ Global
 		SccProjectUniqueName5 = Setup\\Setup.vdproj
 		SccProjectName5 = Setup
 		SccLocalPath5 = Setup
+		SccProjectUniqueName6 = RegistraOID\\RegistraOID.csproj
+		SccProjectName6 = RegistraOID
+		SccLocalPath6 = RegistraOID
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -219,6 +224,41 @@ Global
 		{DBBFDB76-6E9B-448E-AF0C-FACAA51817A7}.Unicode Release MinSize|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{DBBFDB76-6E9B-448E-AF0C-FACAA51817A7}.Unicode Release MinSize|Mixed Platforms.Build.0 = Release|Any CPU
 		{DBBFDB76-6E9B-448E-AF0C-FACAA51817A7}.Unicode Release MinSize|Win32.ActiveCfg = Release|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Release MinDependency|Any CPU.ActiveCfg = Release|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Release MinDependency|Any CPU.Build.0 = Release|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Release MinDependency|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Release MinDependency|Mixed Platforms.Build.0 = Release|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Release MinDependency|Win32.ActiveCfg = Release|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Release MinSize|Any CPU.ActiveCfg = Release|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Release MinSize|Any CPU.Build.0 = Release|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Release MinSize|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Release MinSize|Mixed Platforms.Build.0 = Release|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Release MinSize|Win32.ActiveCfg = Release|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Release|Win32.ActiveCfg = Release|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Unicode Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Unicode Debug|Any CPU.Build.0 = Debug|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Unicode Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Unicode Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Unicode Debug|Win32.ActiveCfg = Debug|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Unicode Release MinDependency|Any CPU.ActiveCfg = Release|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Unicode Release MinDependency|Any CPU.Build.0 = Release|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Unicode Release MinDependency|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Unicode Release MinDependency|Mixed Platforms.Build.0 = Release|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Unicode Release MinDependency|Win32.ActiveCfg = Release|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Unicode Release MinSize|Any CPU.ActiveCfg = Release|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Unicode Release MinSize|Any CPU.Build.0 = Release|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Unicode Release MinSize|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Unicode Release MinSize|Mixed Platforms.Build.0 = Release|Any CPU
+		{612841FA-5B09-4277-85BD-4B52385EB73A}.Unicode Release MinSize|Win32.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
