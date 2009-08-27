@@ -15,14 +15,14 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_06FAF84CD65747BFB643ABA1C025AC9C"
-        "OwnerKey" = "8:_B619A4F4170D40C4B295B80B0C5C4674"
+        "MsmKey" = "8:_1CF5B28C52D1475187D578FD337F6EAC"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_1CF5B28C52D1475187D578FD337F6EAC"
-        "OwnerKey" = "8:_UNDEFINED"
+        "MsmKey" = "8:_216FAF725D204261A9FF9DDF9458C42E"
+        "OwnerKey" = "8:_BD22BD659C4448C68ED450FCF0FB9A5C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -39,8 +39,14 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_73096C276C8F48FA9637BF7ABDA2B5B7"
+        "MsmKey" = "8:_82ACA9BADBC24FFABACABCA9B87696F1"
         "OwnerKey" = "8:_610F117309FD49FABC463015E91EEAD2"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9FF79EE30DA9449FB21A92DDEDE2CA80"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -57,25 +63,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_B619A4F4170D40C4B295B80B0C5C4674"
+        "MsmKey" = "8:_BD22BD659C4448C68ED450FCF0FB9A5C"
         "OwnerKey" = "8:_610F117309FD49FABC463015E91EEAD2"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_C08CBF37BBA14FBAA3BD477CDE847B04"
-        "OwnerKey" = "8:_73096C276C8F48FA9637BF7ABDA2B5B7"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_CC2A0FB715C8422C91EF7E2097A72DB7"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_CFCCDB4BCBE6442D86FD4097E9855BC2"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -99,6 +93,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_F0B525A7EF47426FBA2F74A6AE43BA81"
+        "OwnerKey" = "8:_82ACA9BADBC24FFABACABCA9B87696F1"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_F42E2511995A476687712C291112ABE7"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -112,7 +112,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_CFCCDB4BCBE6442D86FD4097E9855BC2"
+        "OwnerKey" = "8:_9FF79EE30DA9449FB21A92DDEDE2CA80"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -211,17 +211,17 @@
     {
         "CustomAction"
         {
-            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_2690AC4529A2493B8732BE79C185D1E1"
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_EFE2D39E9F124A9CBA398317EA5D332A"
             {
             "Name" = "8:RegistraOID.exe"
             "Condition" = "8:"
-            "Object" = "8:_CFCCDB4BCBE6442D86FD4097E9855BC2"
+            "Object" = "8:_9FF79EE30DA9449FB21A92DDEDE2CA80"
             "FileType" = "3:2"
             "InstallAction" = "3:1"
             "Arguments" = "8:"
             "EntryPoint" = "8:"
             "Sequence" = "3:1"
-            "Identifier" = "8:_25466831_E0EA_4E06_963D_3AADE0033885"
+            "Identifier" = "8:_776E9525_5BE1_460D_8B74_3BCFD2BE8A3D"
             "InstallerClass" = "11:FALSE"
             "CustomActionData" = "8:"
             }
@@ -254,6 +254,37 @@
             "TargetName" = "8:icone.ico"
             "Tag" = "8:"
             "Folder" = "8:_E8DF91C7B01B4B1C9854EC350D23861F"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_9FF79EE30DA9449FB21A92DDEDE2CA80"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:RegistraOID, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_9FF79EE30DA9449FB21A92DDEDE2CA80"
+                    {
+                    "Name" = "8:RegistraOID.exe"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\RegistraOID\\bin\\Release\\RegistraOID.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_933CB92A7FC94699B8E307F48BA85B4E"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -328,37 +359,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_CFCCDB4BCBE6442D86FD4097E9855BC2"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:RegistraOID, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_CFCCDB4BCBE6442D86FD4097E9855BC2"
-                    {
-                    "Name" = "8:RegistraOID.exe"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:..\\RegistraOID\\bin\\Release\\RegistraOID.exe"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_933CB92A7FC94699B8E307F48BA85B4E"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_ECC7585F9C1723EBF650396B1C3F3889"
@@ -458,7 +458,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Assinador Digital"
         "ProductCode" = "8:{B543CD8E-3C54-475A-8C44-CCDCAFBB86C1}"
-        "PackageCode" = "8:{36E9DFFC-6BEF-46A4-8B23-3A1A7E4C2B18}"
+        "PackageCode" = "8:{ED2BF380-7FC1-4E76-99B8-E1A71DF7D69B}"
         "UpgradeCode" = "8:{71F198FD-0004-4373-AB0D-EEE66CB7AFEF}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
@@ -977,7 +977,7 @@
         }
         "MergeModule"
         {
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_06FAF84CD65747BFB643ABA1C025AC9C"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_216FAF725D204261A9FF9DDF9458C42E"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
@@ -991,7 +991,7 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_73096C276C8F48FA9637BF7ABDA2B5B7"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_82ACA9BADBC24FFABACABCA9B87696F1"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
@@ -1005,7 +1005,7 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_B619A4F4170D40C4B295B80B0C5C4674"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_BD22BD659C4448C68ED450FCF0FB9A5C"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
@@ -1019,7 +1019,7 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_C08CBF37BBA14FBAA3BD477CDE847B04"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_F0B525A7EF47426FBA2F74A6AE43BA81"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"

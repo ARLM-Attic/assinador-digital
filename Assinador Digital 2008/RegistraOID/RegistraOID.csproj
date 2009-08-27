@@ -59,8 +59,12 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="icpbr-remove.bat" />
-    <None Include="icpbrz-config-20.bat" />
+    <Content Include="icpbr-remove.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="icpbrz-config-20.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

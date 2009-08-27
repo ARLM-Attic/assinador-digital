@@ -40,7 +40,7 @@ namespace RegistraOID
                 { }
             }
 
-            string msg = "The 'dir' command window was closed at: " + myProcess1.ExitTime +
+            string msg = "The OID Register command window was closed at: " + myProcess1.ExitTime +
                 "\n" + System.Environment.NewLine + "Exit Code: " + myProcess1.ExitCode +
                 "\n" + sOutput + "\n";
 
@@ -49,7 +49,7 @@ namespace RegistraOID
             sErr.Close();
             myProcess1.Close();
 
-            FileStream fstream = new FileStream(getApplicationPath() + "\\teste.txt", FileMode.Create, FileAccess.ReadWrite);
+            FileStream fstream = new FileStream(getApplicationPath() + "\\RegistraOID_Output.txt", FileMode.Create, FileAccess.ReadWrite);
             foreach (char ch in (msg))
             {
                 fstream.WriteByte(Convert.ToByte(ch));
