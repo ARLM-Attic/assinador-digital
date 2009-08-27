@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using System.IO;
-using OPC;
+using System.Windows.Forms;
 using FileUtils;
 using Microsoft.Win32;
+using OPC;
 
 namespace AssinadorDigital
 {
@@ -28,7 +24,7 @@ namespace AssinadorDigital
             selectedDocumentsToRemoveSignature = documents;
 
             LastBackedUpFolder = Registry.CurrentUser.OpenSubKey(@"Software\LTIA\Assinador Digital", true);
-            txtPath.Text = LastBackedUpFolder.GetValue("LastBackUpFolder").ToString();
+            txtPath.Text = (LastBackedUpFolder.GetValue("LastBackUpFolder")??"").ToString();
         }
         /// <summary>
         /// Remove the list os signers from the documents
@@ -44,7 +40,7 @@ namespace AssinadorDigital
             selectedSignaturesInDocuments = selectedSignatures;
 
             LastBackedUpFolder = Registry.CurrentUser.OpenSubKey(@"Software\LTIA\Assinador Digital", true);
-            txtPath.Text = LastBackedUpFolder.GetValue("LastBackUpFolder").ToString();
+            txtPath.Text = (LastBackedUpFolder.GetValue("LastBackUpFolder")??"").ToString();
         }
 
         public frmRemoveDigitalSignatures(List<FileHistory> documents)
@@ -55,7 +51,7 @@ namespace AssinadorDigital
             selectedDocumentsToRemoveDigitalSignature = documents;
 
             LastBackedUpFolder = Registry.CurrentUser.OpenSubKey(@"Software\LTIA\Assinador Digital", true);
-            txtPath.Text = LastBackedUpFolder.GetValue("LastBackUpFolder").ToString();
+            txtPath.Text = (LastBackedUpFolder.GetValue("LastBackUpFolder")??"").ToString();
         }
 
         public frmRemoveDigitalSignatures(List<FileHistory> documents, List<Signers> selectedSignatures)
@@ -67,7 +63,7 @@ namespace AssinadorDigital
             selectedSignaturesInDocuments = selectedSignatures;
 
             LastBackedUpFolder = Registry.CurrentUser.OpenSubKey(@"Software\LTIA\Assinador Digital", true);
-            txtPath.Text = LastBackedUpFolder.GetValue("LastBackUpFolder").ToString();
+            txtPath.Text = (LastBackedUpFolder.GetValue("LastBackUpFolder")??"").ToString();
         }
         #endregion
 

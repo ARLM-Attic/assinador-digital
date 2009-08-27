@@ -53,73 +53,77 @@ namespace AssinadorDigital
 
         private void listFiles(string[] filenames)
         {
-            int length = filenames.Length;
             string[] filetype = new string[2];
 
+            int length = filenames.Length;
             for (int i = 0; i < length; i++)
             {
-                string fileextension = Path.GetExtension(filenames[i]);
-                bool documentFound = false;
-                foreach (ListViewItem documentAlreadyInList in lstDocuments.Items)
+                if (Path.HasExtension(filenames[i]))
                 {
-                    if (documentAlreadyInList.SubItems[2].Text == filenames[i])
+                    string fileextension = Path.GetExtension(filenames[i]);
+                    bool documentFound = false;
+                    foreach (ListViewItem documentAlreadyInList in lstDocuments.Items)
                     {
-                        documentFound = true;
-                        break;
+                        if (documentAlreadyInList.SubItems[2].Text == filenames[i])
+                        {
+                            documentFound = true;
+                            break;
+                        }
                     }
-                }
-                if (!documentFound)
-                {
-                    if (fileextension == ".docx")
+                    if (!documentFound)
                     {
-                        filetype[0] = "0";
-                        filetype[1] = "Microsoft Office Word Document";
-                    }
-                    else if (fileextension == ".docm")
-                    {
-                        filetype[0] = "1";
-                        filetype[1] = "Microsoft Office Word Macro-Enabled Document";
-                    }
-                    else if (fileextension == ".pptx")
-                    {
-                        filetype[0] = "2";
-                        filetype[1] = "Microsoft Office PowerPoint Presentation";
-                    }
-                    else if (fileextension == ".pptm")
-                    {
-                        filetype[0] = "3";
-                        filetype[1] = "Microsoft Office PowerPoint Macro-Enabled Presentation";
-                    }
-                    else if (fileextension == ".xlsx")
-                    {
-                        filetype[0] = "4";
-                        filetype[1] = "Microsoft Office Excel Worksheet";
-                    }
-                    else if (fileextension == ".xlsm")
-                    {
-                        filetype[0] = "5";
-                        filetype[1] = "Microsoft Office Excel Macro-Enabled Worksheet";
-                    }
-                    else if (fileextension == ".xps")
-                    {
-                        filetype[0] = "6";
-                        filetype[1] = "XPS Document";
-                    }
-                    else
-                    {
-                        filetype[0] = "-1";
-                        filetype[1] = "Unknow";
-                    }
+                        if (fileextension == ".docx")
+                        {
+                            filetype[0] = "0";
+                            filetype[1] = "Microsoft Office Word Document";
+                        }
+                        else if (fileextension == ".docm")
+                        {
+                            filetype[0] = "1";
+                            filetype[1] = "Microsoft Office Word Macro-Enabled Document";
+                        }
+                        else if (fileextension == ".pptx")
+                        {
+                            filetype[0] = "2";
+                            filetype[1] = "Microsoft Office PowerPoint Presentation";
+                        }
+                        else if (fileextension == ".pptm")
+                        {
+                            filetype[0] = "3";
+                            filetype[1] = "Microsoft Office PowerPoint Macro-Enabled Presentation";
+                        }
+                        else if (fileextension == ".xlsx")
+                        {
+                            filetype[0] = "4";
+                            filetype[1] = "Microsoft Office Excel Worksheet";
+                        }
+                        else if (fileextension == ".xlsm")
+                        {
+                            filetype[0] = "5";
+                            filetype[1] = "Microsoft Office Excel Macro-Enabled Worksheet";
+                        }
+                        else if (fileextension == ".xps")
+                        {
+                            filetype[0] = "6";
+                            filetype[1] = "XPS Document";
+                        }
+                        else
+                        {
+                            filetype[0] = "-1";
+                            filetype[1] = "Unknow";
+                        }
 
-                    if (filetype[0] != "-1")
-                    {
-                        ListViewItem listItem = new ListViewItem();         //INDEX
-                        listItem.Text = Path.GetFileName(filenames[i]);     //0 filename
-                        listItem.ImageIndex = Convert.ToInt32(filetype[0]);
-                        listItem.SubItems.Add(filetype[1]);                 //1 filetype
-                        listItem.SubItems.Add(filenames[i].ToString());     //2 filepath
+                        if (filetype[0] != "-1")
+                        {
+                            ListViewItem listItem = new ListViewItem();         //INDEX
+                            listItem.Text = Path.GetFileName(filenames[i]);     //0 filename
+                            listItem.ImageIndex = Convert.ToInt32(filetype[0]);
+                            listItem.SubItems.Add(filetype[1]);                 //1 filetype
+                            listItem.SubItems.Add(filenames[i]);                //2 filepath
+                            listItem.SubItems.Add(filenames[i]);                //3 originalFilePath
 
-                        lstDocuments.Items.Add(listItem);
+                            lstDocuments.Items.Add(listItem);
+                        }
                     }
                 }
             }
@@ -565,6 +569,7 @@ namespace AssinadorDigital
 
         private void frmViewDigitalSignature_Load(object sender, EventArgs e)
         {
+            //TODO: Provável causa do problema listado
             listFiles(documents);
         }
 
@@ -599,7 +604,7 @@ namespace AssinadorDigital
                 FileHistory fh = new FileHistory(lstDocuments.SelectedItems[i].SubItems[3].Text, lstDocuments.SelectedItems[i].SubItems[2].Text);
                 selectedDocuments.Add(fh);
             }
-            //focusedDocument = lstFiles.FocusedItem;          
+            
             lblSelected.Text = i.ToString();
             loadSigners();
 
@@ -653,8 +658,6 @@ namespace AssinadorDigital
                 if (lstSigners.Items[i].Selected)
                     signers.Add(lstSigners.Items[i]);
             }
-            focusedSigner = e.Item;
-
         }
 
         private void lstSigners_MouseUp(object sender, MouseEventArgs e)
@@ -802,17 +805,6 @@ namespace AssinadorDigital
             lblSelected.Text = count.ToString();
 
             loadSigners();
-        }
-
-        private void sobreOAssinadorDigitalToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            AboutBox about = new AboutBox();
-            about.ShowDialog();
-        }
-
-        private void sairToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            this.Close();
         }
 
         #endregion

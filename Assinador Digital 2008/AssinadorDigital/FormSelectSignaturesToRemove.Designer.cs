@@ -62,8 +62,6 @@ namespace AssinadorDigital
             this.sgDate = new System.Windows.Forms.ColumnHeader();
             this.ilistValidate = new System.Windows.Forms.ImageList(this.components);
             this.formHeaderImage = new System.Windows.Forms.PictureBox();
-            this.ctxSobre = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.sobreOAssinadorDigitalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxArquivo = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.abrirArquivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.abrirLocalDoArquivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -74,7 +72,6 @@ namespace AssinadorDigital
             this.gpbDescription.SuspendLayout();
             this.gpbSignatures.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.formHeaderImage)).BeginInit();
-            this.ctxSobre.SuspendLayout();
             this.ctxArquivo.SuspendLayout();
             this.ctxAssinatura.SuspendLayout();
             this.SuspendLayout();
@@ -465,20 +462,6 @@ namespace AssinadorDigital
             this.formHeaderImage.TabStop = false;
             this.formHeaderImage.WaitOnLoad = true;
             // 
-            // ctxSobre
-            // 
-            this.ctxSobre.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.sobreOAssinadorDigitalToolStripMenuItem});
-            this.ctxSobre.Name = "ctxSobre";
-            this.ctxSobre.Size = new System.Drawing.Size(207, 26);
-            // 
-            // sobreOAssinadorDigitalToolStripMenuItem
-            // 
-            this.sobreOAssinadorDigitalToolStripMenuItem.Name = "sobreOAssinadorDigitalToolStripMenuItem";
-            this.sobreOAssinadorDigitalToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
-            this.sobreOAssinadorDigitalToolStripMenuItem.Text = "&Sobre o Assinador Digital";
-            this.sobreOAssinadorDigitalToolStripMenuItem.Click += new System.EventHandler(this.sobreOAssinadorDigitalToolStripMenuItem_Click);
-            // 
             // ctxArquivo
             // 
             this.ctxArquivo.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -507,7 +490,7 @@ namespace AssinadorDigital
             this.visualizarCertificadoDigitalToolStripMenuItem,
             this.visualizarXMLDaAssinaturaToolStripMenuItem});
             this.ctxAssinatura.Name = "ctxAssinatura";
-            this.ctxAssinatura.Size = new System.Drawing.Size(225, 70);
+            this.ctxAssinatura.Size = new System.Drawing.Size(225, 48);
             // 
             // visualizarCertificadoDigitalToolStripMenuItem
             // 
@@ -542,7 +525,6 @@ namespace AssinadorDigital
             this.gpbDescription.PerformLayout();
             this.gpbSignatures.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.formHeaderImage)).EndInit();
-            this.ctxSobre.ResumeLayout(false);
             this.ctxArquivo.ResumeLayout(false);
             this.ctxAssinatura.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -591,8 +573,6 @@ namespace AssinadorDigital
         private System.Windows.Forms.ContextMenuStrip ctxArquivo;
         private System.Windows.Forms.ToolStripMenuItem abrirArquivoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem abrirLocalDoArquivoToolStripMenuItem;
-        private System.Windows.Forms.ContextMenuStrip ctxSobre;
-        private System.Windows.Forms.ToolStripMenuItem sobreOAssinadorDigitalToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip ctxAssinatura;
         private System.Windows.Forms.ToolStripMenuItem visualizarCertificadoDigitalToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem visualizarXMLDaAssinaturaToolStripMenuItem;

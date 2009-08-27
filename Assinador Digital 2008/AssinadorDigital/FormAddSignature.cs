@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using System.IO;
-using OPC;
-using FileUtils;
 using System.Security.Cryptography.X509Certificates;
-using System.Security.Cryptography.Pkcs;
-using System.Security.Cryptography;
+using System.Windows.Forms;
+using FileUtils;
 using Microsoft.Win32;
+using OPC;
 
 namespace AssinadorDigital
 {
@@ -33,7 +27,7 @@ namespace AssinadorDigital
             chkIncludeSubfolders.Visible = showCheckBoxViewDocuments;
 
             LastBackedUpFolder = Registry.CurrentUser.OpenSubKey(@"Software\LTIA\Assinador Digital", true);
-            txtPath.Text = LastBackedUpFolder.GetValue("LastBackUpFolder").ToString();
+            txtPath.Text = (LastBackedUpFolder.GetValue("LastBackUpFolder")??"").ToString();
 
             CertificateUtils.VerifyConsultCRL();
         }
@@ -48,7 +42,7 @@ namespace AssinadorDigital
             chkIncludeSubfolders.Visible = showCheckBoxViewDocuments;
 
             LastBackedUpFolder = Registry.CurrentUser.OpenSubKey(@"Software\LTIA\Assinador Digital", true);
-            txtPath.Text = LastBackedUpFolder.GetValue("LastBackUpFolder").ToString();
+            txtPath.Text = (LastBackedUpFolder.GetValue("LastBackUpFolder")??"").ToString();
 
             CertificateUtils.VerifyConsultCRL();
         }

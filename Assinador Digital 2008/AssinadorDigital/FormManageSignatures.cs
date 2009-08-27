@@ -53,106 +53,6 @@ namespace AssinadorDigital
 
         #endregion        
 
-        #region Public Methods
-
-        public void listFiles(List<FileHistory> filenames)
-        {
-            string[] filetype = new string[2];
-
-            int length = filenames.Count;
-            for (int i = 0; i < length; i++)
-            {
-                string file = filenames[i].NewPath;
-                if (Path.HasExtension(file))
-                {
-                    string fileextension = Path.GetExtension(file);
-                    bool documentFound = false;
-                    foreach (ListViewItem documentAlreadyInList in lstDocuments.Items)
-                    {
-                        if (documentAlreadyInList.SubItems[3].Text == filenames[i].OriginalPath
-                                || documentAlreadyInList.SubItems[2].Text == filenames[i].OriginalPath)
-                        {
-                            documentFound = true;
-                            documentAlreadyInList.SubItems[2].Text = filenames[i].NewPath;
-                            break;
-                        }
-                    }
-                    if (!documentFound)
-                    {
-                        if (fileextension == ".docx")
-                        {
-                            filetype[0] = "0";
-                            filetype[1] = "Microsoft Office Word Document";
-                        }
-                        else if (fileextension == ".docm")
-                        {
-                            filetype[0] = "1";
-                            filetype[1] = "Microsoft Office Word Macro-Enabled Document";
-                        }
-                        else if (fileextension == ".pptx")
-                        {
-                            filetype[0] = "2";
-                            filetype[1] = "Microsoft Office PowerPoint Presentation";
-                        }
-                        else if (fileextension == ".pptm")
-                        {
-                            filetype[0] = "3";
-                            filetype[1] = "Microsoft Office PowerPoint Macro-Enabled Presentation";
-                        }
-                        else if (fileextension == ".xlsx")
-                        {
-                            filetype[0] = "4";
-                            filetype[1] = "Microsoft Office Excel Worksheet";
-                        }
-                        else if (fileextension == ".xlsm")
-                        {
-                            filetype[0] = "5";
-                            filetype[1] = "Microsoft Office Excel Macro-Enabled Worksheet";
-                        }
-                        else if (fileextension == ".xps")
-                        {
-                            filetype[0] = "6";
-                            filetype[1] = "XPS Document";
-                        }
-                        else
-                        {
-                            filetype[0] = "-1";
-                            filetype[1] = "Unknow";
-                        }
-
-                        if (filetype[0] != "-1")
-                        {
-                            ListViewItem listItem = new ListViewItem();         //INDEX
-                            listItem.Text = Path.GetFileName(file);             //0 filename
-                            listItem.ImageIndex = Convert.ToInt32(filetype[0]);
-                            listItem.SubItems.Add(filetype[1]);                 //1 filetype
-                            listItem.SubItems.Add(file);                        //2 filepath
-                            listItem.SubItems.Add(filenames[i].OriginalPath);   //3 originalFilePath
-
-                            lstDocuments.Items.Add(listItem);
-                        }
-                    }
-                }
-            }
-            selectedDocuments.Clear();
-            int count = lstDocuments.Items.Count;
-
-            for (int i = 0; i < count; i++)
-            {
-                lstDocuments.Items[i].Selected = true;
-                FileHistory fh = new FileHistory(lstDocuments.SelectedItems[i].SubItems[3].Text, lstDocuments.SelectedItems[i].SubItems[2].Text);
-                selectedDocuments.Add(fh);
-                lblSelected.Text = count.ToString();
-            }
-            if (lstDocuments.Items.Count > 0)
-            {
-                lstDocuments.Items[0].Focused = true;
-            }
-            loadSigners();
-        }
-
-        #endregion
-
         #region Private Methods
 
         private void listFiles(string[] filenames)
@@ -329,7 +229,7 @@ namespace AssinadorDigital
             }
         }
 
-        public bool loadSigners()
+        private bool loadSigners()
         {
             bool checkCRL = Convert.ToBoolean(assinadorRegistry.GetValue("ConsultCRL"));
 
@@ -669,6 +569,106 @@ namespace AssinadorDigital
 
         #endregion                                 
 
+        #region Public Methods
+
+        public void listFiles(List<FileHistory> filenames)
+        {
+            string[] filetype = new string[2];
+
+            int length = filenames.Count;
+            for (int i = 0; i < length; i++)
+            {
+                string file = filenames[i].NewPath;
+                if (Path.HasExtension(file))
+                {
+                    string fileextension = Path.GetExtension(file);
+                    bool documentFound = false;
+                    foreach (ListViewItem documentAlreadyInList in lstDocuments.Items)
+                    {
+                        if (documentAlreadyInList.SubItems[3].Text == filenames[i].OriginalPath
+                                || documentAlreadyInList.SubItems[2].Text == filenames[i].OriginalPath)
+                        {
+                            documentFound = true;
+                            documentAlreadyInList.SubItems[2].Text = filenames[i].NewPath;
+                            break;
+                        }
+                    }
+                    if (!documentFound)
+                    {
+                        if (fileextension == ".docx")
+                        {
+                            filetype[0] = "0";
+                            filetype[1] = "Microsoft Office Word Document";
+                        }
+                        else if (fileextension == ".docm")
+                        {
+                            filetype[0] = "1";
+                            filetype[1] = "Microsoft Office Word Macro-Enabled Document";
+                        }
+                        else if (fileextension == ".pptx")
+                        {
+                            filetype[0] = "2";
+                            filetype[1] = "Microsoft Office PowerPoint Presentation";
+                        }
+                        else if (fileextension == ".pptm")
+                        {
+                            filetype[0] = "3";
+                            filetype[1] = "Microsoft Office PowerPoint Macro-Enabled Presentation";
+                        }
+                        else if (fileextension == ".xlsx")
+                        {
+                            filetype[0] = "4";
+                            filetype[1] = "Microsoft Office Excel Worksheet";
+                        }
+                        else if (fileextension == ".xlsm")
+                        {
+                            filetype[0] = "5";
+                            filetype[1] = "Microsoft Office Excel Macro-Enabled Worksheet";
+                        }
+                        else if (fileextension == ".xps")
+                        {
+                            filetype[0] = "6";
+                            filetype[1] = "XPS Document";
+                        }
+                        else
+                        {
+                            filetype[0] = "-1";
+                            filetype[1] = "Unknow";
+                        }
+
+                        if (filetype[0] != "-1")
+                        {
+                            ListViewItem listItem = new ListViewItem();         //INDEX
+                            listItem.Text = Path.GetFileName(file);             //0 filename
+                            listItem.ImageIndex = Convert.ToInt32(filetype[0]);
+                            listItem.SubItems.Add(filetype[1]);                 //1 filetype
+                            listItem.SubItems.Add(file);                        //2 filepath
+                            listItem.SubItems.Add(filenames[i].OriginalPath);   //3 originalFilePath
+
+                            lstDocuments.Items.Add(listItem);
+                        }
+                    }
+                }
+            }
+            selectedDocuments.Clear();
+            int count = lstDocuments.Items.Count;
+
+            for (int i = 0; i < count; i++)
+            {
+                lstDocuments.Items[i].Selected = true;
+                FileHistory fh = new FileHistory(lstDocuments.SelectedItems[i].SubItems[3].Text, lstDocuments.SelectedItems[i].SubItems[2].Text);
+                selectedDocuments.Add(fh);
+                lblSelected.Text = count.ToString();
+            }
+            if (lstDocuments.Items.Count > 0)
+            {
+                lstDocuments.Items[0].Focused = true;
+            }
+            loadSigners();
+        }
+
+        #endregion
+
         #region Events
 
         private void frmManageDigitalSignature_Load(object sender, EventArgs e)
@@ -900,17 +900,24 @@ namespace AssinadorDigital
         #endregion
         #region Other Controls
 
-        private void btnSign_Click(object sender, EventArgs e)
+        private void btnSelectAll_Click(object sender, EventArgs e)
         {
-            List<FileHistory> documentsToAddSignatures = new List<FileHistory>();
-            foreach (FileHistory document in selectedDocuments)
-            {
-                documentsToAddSignatures.Add(document);
-            }
+            selectedDocuments.Clear();
+            int count = lstDocuments.Items.Count;
 
-            frmAddDigitalSignature FormAddDigitalSignature = new frmAddDigitalSignature(documentsToAddSignatures, false);
-            FormAddDigitalSignature.Owner = (frmManageDigitalSignature)this;
-            FormAddDigitalSignature.ShowDialog();
+            for (int i = 0; i < count; i++)
+            {
+                lstDocuments.Items[i].Selected = true;
+                FileHistory fh = new FileHistory(lstDocuments.SelectedItems[i].SubItems[3].Text, lstDocuments.SelectedItems[i].SubItems[2].Text);
+                selectedDocuments.Add(fh);
+            }
+            if (lstDocuments.Items.Count > 0)
+            {
+                lstDocuments.Items[0].Focused = true;
+            }
+            lblSelected.Text = count.ToString();
+
+            loadSigners();
         }
 
         private void btnRemove_Click(object sender, EventArgs e)
@@ -990,24 +997,17 @@ namespace AssinadorDigital
             FormRemoveDigitalSignatures.ShowDialog();
         }
 
-        private void btnSelectAll_Click(object sender, EventArgs e)
+        private void btnSign_Click(object sender, EventArgs e)
         {
-            selectedDocuments.Clear();
-            int count = lstDocuments.Items.Count;
-
-            for (int i = 0; i < count; i++)
+            List<FileHistory> documentsToAddSignatures = new List<FileHistory>();
+            foreach (FileHistory document in selectedDocuments)
             {
-                lstDocuments.Items[i].Selected = true;
-                FileHistory fh = new FileHistory(lstDocuments.SelectedItems[i].SubItems[3].Text, lstDocuments.SelectedItems[i].SubItems[2].Text);
-                selectedDocuments.Add(fh);
+                documentsToAddSignatures.Add(document);
             }
-            if (lstDocuments.Items.Count > 0)
-            {
-                lstDocuments.Items[0].Focused = true;
-            }
-            lblSelected.Text = count.ToString();
 
-            loadSigners();
+            frmAddDigitalSignature FormAddDigitalSignature = new frmAddDigitalSignature(documentsToAddSignatures, false);
+            FormAddDigitalSignature.Owner = (frmManageDigitalSignature)this;
+            FormAddDigitalSignature.ShowDialog();
         }
 
         #endregion
