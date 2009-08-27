@@ -425,6 +425,7 @@ namespace AssinadorDigital
             this.lstSigners.TabIndex = 9;
             this.lstSigners.UseCompatibleStateImageBehavior = false;
             this.lstSigners.View = System.Windows.Forms.View.Details;
+            this.lstSigners.MouseUp += new System.Windows.Forms.MouseEventHandler(this.lstSigners_MouseUp);
             this.lstSigners.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.lstSigners_ItemSelectionChanged);
             // 
             // sgName
